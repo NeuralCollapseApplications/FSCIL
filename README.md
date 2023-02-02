@@ -26,7 +26,7 @@ docker build -t harbory/openmmlab:2206 --network=host .
 ## Data Preparation
 You do not need to prepare CIFAR datasets since it is managed by torch.
 
-For other datasets, please refer to [hub](https://huggingface.co/datasets/HarborYuan/Few-Shot-Class-Incremental-Learning)([Link](https://huggingface.co/datasets/HarborYuan/Few-Shot-Class-Incremental-Learning/blob/main/fscil.zip)). It is worth noting that the Mini ImageNet dataset is with various versions. Here we follow [CEC](https://drive.google.com/drive/folders/11LxZCQj2FRCs0JTsf_dafvTHqFn2yGSN), which is widely adopted in FSCIL. Please keep in mind that the usage of datasets is governed by their corresponding agreements. Data sharing here is only for research purposes only.
+For other datasets, please refer to [hub](https://huggingface.co/datasets/HarborYuan/Few-Shot-Class-Incremental-Learning)([Link](https://huggingface.co/datasets/HarborYuan/Few-Shot-Class-Incremental-Learning/blob/main/fscil.zip)). It is worth noting that the Mini ImageNet dataset is with various versions. Here we follow [CEC](https://drive.google.com/drive/folders/11LxZCQj2FRCs0JTsf_dafvTHqFn2yGSN), which is widely adopted in FSCIL. Please keep in mind that the usage of datasets is governed by their corresponding agreements. Data sharing here is for research purposes only.
 
 Please put the datasets into the {YOUR DATA LOCATION} you provided above.
 
