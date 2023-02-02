@@ -1,0 +1,615 @@
+2023-02-02 22:46:22,713 - mmcls - INFO - Environment info:
+------------------------------------------------------------
+sys.platform: linux
+Python: 3.8.13 | packaged by conda-forge | (default, Mar 25 2022, 06:04:10) [GCC 10.3.0]
+CUDA available: True
+GPU 0,1,2,3,4,5,6,7: A100-SXM4-40GB
+CUDA_HOME: /usr/local/cuda
+NVCC: Cuda compilation tools, release 11.7, V11.7.99
+GCC: gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+PyTorch: 1.13.0a0+340c412
+PyTorch compiling details: PyTorch built with:
+  - GCC 9.4
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2020.0.4 Product Build 20200917 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v2.6.0 (Git Hash N/A)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 11.7
+  - NVCC architecture flags: -gencode;arch=compute_52,code=sm_52;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_86,code=compute_86
+  - CuDNN 8.4.1  (built against CUDA 11.6)
+  - Magma 2.6.2
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.7, CUDNN_VERSION=8.4.1, CXX_COMPILER=/usr/bin/c++, CXX_FLAGS=-fno-gnu-unique -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_KINETO -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -DEDGE_PROFILER_USE_KINETO -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Werror=cast-function-type -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.13.0, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=OFF, USE_MPI=ON, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, 
+
+TorchVision: 0.13.0a0
+OpenCV: 3.4.11
+MMCV: 1.6.1
+MMCV Compiler: GCC 9.4
+MMCV CUDA Compiler: 11.7
+MMClassification: 0.23.2_71ef7ba+24f49fc
+------------------------------------------------------------
+
+2023-02-02 22:46:22,713 - mmcls - INFO - Distributed training: True
+2023-02-02 22:46:22,955 - mmcls - INFO - Config:
+model = dict(
+    type='ImageClassifierCIL',
+    backbone=dict(
+        type='ResNet',
+        depth=18,
+        frozen_stages=1,
+        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet18'),
+        norm_cfg=dict(type='SyncBN', requires_grad=True)),
+    neck=dict(type='MLPFFNNeck', in_channels=512, out_channels=512),
+    head=dict(
+        type='ETFHead',
+        num_classes=200,
+        eval_classes=100,
+        in_channels=512,
+        loss=dict(type='DRLoss', loss_weight=10.0),
+        topk=(1, 5),
+        cal_acc=True,
+        with_len=False))
+img_size = 224
+_img_resize_size = 256
+img_norm_cfg = dict(
+    mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
+meta_keys = ('filename', 'ori_filename', 'ori_shape', 'img_shape', 'flip',
+             'flip_direction', 'img_norm_cfg', 'cls_id', 'img_id')
+train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='RandomResizedCrop', size=224),
+    dict(type='RandomFlip', flip_prob=0.5, direction='horizontal'),
+    dict(type='ColorJitter', brightness=0.4, contrast=0.4, saturation=0.4),
+    dict(
+        type='Normalize',
+        mean=[123.675, 116.28, 103.53],
+        std=[58.395, 57.12, 57.375],
+        to_rgb=True),
+    dict(type='ImageToTensor', keys=['img']),
+    dict(type='ToTensor', keys=['gt_label']),
+    dict(
+        type='Collect',
+        keys=['img', 'gt_label'],
+        meta_keys=('filename', 'ori_filename', 'ori_shape', 'img_shape',
+                   'flip', 'flip_direction', 'img_norm_cfg', 'cls_id',
+                   'img_id'))
+]
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='Resize', size=(256, -1)),
+    dict(type='CenterCrop', crop_size=224),
+    dict(
+        type='Normalize',
+        mean=[123.675, 116.28, 103.53],
+        std=[58.395, 57.12, 57.375],
+        to_rgb=True),
+    dict(type='ImageToTensor', keys=['img']),
+    dict(
+        type='Collect',
+        keys=['img', 'gt_label'],
+        meta_keys=('filename', 'ori_filename', 'ori_shape', 'img_shape',
+                   'flip', 'flip_direction', 'img_norm_cfg', 'cls_id',
+                   'img_id'))
+]
+data = dict(
+    samples_per_gpu=64,
+    workers_per_gpu=8,
+    train_dataloader=dict(persistent_workers=True),
+    val_dataloader=dict(persistent_workers=True),
+    test_dataloader=dict(persistent_workers=True),
+    train=dict(
+        type='RepeatDataset',
+        times=4,
+        dataset=dict(
+            type='CUBFSCILDataset',
+            data_prefix='/opt/data/CUB_200_2011',
+            pipeline=[
+                dict(type='LoadImageFromFile'),
+                dict(type='RandomResizedCrop', size=224),
+                dict(type='RandomFlip', flip_prob=0.5, direction='horizontal'),
+                dict(
+                    type='ColorJitter',
+                    brightness=0.4,
+                    contrast=0.4,
+                    saturation=0.4),
+                dict(
+                    type='Normalize',
+                    mean=[123.675, 116.28, 103.53],
+                    std=[58.395, 57.12, 57.375],
+                    to_rgb=True),
+                dict(type='ImageToTensor', keys=['img']),
+                dict(type='ToTensor', keys=['gt_label']),
+                dict(
+                    type='Collect',
+                    keys=['img', 'gt_label'],
+                    meta_keys=('filename', 'ori_filename', 'ori_shape',
+                               'img_shape', 'flip', 'flip_direction',
+                               'img_norm_cfg', 'cls_id', 'img_id'))
+            ],
+            num_cls=100,
+            subset='train')),
+    val=dict(
+        type='CUBFSCILDataset',
+        data_prefix='/opt/data/CUB_200_2011',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(type='Resize', size=(256, -1)),
+            dict(type='CenterCrop', crop_size=224),
+            dict(
+                type='Normalize',
+                mean=[123.675, 116.28, 103.53],
+                std=[58.395, 57.12, 57.375],
+                to_rgb=True),
+            dict(type='ImageToTensor', keys=['img']),
+            dict(
+                type='Collect',
+                keys=['img', 'gt_label'],
+                meta_keys=('filename', 'ori_filename', 'ori_shape',
+                           'img_shape', 'flip', 'flip_direction',
+                           'img_norm_cfg', 'cls_id', 'img_id'))
+        ],
+        num_cls=100,
+        subset='test'),
+    test=dict(
+        type='CUBFSCILDataset',
+        data_prefix='/opt/data/CUB_200_2011',
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(type='Resize', size=(256, -1)),
+            dict(type='CenterCrop', crop_size=224),
+            dict(
+                type='Normalize',
+                mean=[123.675, 116.28, 103.53],
+                std=[58.395, 57.12, 57.375],
+                to_rgb=True),
+            dict(type='ImageToTensor', keys=['img']),
+            dict(
+                type='Collect',
+                keys=['img', 'gt_label'],
+                meta_keys=('filename', 'ori_filename', 'ori_shape',
+                           'img_shape', 'flip', 'flip_direction',
+                           'img_norm_cfg', 'cls_id', 'img_id'))
+        ],
+        num_cls=200,
+        subset='test'))
+optimizer = dict(type='SGD', lr=0.025, momentum=0.9, weight_decay=0.0005)
+optimizer_config = dict(grad_clip=None)
+lr_config = dict(
+    policy='CosineAnnealingCooldown',
+    min_lr=None,
+    min_lr_ratio=0.1,
+    cool_down_ratio=0.1,
+    cool_down_time=10,
+    by_epoch=False,
+    warmup='linear',
+    warmup_iters=100,
+    warmup_ratio=0.1,
+    warmup_by_epoch=False)
+runner = dict(type='EpochBasedRunner', max_epochs=20)
+checkpoint_config = dict(interval=1, max_keep_ckpts=2)
+evaluation = dict(interval=1, save_best='auto')
+log_config = dict(interval=10, hooks=[dict(type='TextLoggerHook')])
+dist_params = dict(backend='nccl')
+log_level = 'INFO'
+workflow = [('train', 1)]
+load_from = None
+resume_from = None
+mean_neck_feat = True
+mean_cur_feat = False
+feat_test = False
+grad_clip = None
+finetune_lr = 0.1
+inc_start = 100
+inc_end = 200
+inc_step = 10
+copy_list = (1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+step_list = (50, 50, 50, 50, 50, 50, 50, 50, 50, 50)
+work_dir = '/opt/logger/cub_etf'
+gpu_ids = range(0, 8)
+
+2023-02-02 22:46:22,956 - mmcls - INFO - Set random seed to 0, deterministic: True
+2023-02-02 22:46:23,058 - mmcls - INFO - ETF head : evaluating 100 out of 200 classes.
+2023-02-02 22:46:23,059 - mmcls - INFO - ETF head : with_len : False
+2023-02-02 22:46:23,077 - mmcls - INFO - initialize ResNet with init_cfg {'type': 'Pretrained', 'checkpoint': 'torchvision://resnet18'}
+Name of parameter - Initialization information
+
+backbone.conv1.weight - torch.Size([64, 3, 7, 7]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.bn1.weight - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.bn1.bias - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer1.0.conv1.weight - torch.Size([64, 64, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer1.0.bn1.weight - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer1.0.bn1.bias - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer1.0.conv2.weight - torch.Size([64, 64, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer1.0.bn2.weight - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer1.0.bn2.bias - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer1.1.conv1.weight - torch.Size([64, 64, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer1.1.bn1.weight - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer1.1.bn1.bias - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer1.1.conv2.weight - torch.Size([64, 64, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer1.1.bn2.weight - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer1.1.bn2.bias - torch.Size([64]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.0.conv1.weight - torch.Size([128, 64, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.0.bn1.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.0.bn1.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.0.conv2.weight - torch.Size([128, 128, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.0.bn2.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.0.bn2.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.0.downsample.0.weight - torch.Size([128, 64, 1, 1]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.0.downsample.1.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.0.downsample.1.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.1.conv1.weight - torch.Size([128, 128, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.1.bn1.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.1.bn1.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.1.conv2.weight - torch.Size([128, 128, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.1.bn2.weight - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer2.1.bn2.bias - torch.Size([128]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.0.conv1.weight - torch.Size([256, 128, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.0.bn1.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.0.bn1.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.0.conv2.weight - torch.Size([256, 256, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.0.bn2.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.0.bn2.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.0.downsample.0.weight - torch.Size([256, 128, 1, 1]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.0.downsample.1.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.0.downsample.1.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.1.conv1.weight - torch.Size([256, 256, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.1.bn1.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.1.bn1.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.1.conv2.weight - torch.Size([256, 256, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.1.bn2.weight - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer3.1.bn2.bias - torch.Size([256]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.0.conv1.weight - torch.Size([512, 256, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.0.bn1.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.0.bn1.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.0.conv2.weight - torch.Size([512, 512, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.0.bn2.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.0.bn2.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.0.downsample.0.weight - torch.Size([512, 256, 1, 1]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.0.downsample.1.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.0.downsample.1.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.1.conv1.weight - torch.Size([512, 512, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.1.bn1.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.1.bn1.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.1.conv2.weight - torch.Size([512, 512, 3, 3]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.1.bn2.weight - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet18 
+
+backbone.layer4.1.bn2.bias - torch.Size([512]): 
+PretrainedInit: load from torchvision://resnet18 
+
+neck.ln1.linear.weight - torch.Size([1024, 512]): 
+The value is the same before and after calling `init_weights` of ImageClassifierCIL  
+
+neck.ln1.linear.bias - torch.Size([1024]): 
+The value is the same before and after calling `init_weights` of ImageClassifierCIL  
+
+neck.ln1.ln.weight - torch.Size([1024]): 
+The value is the same before and after calling `init_weights` of ImageClassifierCIL  
+
+neck.ln1.ln.bias - torch.Size([1024]): 
+The value is the same before and after calling `init_weights` of ImageClassifierCIL  
+
+neck.ln2.linear.weight - torch.Size([1024, 1024]): 
+The value is the same before and after calling `init_weights` of ImageClassifierCIL  
+
+neck.ln2.linear.bias - torch.Size([1024]): 
+The value is the same before and after calling `init_weights` of ImageClassifierCIL  
+
+neck.ln2.ln.weight - torch.Size([1024]): 
+The value is the same before and after calling `init_weights` of ImageClassifierCIL  
+
+neck.ln2.ln.bias - torch.Size([1024]): 
+The value is the same before and after calling `init_weights` of ImageClassifierCIL  
+
+neck.ln3.linear.weight - torch.Size([512, 1024]): 
+The value is the same before and after calling `init_weights` of ImageClassifierCIL  
+
+neck.ffn.proj.weight - torch.Size([512, 512]): 
+The value is the same before and after calling `init_weights` of ImageClassifierCIL  
+2023-02-02 22:46:44,017 - mmcls - INFO - Start running, host: root@DGX-108, work_dir: /opt/logger/cub_etf
+2023-02-02 22:46:44,017 - mmcls - INFO - Hooks will be executed in the following order:
+before_run:
+(VERY_HIGH   ) CosineAnnealingCooldownLrUpdaterHook
+(NORMAL      ) CheckpointHook                     
+(LOW         ) DistEvalHook                       
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+before_train_epoch:
+(VERY_HIGH   ) CosineAnnealingCooldownLrUpdaterHook
+(NORMAL      ) DistSamplerSeedHook                
+(LOW         ) IterTimerHook                      
+(LOW         ) DistEvalHook                       
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+before_train_iter:
+(VERY_HIGH   ) CosineAnnealingCooldownLrUpdaterHook
+(LOW         ) IterTimerHook                      
+(LOW         ) DistEvalHook                       
+ -------------------- 
+after_train_iter:
+(ABOVE_NORMAL) DistOptimizerHook                  
+(NORMAL      ) CheckpointHook                     
+(LOW         ) IterTimerHook                      
+(LOW         ) DistEvalHook                       
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+after_train_epoch:
+(NORMAL      ) CheckpointHook                     
+(LOW         ) DistEvalHook                       
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+before_val_epoch:
+(NORMAL      ) DistSamplerSeedHook                
+(LOW         ) IterTimerHook                      
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+before_val_iter:
+(LOW         ) IterTimerHook                      
+ -------------------- 
+after_val_iter:
+(LOW         ) IterTimerHook                      
+ -------------------- 
+after_val_epoch:
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+after_run:
+(VERY_LOW    ) TextLoggerHook                     
+ -------------------- 
+2023-02-02 22:46:44,017 - mmcls - INFO - workflow: [('train', 1)], max: 20 epochs
+2023-02-02 22:46:44,017 - mmcls - INFO - Checkpoints will be saved to /opt/logger/cub_etf by HardDiskBackend.
+2023-02-02 22:47:07,414 - mmcls - INFO - Epoch [1][10/24]	lr: 4.521e-03, eta: 0:18:09, time: 2.318, data_time: 0.324, memory: 696, loss: 4.9121, top-1: 1.0547, top-5: 5.1953
+2023-02-02 22:47:11,587 - mmcls - INFO - Epoch [1][20/24]	lr: 6.750e-03, eta: 0:10:33, time: 0.437, data_time: 0.022, memory: 696, loss: 4.4593, top-1: 2.7148, top-5: 10.2930
+2023-02-02 22:47:13,071 - mmcls - INFO - Saving checkpoint at 1 epochs
+2023-02-02 22:47:16,535 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:47:16,709 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_1.pth.
+2023-02-02 22:47:16,709 - mmcls - INFO - Best acc is 11.2081 at 1 epoch.
+2023-02-02 22:47:16,709 - mmcls - INFO - Epoch(val) [1][6]	acc: 11.2081
+2023-02-02 22:47:20,232 - mmcls - INFO - Epoch [2][10/24]	lr: 9.817e-03, eta: 0:06:47, time: 0.351, data_time: 0.236, memory: 696, loss: 4.0745, top-1: 16.1133, top-5: 41.7773
+2023-02-02 22:47:21,312 - mmcls - INFO - Epoch [2][20/24]	lr: 1.195e-02, eta: 0:05:18, time: 0.109, data_time: 0.001, memory: 696, loss: 3.8457, top-1: 26.1719, top-5: 57.7344
+2023-02-02 22:47:21,432 - mmcls - INFO - Saving checkpoint at 2 epochs
+2023-02-02 22:47:24,053 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:47:24,063 - mmcls - INFO - The previous best checkpoint /opt/logger/cub_etf/best_acc_epoch_1.pth was removed
+2023-02-02 22:47:24,219 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_2.pth.
+2023-02-02 22:47:24,219 - mmcls - INFO - Best acc is 39.9441 at 2 epoch.
+2023-02-02 22:47:24,219 - mmcls - INFO - Epoch(val) [2][6]	acc: 39.9441
+2023-02-02 22:47:31,726 - mmcls - INFO - Epoch [3][10/24]	lr: 1.483e-02, eta: 0:04:47, time: 0.730, data_time: 0.241, memory: 696, loss: 3.2499, top-1: 41.5430, top-5: 74.8242
+2023-02-02 22:47:35,669 - mmcls - INFO - Epoch [3][20/24]	lr: 1.680e-02, eta: 0:04:22, time: 0.390, data_time: 0.021, memory: 696, loss: 2.8787, top-1: 50.9180, top-5: 81.4062
+2023-02-02 22:47:37,689 - mmcls - INFO - Saving checkpoint at 3 epochs
+2023-02-02 22:47:40,472 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:47:40,484 - mmcls - INFO - The previous best checkpoint /opt/logger/cub_etf/best_acc_epoch_2.pth was removed
+2023-02-02 22:47:40,722 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_3.pth.
+2023-02-02 22:47:40,722 - mmcls - INFO - Best acc is 61.8366 at 3 epoch.
+2023-02-02 22:47:40,722 - mmcls - INFO - Epoch(val) [3][6]	acc: 61.8366
+2023-02-02 22:47:47,733 - mmcls - INFO - Epoch [4][10/24]	lr: 1.939e-02, eta: 0:04:03, time: 0.686, data_time: 0.243, memory: 696, loss: 2.4460, top-1: 59.9805, top-5: 87.3633
+2023-02-02 22:47:50,560 - mmcls - INFO - Epoch [4][20/24]	lr: 2.112e-02, eta: 0:03:43, time: 0.289, data_time: 0.016, memory: 696, loss: 2.2326, top-1: 65.2344, top-5: 88.8867
+2023-02-02 22:47:52,272 - mmcls - INFO - Saving checkpoint at 4 epochs
+2023-02-02 22:47:55,079 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:47:55,088 - mmcls - INFO - The previous best checkpoint /opt/logger/cub_etf/best_acc_epoch_3.pth was removed
+2023-02-02 22:47:55,247 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_4.pth.
+2023-02-02 22:47:55,247 - mmcls - INFO - Best acc is 69.8673 at 4 epoch.
+2023-02-02 22:47:55,247 - mmcls - INFO - Epoch(val) [4][6]	acc: 69.8673
+2023-02-02 22:48:03,000 - mmcls - INFO - Epoch [5][10/24]	lr: 2.234e-02, eta: 0:03:33, time: 0.750, data_time: 0.240, memory: 696, loss: 1.9729, top-1: 68.4180, top-5: 91.1133
+2023-02-02 22:48:07,102 - mmcls - INFO - Epoch [5][20/24]	lr: 2.184e-02, eta: 0:03:23, time: 0.425, data_time: 0.026, memory: 696, loss: 1.8461, top-1: 70.9570, top-5: 91.4648
+2023-02-02 22:48:08,434 - mmcls - INFO - Saving checkpoint at 5 epochs
+2023-02-02 22:48:11,250 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:48:11,259 - mmcls - INFO - The previous best checkpoint /opt/logger/cub_etf/best_acc_epoch_4.pth was removed
+2023-02-02 22:48:11,419 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_5.pth.
+2023-02-02 22:48:11,419 - mmcls - INFO - Best acc is 73.1844 at 5 epoch.
+2023-02-02 22:48:11,419 - mmcls - INFO - Epoch(val) [5][6]	acc: 73.1844
+2023-02-02 22:48:17,340 - mmcls - INFO - Epoch [6][10/24]	lr: 2.107e-02, eta: 0:03:10, time: 0.574, data_time: 0.246, memory: 696, loss: 1.6477, top-1: 73.8281, top-5: 92.4414
+2023-02-02 22:48:21,283 - mmcls - INFO - Epoch [6][20/24]	lr: 2.048e-02, eta: 0:03:00, time: 0.393, data_time: 0.019, memory: 696, loss: 1.5627, top-1: 74.2188, top-5: 93.4961
+2023-02-02 22:48:22,888 - mmcls - INFO - Saving checkpoint at 6 epochs
+2023-02-02 22:48:25,726 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:48:25,737 - mmcls - INFO - The previous best checkpoint /opt/logger/cub_etf/best_acc_epoch_5.pth was removed
+2023-02-02 22:48:25,893 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_6.pth.
+2023-02-02 22:48:25,893 - mmcls - INFO - Best acc is 76.0126 at 6 epoch.
+2023-02-02 22:48:25,893 - mmcls - INFO - Epoch(val) [6][6]	acc: 76.0126
+2023-02-02 22:48:32,856 - mmcls - INFO - Epoch [7][10/24]	lr: 1.961e-02, eta: 0:02:52, time: 0.694, data_time: 0.239, memory: 696, loss: 1.4047, top-1: 77.9492, top-5: 94.0039
+2023-02-02 22:48:36,540 - mmcls - INFO - Epoch [7][20/24]	lr: 1.896e-02, eta: 0:02:43, time: 0.363, data_time: 0.002, memory: 696, loss: 1.3368, top-1: 77.7930, top-5: 93.9648
+2023-02-02 22:48:38,057 - mmcls - INFO - Saving checkpoint at 7 epochs
+2023-02-02 22:48:40,595 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:48:40,605 - mmcls - INFO - The previous best checkpoint /opt/logger/cub_etf/best_acc_epoch_6.pth was removed
+2023-02-02 22:48:40,756 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_7.pth.
+2023-02-02 22:48:40,756 - mmcls - INFO - Best acc is 76.9553 at 7 epoch.
+2023-02-02 22:48:40,756 - mmcls - INFO - Epoch(val) [7][6]	acc: 76.9553
+2023-02-02 22:48:46,498 - mmcls - INFO - Epoch [8][10/24]	lr: 1.800e-02, eta: 0:02:33, time: 0.561, data_time: 0.236, memory: 696, loss: 1.2426, top-1: 80.2539, top-5: 94.7656
+2023-02-02 22:48:50,312 - mmcls - INFO - Epoch [8][20/24]	lr: 1.730e-02, eta: 0:02:26, time: 0.382, data_time: 0.013, memory: 696, loss: 1.1574, top-1: 81.2305, top-5: 94.9805
+2023-02-02 22:48:52,136 - mmcls - INFO - Saving checkpoint at 8 epochs
+2023-02-02 22:48:54,914 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:48:54,925 - mmcls - INFO - The previous best checkpoint /opt/logger/cub_etf/best_acc_epoch_7.pth was removed
+2023-02-02 22:48:55,081 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_8.pth.
+2023-02-02 22:48:55,081 - mmcls - INFO - Best acc is 78.9106 at 8 epoch.
+2023-02-02 22:48:55,081 - mmcls - INFO - Epoch(val) [8][6]	acc: 78.9106
+2023-02-02 22:49:02,293 - mmcls - INFO - Epoch [9][10/24]	lr: 1.628e-02, eta: 0:02:19, time: 0.710, data_time: 0.240, memory: 696, loss: 1.0856, top-1: 82.7734, top-5: 95.1758
+2023-02-02 22:49:06,265 - mmcls - INFO - Epoch [9][20/24]	lr: 1.555e-02, eta: 0:02:13, time: 0.400, data_time: 0.011, memory: 696, loss: 1.0670, top-1: 82.0703, top-5: 95.0195
+2023-02-02 22:49:07,969 - mmcls - INFO - Saving checkpoint at 9 epochs
+2023-02-02 22:49:10,659 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:49:10,659 - mmcls - INFO - Epoch(val) [9][6]	acc: 78.3170
+2023-02-02 22:49:18,300 - mmcls - INFO - Epoch [10][10/24]	lr: 1.450e-02, eta: 0:02:07, time: 0.741, data_time: 0.238, memory: 696, loss: 0.9847, top-1: 83.9258, top-5: 95.3906
+2023-02-02 22:49:22,784 - mmcls - INFO - Epoch [10][20/24]	lr: 1.375e-02, eta: 0:02:01, time: 0.462, data_time: 0.023, memory: 696, loss: 0.9639, top-1: 84.0039, top-5: 95.3320
+2023-02-02 22:49:24,654 - mmcls - INFO - Saving checkpoint at 10 epochs
+2023-02-02 22:49:27,491 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:49:27,492 - mmcls - INFO - Epoch(val) [10][6]	acc: 78.4916
+2023-02-02 22:49:34,775 - mmcls - INFO - Epoch [11][10/24]	lr: 1.270e-02, eta: 0:01:54, time: 0.718, data_time: 0.238, memory: 696, loss: 0.9155, top-1: 84.6094, top-5: 95.8984
+2023-02-02 22:49:37,884 - mmcls - INFO - Epoch [11][20/24]	lr: 1.195e-02, eta: 0:01:48, time: 0.309, data_time: 0.010, memory: 696, loss: 0.8877, top-1: 85.1953, top-5: 95.7227
+2023-02-02 22:49:39,075 - mmcls - INFO - Saving checkpoint at 11 epochs
+2023-02-02 22:49:41,894 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:49:41,903 - mmcls - INFO - The previous best checkpoint /opt/logger/cub_etf/best_acc_epoch_8.pth was removed
+2023-02-02 22:49:42,073 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_11.pth.
+2023-02-02 22:49:42,073 - mmcls - INFO - Best acc is 79.7835 at 11 epoch.
+2023-02-02 22:49:42,074 - mmcls - INFO - Epoch(val) [11][6]	acc: 79.7835
+2023-02-02 22:49:49,250 - mmcls - INFO - Epoch [12][10/24]	lr: 1.092e-02, eta: 0:01:41, time: 0.716, data_time: 0.242, memory: 696, loss: 0.8653, top-1: 85.0781, top-5: 95.7031
+2023-02-02 22:49:53,259 - mmcls - INFO - Epoch [12][20/24]	lr: 1.020e-02, eta: 0:01:35, time: 0.384, data_time: 0.002, memory: 696, loss: 0.8529, top-1: 85.3711, top-5: 95.7227
+2023-02-02 22:49:54,929 - mmcls - INFO - Saving checkpoint at 12 epochs
+2023-02-02 22:49:57,801 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:49:57,802 - mmcls - INFO - Epoch(val) [12][6]	acc: 79.4693
+2023-02-02 22:50:04,398 - mmcls - INFO - Epoch [13][10/24]	lr: 9.220e-03, eta: 0:01:28, time: 0.638, data_time: 0.262, memory: 696, loss: 0.8150, top-1: 85.4883, top-5: 96.2500
+2023-02-02 22:50:08,266 - mmcls - INFO - Epoch [13][20/24]	lr: 8.542e-03, eta: 0:01:23, time: 0.405, data_time: 0.022, memory: 696, loss: 0.8094, top-1: 85.2734, top-5: 95.9766
+2023-02-02 22:50:09,807 - mmcls - INFO - Saving checkpoint at 13 epochs
+2023-02-02 22:50:12,560 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:50:12,577 - mmcls - INFO - The previous best checkpoint /opt/logger/cub_etf/best_acc_epoch_11.pth was removed
+2023-02-02 22:50:12,750 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_13.pth.
+2023-02-02 22:50:12,750 - mmcls - INFO - Best acc is 79.8883 at 13 epoch.
+2023-02-02 22:50:12,750 - mmcls - INFO - Epoch(val) [13][6]	acc: 79.8883
+2023-02-02 22:50:20,320 - mmcls - INFO - Epoch [14][10/24]	lr: 7.633e-03, eta: 0:01:16, time: 0.744, data_time: 0.241, memory: 696, loss: 0.7489, top-1: 87.3438, top-5: 96.7188
+2023-02-02 22:50:24,094 - mmcls - INFO - Epoch [14][20/24]	lr: 7.016e-03, eta: 0:01:11, time: 0.376, data_time: 0.013, memory: 696, loss: 0.7997, top-1: 85.8984, top-5: 95.8398
+2023-02-02 22:50:25,320 - mmcls - INFO - Saving checkpoint at 14 epochs
+2023-02-02 22:50:27,937 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:50:27,938 - mmcls - INFO - Epoch(val) [14][6]	acc: 79.8883
+2023-02-02 22:50:35,352 - mmcls - INFO - Epoch [15][10/24]	lr: 6.204e-03, eta: 0:01:05, time: 0.739, data_time: 0.261, memory: 696, loss: 0.7470, top-1: 87.1094, top-5: 96.5430
+2023-02-02 22:50:39,515 - mmcls - INFO - Epoch [15][20/24]	lr: 5.663e-03, eta: 0:00:59, time: 0.410, data_time: 0.002, memory: 696, loss: 0.7393, top-1: 87.4023, top-5: 96.2695
+2023-02-02 22:50:40,757 - mmcls - INFO - Saving checkpoint at 15 epochs
+2023-02-02 22:50:43,443 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:50:43,452 - mmcls - INFO - The previous best checkpoint /opt/logger/cub_etf/best_acc_epoch_13.pth was removed
+2023-02-02 22:50:43,622 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_15.pth.
+2023-02-02 22:50:43,622 - mmcls - INFO - Best acc is 80.2025 at 15 epoch.
+2023-02-02 22:50:43,623 - mmcls - INFO - Epoch(val) [15][6]	acc: 80.2025
+2023-02-02 22:50:51,189 - mmcls - INFO - Epoch [16][10/24]	lr: 4.968e-03, eta: 0:00:53, time: 0.743, data_time: 0.239, memory: 696, loss: 0.7333, top-1: 87.4219, top-5: 96.5430
+2023-02-02 22:50:54,301 - mmcls - INFO - Epoch [16][20/24]	lr: 4.518e-03, eta: 0:00:48, time: 0.316, data_time: 0.014, memory: 696, loss: 0.7036, top-1: 87.6367, top-5: 96.6406
+2023-02-02 22:50:55,363 - mmcls - INFO - Saving checkpoint at 16 epochs
+2023-02-02 22:50:58,207 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:50:58,207 - mmcls - INFO - Epoch(val) [16][6]	acc: 79.8883
+2023-02-02 22:51:05,393 - mmcls - INFO - Epoch [17][10/24]	lr: 3.957e-03, eta: 0:00:41, time: 0.691, data_time: 0.242, memory: 696, loss: 0.6792, top-1: 88.7695, top-5: 96.7578
+2023-02-02 22:51:08,944 - mmcls - INFO - Epoch [17][20/24]	lr: 3.609e-03, eta: 0:00:36, time: 0.376, data_time: 0.027, memory: 696, loss: 0.6956, top-1: 87.9883, top-5: 96.3672
+2023-02-02 22:51:09,456 - mmcls - INFO - Saving checkpoint at 17 epochs
+2023-02-02 22:51:12,021 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:51:12,022 - mmcls - INFO - Epoch(val) [17][6]	acc: 80.0279
+2023-02-02 22:51:17,804 - mmcls - INFO - Epoch [18][10/24]	lr: 3.199e-03, eta: 0:00:29, time: 0.576, data_time: 0.245, memory: 696, loss: 0.6818, top-1: 88.4766, top-5: 96.5430
+2023-02-02 22:51:22,258 - mmcls - INFO - Epoch [18][20/24]	lr: 2.961e-03, eta: 0:00:24, time: 0.445, data_time: 0.002, memory: 696, loss: 0.6741, top-1: 87.6562, top-5: 96.9336
+2023-02-02 22:51:23,827 - mmcls - INFO - Saving checkpoint at 18 epochs
+2023-02-02 22:51:26,589 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:51:26,589 - mmcls - INFO - Epoch(val) [18][6]	acc: 80.1327
+2023-02-02 22:51:33,777 - mmcls - INFO - Epoch [19][10/24]	lr: 2.711e-03, eta: 0:00:18, time: 0.708, data_time: 0.240, memory: 696, loss: 0.6678, top-1: 88.1250, top-5: 96.7188
+2023-02-02 22:51:38,038 - mmcls - INFO - Epoch [19][20/24]	lr: 2.591e-03, eta: 0:00:13, time: 0.431, data_time: 0.011, memory: 696, loss: 0.6714, top-1: 88.6914, top-5: 96.6016
+2023-02-02 22:51:39,465 - mmcls - INFO - Saving checkpoint at 19 epochs
+2023-02-02 22:51:42,323 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:51:42,333 - mmcls - INFO - The previous best checkpoint /opt/logger/cub_etf/best_acc_epoch_15.pth was removed
+2023-02-02 22:51:42,495 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_19.pth.
+2023-02-02 22:51:42,495 - mmcls - INFO - Best acc is 80.2374 at 19 epoch.
+2023-02-02 22:51:42,495 - mmcls - INFO - Epoch(val) [19][6]	acc: 80.2374
+2023-02-02 22:51:49,948 - mmcls - INFO - Epoch [20][10/24]	lr: 2.506e-03, eta: 0:00:06, time: 0.733, data_time: 0.242, memory: 696, loss: 0.6469, top-1: 88.8477, top-5: 96.9141
+2023-02-02 22:51:54,215 - mmcls - INFO - Epoch [20][20/24]	lr: 2.500e-04, eta: 0:00:01, time: 0.435, data_time: 0.013, memory: 696, loss: 0.6692, top-1: 88.2617, top-5: 96.6406
+2023-02-02 22:51:55,841 - mmcls - INFO - Saving checkpoint at 20 epochs
+2023-02-02 22:51:58,568 - mmcls - INFO - Dist Eval Hook : There are 2864 samples in total.
+2023-02-02 22:51:58,578 - mmcls - INFO - The previous best checkpoint /opt/logger/cub_etf/best_acc_epoch_19.pth was removed
+2023-02-02 22:51:58,737 - mmcls - INFO - Now best checkpoint is saved as best_acc_epoch_20.pth.
+2023-02-02 22:51:58,738 - mmcls - INFO - Best acc is 80.4469 at 20 epoch.
+2023-02-02 22:51:58,738 - mmcls - INFO - Epoch(val) [20][6]	acc: 80.4469

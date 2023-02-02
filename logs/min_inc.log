@@ -1,0 +1,1236 @@
+2023-02-02 23:34:48,093 - mmcls - INFO - Environment info:
+------------------------------------------------------------
+sys.platform: linux
+Python: 3.8.13 | packaged by conda-forge | (default, Mar 25 2022, 06:04:10) [GCC 10.3.0]
+CUDA available: True
+GPU 0,1,2,3,4,5,6,7: A100-SXM4-40GB
+CUDA_HOME: /usr/local/cuda
+NVCC: Cuda compilation tools, release 11.7, V11.7.99
+GCC: gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+PyTorch: 1.13.0a0+340c412
+PyTorch compiling details: PyTorch built with:
+  - GCC 9.4
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2020.0.4 Product Build 20200917 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v2.6.0 (Git Hash N/A)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 11.7
+  - NVCC architecture flags: -gencode;arch=compute_52,code=sm_52;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_86,code=compute_86
+  - CuDNN 8.4.1  (built against CUDA 11.6)
+  - Magma 2.6.2
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.7, CUDNN_VERSION=8.4.1, CXX_COMPILER=/usr/bin/c++, CXX_FLAGS=-fno-gnu-unique -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_KINETO -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -DEDGE_PROFILER_USE_KINETO -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Werror=cast-function-type -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.13.0, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=OFF, USE_MPI=ON, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, 
+
+TorchVision: 0.13.0a0
+OpenCV: 3.4.11
+MMCV: 1.6.1
+MMCV Compiler: GCC 9.4
+MMCV CUDA Compiler: 11.7
+MMClassification: 0.23.2_71ef7ba+24f49fc
+------------------------------------------------------------
+
+2023-02-02 23:34:48,094 - mmcls - INFO - Distributed training: True
+2023-02-02 23:34:48,094 - mmcls - INFO - Set random seed to 0, deterministic: True
+2023-02-02 23:34:48,218 - mmcls - INFO - ETF head : evaluating 60 out of 100 classes.
+2023-02-02 23:34:48,218 - mmcls - INFO - ETF head : with_len : False
+2023-02-02 23:34:48,227 - mmcls - INFO - load checkpoint from local path: /opt/logger/m_imagenet_etf/best.pth
+2023-02-02 23:34:48,344 - mmcls - INFO - The model config:
+type = 'ImageClassifierCIL'
+backbone = dict(type='ResNet12', with_avgpool=False, flatten=False)
+neck = dict(type='MLPFFNNeck', in_channels=640, out_channels=512)
+head = dict(
+    type='ETFHead',
+    num_classes=100,
+    eval_classes=60,
+    in_channels=512,
+    loss=dict(type='DRLoss', loss_weight=10.0),
+    topk=(1, 5),
+    cal_acc=True,
+    with_len=False)
+mixup = 0.0
+
+2023-02-02 23:35:08,538 - mmcls - INFO - The feat dataset config is : 
+{'type': 'MiniImageNetFSCILDataset', 'data_prefix': '/opt/data/miniimagenet', 'pipeline': [{'type': 'LoadImageFromFile'}, {'type': 'Resize', 'size': (96, -1)}, {'type': 'CenterCrop', 'crop_size': 84}, {'type': 'Normalize', 'mean': [123.675, 116.28, 103.53], 'std': [58.395, 57.12, 57.375], 'to_rgb': True}, {'type': 'ImageToTensor', 'keys': ['img']}, {'type': 'Collect', 'keys': ['img', 'gt_label'], 'meta_keys': ('filename', 'ori_filename', 'ori_shape', 'img_shape', 'flip', 'flip_direction', 'img_norm_cfg', 'cls_id', 'img_id')}], 'num_cls': 60, 'subset': 'train'}
+2023-02-02 23:35:22,143 - mmcls - INFO - Feat init done with 60 classes
+2023-02-02 23:35:27,680 - mmcls - INFO - Memory done with 60 classes
+2023-02-02 23:35:27,796 - mmcls - INFO - The test dataset config is : 
+{'type': 'MiniImageNetFSCILDataset', 'data_prefix': '/opt/data/miniimagenet', 'pipeline': [{'type': 'LoadImageFromFile'}, {'type': 'Resize', 'size': (96, -1)}, {'type': 'CenterCrop', 'crop_size': 84}, {'type': 'Normalize', 'mean': [123.675, 116.28, 103.53], 'std': [58.395, 57.12, 57.375], 'to_rgb': True}, {'type': 'ImageToTensor', 'keys': ['img']}, {'type': 'Collect', 'keys': ['img', 'gt_label'], 'meta_keys': ('filename', 'ori_filename', 'ori_shape', 'img_shape', 'flip', 'flip_direction', 'img_norm_cfg', 'cls_id', 'img_id')}], 'num_cls': 100, 'subset': 'test'}
+2023-02-02 23:35:34,458 - mmcls - INFO - Test memory done with 100 classes
+2023-02-02 23:35:34,715 - mmcls - INFO - The incremental dataset config is : 
+{'type': 'MiniImageNetFSCILDataset', 'data_prefix': '/opt/data/miniimagenet', 'pipeline': [{'type': 'LoadImageFromFile'}, {'type': 'Resize', 'size': (96, -1)}, {'type': 'CenterCrop', 'crop_size': 84}, {'type': 'Normalize', 'mean': [123.675, 116.28, 103.53], 'std': [58.395, 57.12, 57.375], 'to_rgb': True}, {'type': 'ImageToTensor', 'keys': ['img']}, {'type': 'Collect', 'keys': ['img', 'gt_label'], 'meta_keys': ('filename', 'ori_filename', 'ori_shape', 'img_shape', 'flip', 'flip_direction', 'img_norm_cfg', 'cls_id', 'img_id')}], 'num_cls': 60, 'subset': 'train', 'few_cls': (60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99)}
+2023-02-02 23:35:37,499 - mmcls - INFO - Incremental memory done with 40 classes
+2023-02-02 23:35:37,813 - mmcls - INFO - Evaluating session 1, from 0 to 60.
+2023-02-02 23:35:41,549 - mmcls - INFO - [01]Evaluation results : acc : 84.02 ; acc_base : 84.02 ; acc_inc : nan
+2023-02-02 23:35:41,549 - mmcls - INFO - [01]Evaluation results : acc_incremental_old : nan ; acc_incremental_new : 83.40
+2023-02-02 23:35:41,581 - mmcls - INFO - Start to execute the incremental sessions.
+2023-02-02 23:35:41,640 - mmcls - INFO - Starting session : 2 ------------------------------------------------------------
+2023-02-02 23:35:41,640 - mmcls - INFO - Newly added classes are from 60 to 65.
+2023-02-02 23:35:41,640 - mmcls - INFO - Model now can classify 65 classes
+2023-02-02 23:35:41,640 - mmcls - INFO - 100 steps
+2023-02-02 23:35:41,640 - mmcls - INFO - Extracting mean neck feat from 60 to 60
+2023-02-02 23:35:41,640 - mmcls - INFO - Copy 1 duplications.
+2023-02-02 23:35:41,642 - mmcls - INFO - Session : 2 ; The dataset has 85 samples.
+2023-02-02 23:35:41,642 - mmcls - INFO - Labels : [60, 60, 60, 60, 60, 61, 61, 61, 61, 61, 62, 62, 62, 62, 62, 63, 63, 63, 63, 63, 64, 64, 64, 64, 64, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+2023-02-02 23:35:43,821 - mmcls - INFO - [001/100] Training session : 2 ; lr : 0.006998105536686307 ; loss : 1.9659613370895386 ; acc@1 : 62.5
+2023-02-02 23:35:47,041 - mmcls - INFO - [002/100] Training session : 2 ; lr : 0.011487554072942874 ; loss : 1.7696568965911865 ; acc@1 : 62.5
+2023-02-02 23:35:50,400 - mmcls - INFO - [003/100] Training session : 2 ; lr : 0.015961056588156487 ; loss : 0.5027990341186523 ; acc@1 : 87.5
+2023-02-02 23:35:54,294 - mmcls - INFO - [004/100] Training session : 2 ; lr : 0.020411352143495484 ; loss : 0.4172751009464264 ; acc@1 : 87.5
+2023-02-02 23:35:57,847 - mmcls - INFO - [005/100] Training session : 2 ; lr : 0.02483122112960869 ; loss : 0.15875768661499023 ; acc@1 : 100.0
+2023-02-02 23:36:00,921 - mmcls - INFO - [006/100] Training session : 2 ; lr : 0.02475720207770077 ; loss : 0.39323872327804565 ; acc@1 : 100.0
+2023-02-02 23:36:03,762 - mmcls - INFO - [007/100] Training session : 2 ; lr : 0.024669916640944072 ; loss : 0.05378495156764984 ; acc@1 : 100.0
+2023-02-02 23:36:06,888 - mmcls - INFO - [008/100] Training session : 2 ; lr : 0.02456946026468219 ; loss : 0.41481947898864746 ; acc@1 : 87.5
+2023-02-02 23:36:10,086 - mmcls - INFO - [009/100] Training session : 2 ; lr : 0.024455942796487676 ; loss : 0.43360695242881775 ; acc@1 : 87.5
+2023-02-02 23:36:13,709 - mmcls - INFO - [010/100] Training session : 2 ; lr : 0.024329488366045354 ; loss : 0.20791226625442505 ; acc@1 : 100.0
+2023-02-02 23:36:17,368 - mmcls - INFO - [011/100] Training session : 2 ; lr : 0.02419023524941833 ; loss : 0.28218549489974976 ; acc@1 : 100.0
+2023-02-02 23:36:21,959 - mmcls - INFO - [012/100] Training session : 2 ; lr : 0.02403833571784514 ; loss : 0.12923607230186462 ; acc@1 : 100.0
+2023-02-02 23:36:26,000 - mmcls - INFO - [013/100] Training session : 2 ; lr : 0.023873955871233386 ; loss : 0.08227318525314331 ; acc@1 : 100.0
+2023-02-02 23:36:29,869 - mmcls - INFO - [014/100] Training session : 2 ; lr : 0.023697275456531948 ; loss : 0.2614721655845642 ; acc@1 : 100.0
+2023-02-02 23:36:33,949 - mmcls - INFO - [015/100] Training session : 2 ; lr : 0.023508487671180304 ; loss : 0.11018984019756317 ; acc@1 : 100.0
+2023-02-02 23:36:38,348 - mmcls - INFO - [016/100] Training session : 2 ; lr : 0.02330779895184998 ; loss : 0.11414074897766113 ; acc@1 : 100.0
+2023-02-02 23:36:42,562 - mmcls - INFO - [017/100] Training session : 2 ; lr : 0.023095428748709075 ; loss : 0.1068396046757698 ; acc@1 : 100.0
+2023-02-02 23:36:47,088 - mmcls - INFO - [018/100] Training session : 2 ; lr : 0.02287160928545675 ; loss : 0.08945409208536148 ; acc@1 : 100.0
+2023-02-02 23:36:50,463 - mmcls - INFO - [019/100] Training session : 2 ; lr : 0.022636585305389974 ; loss : 0.06168820708990097 ; acc@1 : 100.0
+2023-02-02 23:36:53,789 - mmcls - INFO - [020/100] Training session : 2 ; lr : 0.022390613803780372 ; loss : 0.11069654673337936 ; acc@1 : 100.0
+2023-02-02 23:36:57,531 - mmcls - INFO - [021/100] Training session : 2 ; lr : 0.022133963746853634 ; loss : 0.12935511767864227 ; acc@1 : 100.0
+2023-02-02 23:37:00,678 - mmcls - INFO - [022/100] Training session : 2 ; lr : 0.021866915777678905 ; loss : 0.05441556125879288 ; acc@1 : 100.0
+2023-02-02 23:37:04,124 - mmcls - INFO - [023/100] Training session : 2 ; lr : 0.02158976190928973 ; loss : 0.04916056990623474 ; acc@1 : 100.0
+2023-02-02 23:37:07,689 - mmcls - INFO - [024/100] Training session : 2 ; lr : 0.021302805205372047 ; loss : 0.05636589601635933 ; acc@1 : 100.0
+2023-02-02 23:37:10,137 - mmcls - INFO - [025/100] Training session : 2 ; lr : 0.02100635944886855 ; loss : 0.028246533125638962 ; acc@1 : 100.0
+2023-02-02 23:37:13,739 - mmcls - INFO - [026/100] Training session : 2 ; lr : 0.020700748798861586 ; loss : 0.06494027376174927 ; acc@1 : 100.0
+2023-02-02 23:37:16,856 - mmcls - INFO - [027/100] Training session : 2 ; lr : 0.020386307436110022 ; loss : 0.054075438529253006 ; acc@1 : 100.0
+2023-02-02 23:37:19,457 - mmcls - INFO - [028/100] Training session : 2 ; lr : 0.020063379197627438 ; loss : 0.06626635044813156 ; acc@1 : 100.0
+2023-02-02 23:37:22,990 - mmcls - INFO - [029/100] Training session : 2 ; lr : 0.019732317200701427 ; loss : 0.05906902626156807 ; acc@1 : 100.0
+2023-02-02 23:37:26,715 - mmcls - INFO - [030/100] Training session : 2 ; lr : 0.01939348345676504 ; loss : 0.052157267928123474 ; acc@1 : 100.0
+2023-02-02 23:37:30,027 - mmcls - INFO - [031/100] Training session : 2 ; lr : 0.01904724847554254 ; loss : 0.03488747775554657 ; acc@1 : 100.0
+2023-02-02 23:37:33,161 - mmcls - INFO - [032/100] Training session : 2 ; lr : 0.018693990859902542 ; loss : 0.05357273668050766 ; acc@1 : 100.0
+2023-02-02 23:37:36,541 - mmcls - INFO - [033/100] Training session : 2 ; lr : 0.018334096891861263 ; loss : 0.015440346673130989 ; acc@1 : 100.0
+2023-02-02 23:37:40,459 - mmcls - INFO - [034/100] Training session : 2 ; lr : 0.01796796011018885 ; loss : 0.010327980853617191 ; acc@1 : 100.0
+2023-02-02 23:37:43,747 - mmcls - INFO - [035/100] Training session : 2 ; lr : 0.0175959808800805 ; loss : 0.07748441398143768 ; acc@1 : 100.0
+2023-02-02 23:37:46,703 - mmcls - INFO - [036/100] Training session : 2 ; lr : 0.01721856595536298 ; loss : 0.0073865437880158424 ; acc@1 : 100.0
+2023-02-02 23:37:49,668 - mmcls - INFO - [037/100] Training session : 2 ; lr : 0.016836128033715335 ; loss : 0.007554260082542896 ; acc@1 : 100.0
+2023-02-02 23:37:53,066 - mmcls - INFO - [038/100] Training session : 2 ; lr : 0.016449085305389976 ; loss : 0.011831965297460556 ; acc@1 : 100.0
+2023-02-02 23:37:56,446 - mmcls - INFO - [039/100] Training session : 2 ; lr : 0.016057860995927827 ; loss : 0.04745886102318764 ; acc@1 : 100.0
+2023-02-02 23:37:59,671 - mmcls - INFO - [040/100] Training session : 2 ; lr : 0.01566288290336739 ; loss : 0.013348002918064594 ; acc@1 : 100.0
+2023-02-02 23:38:02,753 - mmcls - INFO - [041/100] Training session : 2 ; lr : 0.015264582930453869 ; loss : 0.049961838871240616 ; acc@1 : 100.0
+2023-02-02 23:38:06,141 - mmcls - INFO - [042/100] Training session : 2 ; lr : 0.014863396612359863 ; loss : 0.009986949153244495 ; acc@1 : 100.0
+2023-02-02 23:38:09,400 - mmcls - INFO - [043/100] Training session : 2 ; lr : 0.014459762640434045 ; loss : 0.0695471540093422 ; acc@1 : 100.0
+2023-02-02 23:38:13,394 - mmcls - INFO - [044/100] Training session : 2 ; lr : 0.014054122382498632 ; loss : 0.02065994217991829 ; acc@1 : 100.0
+2023-02-02 23:38:16,397 - mmcls - INFO - [045/100] Training session : 2 ; lr : 0.013646919400220114 ; loss : 0.0049655442126095295 ; acc@1 : 100.0
+2023-02-02 23:38:19,436 - mmcls - INFO - [046/100] Training session : 2 ; lr : 0.013238598964081126 ; loss : 0.03335481882095337 ; acc@1 : 100.0
+2023-02-02 23:38:22,327 - mmcls - INFO - [047/100] Training session : 2 ; lr : 0.012829607566483688 ; loss : 0.00675346702337265 ; acc@1 : 100.0
+2023-02-02 23:38:25,777 - mmcls - INFO - [048/100] Training session : 2 ; lr : 0.012420392433516314 ; loss : 0.016060790047049522 ; acc@1 : 100.0
+2023-02-02 23:38:28,610 - mmcls - INFO - [049/100] Training session : 2 ; lr : 0.012011401035918873 ; loss : 0.015744974836707115 ; acc@1 : 100.0
+2023-02-02 23:38:32,008 - mmcls - INFO - [050/100] Training session : 2 ; lr : 0.011603080599779889 ; loss : 0.03915620967745781 ; acc@1 : 100.0
+2023-02-02 23:38:35,176 - mmcls - INFO - [051/100] Training session : 2 ; lr : 0.011195877617501373 ; loss : 0.02152029424905777 ; acc@1 : 100.0
+2023-02-02 23:38:38,987 - mmcls - INFO - [052/100] Training session : 2 ; lr : 0.010790237359565955 ; loss : 0.014826694503426552 ; acc@1 : 100.0
+2023-02-02 23:38:41,988 - mmcls - INFO - [053/100] Training session : 2 ; lr : 0.010386603387640145 ; loss : 0.022289812564849854 ; acc@1 : 100.0
+2023-02-02 23:38:45,018 - mmcls - INFO - [054/100] Training session : 2 ; lr : 0.009985417069546136 ; loss : 0.024576134979724884 ; acc@1 : 100.0
+2023-02-02 23:38:47,843 - mmcls - INFO - [055/100] Training session : 2 ; lr : 0.009587117096632613 ; loss : 0.026941727846860886 ; acc@1 : 100.0
+2023-02-02 23:38:50,839 - mmcls - INFO - [056/100] Training session : 2 ; lr : 0.009192139004072177 ; loss : 0.028408264741301537 ; acc@1 : 100.0
+2023-02-02 23:38:54,045 - mmcls - INFO - [057/100] Training session : 2 ; lr : 0.008800914694610027 ; loss : 0.02529098652303219 ; acc@1 : 100.0
+2023-02-02 23:38:57,408 - mmcls - INFO - [058/100] Training session : 2 ; lr : 0.008413871966284667 ; loss : 0.014893952757120132 ; acc@1 : 100.0
+2023-02-02 23:39:00,581 - mmcls - INFO - [059/100] Training session : 2 ; lr : 0.008031434044637017 ; loss : 0.021353324875235558 ; acc@1 : 100.0
+2023-02-02 23:39:03,994 - mmcls - INFO - [060/100] Training session : 2 ; lr : 0.007654019119919506 ; loss : 0.01661651022732258 ; acc@1 : 100.0
+2023-02-02 23:39:07,025 - mmcls - INFO - [061/100] Training session : 2 ; lr : 0.007282039889811152 ; loss : 0.019905690103769302 ; acc@1 : 100.0
+2023-02-02 23:39:10,707 - mmcls - INFO - [062/100] Training session : 2 ; lr : 0.006915903108138741 ; loss : 0.02351200580596924 ; acc@1 : 100.0
+2023-02-02 23:39:13,274 - mmcls - INFO - [063/100] Training session : 2 ; lr : 0.006556009140097466 ; loss : 0.061973586678504944 ; acc@1 : 100.0
+2023-02-02 23:39:16,695 - mmcls - INFO - [064/100] Training session : 2 ; lr : 0.0062027515244574664 ; loss : 0.04162413999438286 ; acc@1 : 100.0
+2023-02-02 23:39:19,806 - mmcls - INFO - [065/100] Training session : 2 ; lr : 0.00585651654323497 ; loss : 0.008690138347446918 ; acc@1 : 100.0
+2023-02-02 23:39:22,951 - mmcls - INFO - [066/100] Training session : 2 ; lr : 0.005517682799298574 ; loss : 0.010069395415484905 ; acc@1 : 100.0
+2023-02-02 23:39:26,348 - mmcls - INFO - [067/100] Training session : 2 ; lr : 0.005186620802372565 ; loss : 0.0063394405879080296 ; acc@1 : 100.0
+2023-02-02 23:39:29,907 - mmcls - INFO - [068/100] Training session : 2 ; lr : 0.00486369256388998 ; loss : 0.01567303016781807 ; acc@1 : 100.0
+2023-02-02 23:39:33,034 - mmcls - INFO - [069/100] Training session : 2 ; lr : 0.004549251201138413 ; loss : 0.018115077167749405 ; acc@1 : 100.0
+2023-02-02 23:39:36,864 - mmcls - INFO - [070/100] Training session : 2 ; lr : 0.004243640551131457 ; loss : 0.004958165809512138 ; acc@1 : 100.0
+2023-02-02 23:39:39,264 - mmcls - INFO - [071/100] Training session : 2 ; lr : 0.003947194794627954 ; loss : 0.02112865447998047 ; acc@1 : 100.0
+2023-02-02 23:39:43,069 - mmcls - INFO - [072/100] Training session : 2 ; lr : 0.003660238090710274 ; loss : 0.009147337637841702 ; acc@1 : 100.0
+2023-02-02 23:39:46,105 - mmcls - INFO - [073/100] Training session : 2 ; lr : 0.0033830842223210996 ; loss : 0.01591261476278305 ; acc@1 : 100.0
+2023-02-02 23:39:49,399 - mmcls - INFO - [074/100] Training session : 2 ; lr : 0.0031160362531463728 ; loss : 0.01745959371328354 ; acc@1 : 100.0
+2023-02-02 23:39:52,716 - mmcls - INFO - [075/100] Training session : 2 ; lr : 0.002859386196219631 ; loss : 0.018179256469011307 ; acc@1 : 100.0
+2023-02-02 23:39:55,857 - mmcls - INFO - [076/100] Training session : 2 ; lr : 0.002613414694610027 ; loss : 0.02598021924495697 ; acc@1 : 100.0
+2023-02-02 23:39:58,868 - mmcls - INFO - [077/100] Training session : 2 ; lr : 0.002378390714543252 ; loss : 0.028366267681121826 ; acc@1 : 100.0
+2023-02-02 23:40:01,943 - mmcls - INFO - [078/100] Training session : 2 ; lr : 0.002154571251290923 ; loss : 0.01095675677061081 ; acc@1 : 100.0
+2023-02-02 23:40:04,533 - mmcls - INFO - [079/100] Training session : 2 ; lr : 0.001942201048150023 ; loss : 0.023173019289970398 ; acc@1 : 100.0
+2023-02-02 23:40:08,454 - mmcls - INFO - [080/100] Training session : 2 ; lr : 0.001741512328819699 ; loss : 0.013143843971192837 ; acc@1 : 100.0
+2023-02-02 23:40:11,605 - mmcls - INFO - [081/100] Training session : 2 ; lr : 0.0015527245434680521 ; loss : 0.016817858442664146 ; acc@1 : 100.0
+2023-02-02 23:40:14,598 - mmcls - INFO - [082/100] Training session : 2 ; lr : 0.001376044128766614 ; loss : 0.013587395660579205 ; acc@1 : 100.0
+2023-02-02 23:40:17,537 - mmcls - INFO - [083/100] Training session : 2 ; lr : 0.0012116642821548638 ; loss : 0.006993677467107773 ; acc@1 : 100.0
+2023-02-02 23:40:20,365 - mmcls - INFO - [084/100] Training session : 2 ; lr : 0.0010597647505816734 ; loss : 0.013911696150898933 ; acc@1 : 100.0
+2023-02-02 23:40:23,309 - mmcls - INFO - [085/100] Training session : 2 ; lr : 0.0009205116339546464 ; loss : 0.026332447305321693 ; acc@1 : 100.0
+2023-02-02 23:40:25,589 - mmcls - INFO - [086/100] Training session : 2 ; lr : 0.0007940572035123242 ; loss : 0.01371069811284542 ; acc@1 : 100.0
+2023-02-02 23:40:28,775 - mmcls - INFO - [087/100] Training session : 2 ; lr : 0.0006805397353178116 ; loss : 0.01858212612569332 ; acc@1 : 100.0
+2023-02-02 23:40:31,401 - mmcls - INFO - [088/100] Training session : 2 ; lr : 0.000580083359055929 ; loss : 0.00930367223918438 ; acc@1 : 100.0
+2023-02-02 23:40:34,399 - mmcls - INFO - [089/100] Training session : 2 ; lr : 0.0004927979222992343 ; loss : 0.016134250909090042 ; acc@1 : 100.0
+2023-02-02 23:40:37,434 - mmcls - INFO - [090/100] Training session : 2 ; lr : 0.0004187788703913113 ; loss : 0.009653335437178612 ; acc@1 : 100.0
+2023-02-02 23:40:40,373 - mmcls - INFO - [091/100] Training session : 2 ; lr : 0.00035810714207868197 ; loss : 0.013703824952244759 ; acc@1 : 100.0
+2023-02-02 23:40:43,652 - mmcls - INFO - [092/100] Training session : 2 ; lr : 0.0003108490810054837 ; loss : 0.048642754554748535 ; acc@1 : 100.0
+2023-02-02 23:40:46,611 - mmcls - INFO - [093/100] Training session : 2 ; lr : 0.00027705636316766513 ; loss : 0.007780266460031271 ; acc@1 : 100.0
+2023-02-02 23:40:49,933 - mmcls - INFO - [094/100] Training session : 2 ; lr : 0.00025676594040604015 ; loss : 0.0138607919216156 ; acc@1 : 100.0
+2023-02-02 23:40:52,145 - mmcls - INFO - [095/100] Training session : 2 ; lr : 0.00025 ; loss : 0.014161542989313602 ; acc@1 : 100.0
+2023-02-02 23:40:54,556 - mmcls - INFO - [096/100] Training session : 2 ; lr : 2.5e-05 ; loss : 0.036330148577690125 ; acc@1 : 100.0
+2023-02-02 23:40:57,119 - mmcls - INFO - [097/100] Training session : 2 ; lr : 2.5e-05 ; loss : 0.015680259093642235 ; acc@1 : 100.0
+2023-02-02 23:40:59,486 - mmcls - INFO - [098/100] Training session : 2 ; lr : 2.5e-05 ; loss : 0.028279030695557594 ; acc@1 : 100.0
+2023-02-02 23:41:02,017 - mmcls - INFO - [099/100] Training session : 2 ; lr : 2.5e-05 ; loss : 0.011524807661771774 ; acc@1 : 100.0
+2023-02-02 23:41:04,402 - mmcls - INFO - [100/100] Training session : 2 ; lr : 2.5e-05 ; loss : 0.02051508240401745 ; acc@1 : 100.0
+2023-02-02 23:41:04,402 - mmcls - INFO - Evaluating session 2, from 0 to 65.
+2023-02-02 23:41:07,960 - mmcls - INFO - [02]Evaluation results : acc : 76.80 ; acc_base : 78.68 ; acc_inc : 54.20
+2023-02-02 23:41:07,961 - mmcls - INFO - [02]Evaluation results : acc_incremental_old : nan ; acc_incremental_new : 54.20
+2023-02-02 23:41:08,065 - mmcls - INFO - Starting session : 3 ------------------------------------------------------------
+2023-02-02 23:41:08,065 - mmcls - INFO - Newly added classes are from 65 to 70.
+2023-02-02 23:41:08,065 - mmcls - INFO - Model now can classify 70 classes
+2023-02-02 23:41:08,066 - mmcls - INFO - 110 steps
+2023-02-02 23:41:08,066 - mmcls - INFO - Extracting mean neck feat from 60 to 65
+2023-02-02 23:41:08,066 - mmcls - INFO - Copy 2 duplications.
+2023-02-02 23:41:08,074 - mmcls - INFO - Session : 3 ; The dataset has 95 samples.
+2023-02-02 23:41:08,074 - mmcls - INFO - Labels : [65, 65, 65, 65, 65, 66, 66, 66, 66, 66, 67, 67, 67, 67, 67, 68, 68, 68, 68, 68, 69, 69, 69, 69, 69, 60, 61, 62, 63, 64, 60, 61, 62, 63, 64, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+2023-02-02 23:41:10,815 - mmcls - INFO - [001/110] Training session : 3 ; lr : 0.006998449177862337 ; loss : 1.3259899616241455 ; acc@1 : 75.0
+2023-02-02 23:41:12,742 - mmcls - INFO - [002/110] Training session : 3 ; lr : 0.011489811163702832 ; loss : 1.302476406097412 ; acc@1 : 75.0
+2023-02-02 23:41:15,754 - mmcls - INFO - [003/110] Training session : 3 ; lr : 0.01596811640844229 ; loss : 0.6140751838684082 ; acc@1 : 87.5
+2023-02-02 23:41:19,951 - mmcls - INFO - [004/110] Training session : 3 ; lr : 0.020427414185053797 ; loss : 1.0757852792739868 ; acc@1 : 75.0
+2023-02-02 23:41:23,621 - mmcls - INFO - [005/110] Training session : 3 ; lr : 0.024861781474535966 ; loss : 1.5114833116531372 ; acc@1 : 62.5
+2023-02-02 23:41:27,450 - mmcls - INFO - [006/110] Training session : 3 ; lr : 0.024801128658908045 ; loss : 0.7480797171592712 ; acc@1 : 75.0
+2023-02-02 23:41:30,835 - mmcls - INFO - [007/110] Training session : 3 ; lr : 0.024729576559080847 ; loss : 0.45188719034194946 ; acc@1 : 75.0
+2023-02-02 23:41:34,142 - mmcls - INFO - [008/110] Training session : 3 ; lr : 0.024647189223874235 ; loss : 0.5216777920722961 ; acc@1 : 75.0
+2023-02-02 23:41:37,245 - mmcls - INFO - [009/110] Training session : 3 ; lr : 0.024554040401111185 ; loss : 0.1362769603729248 ; acc@1 : 100.0
+2023-02-02 23:41:40,414 - mmcls - INFO - [010/110] Training session : 3 ; lr : 0.024450213471603494 ; loss : 0.14003205299377441 ; acc@1 : 100.0
+2023-02-02 23:41:44,677 - mmcls - INFO - [011/110] Training session : 3 ; lr : 0.024335801374514656 ; loss : 0.3117813169956207 ; acc@1 : 87.5
+2023-02-02 23:41:48,701 - mmcls - INFO - [012/110] Training session : 3 ; lr : 0.02421090652416675 ; loss : 0.09149011224508286 ; acc@1 : 100.0
+2023-02-02 23:41:52,965 - mmcls - INFO - [013/110] Training session : 3 ; lr : 0.02407564071836571 ; loss : 0.2999343276023865 ; acc@1 : 100.0
+2023-02-02 23:41:57,214 - mmcls - INFO - [014/110] Training session : 3 ; lr : 0.023930125038327185 ; loss : 0.07632534205913544 ; acc@1 : 100.0
+2023-02-02 23:42:01,073 - mmcls - INFO - [015/110] Training session : 3 ; lr : 0.023774489740292438 ; loss : 0.09844107925891876 ; acc@1 : 100.0
+2023-02-02 23:42:04,943 - mmcls - INFO - [016/110] Training session : 3 ; lr : 0.023608874138931358 ; loss : 0.07109826803207397 ; acc@1 : 100.0
+2023-02-02 23:42:08,235 - mmcls - INFO - [017/110] Training session : 3 ; lr : 0.023433426482636983 ; loss : 0.2321888655424118 ; acc@1 : 100.0
+2023-02-02 23:42:11,913 - mmcls - INFO - [018/110] Training session : 3 ; lr : 0.023248303820823095 ; loss : 0.047051794826984406 ; acc@1 : 100.0
+2023-02-02 23:42:15,470 - mmcls - INFO - [019/110] Training session : 3 ; lr : 0.023053671863343735 ; loss : 0.32641464471817017 ; acc@1 : 75.0
+2023-02-02 23:42:18,977 - mmcls - INFO - [020/110] Training session : 3 ; lr : 0.02284970483216044 ; loss : 0.08740957826375961 ; acc@1 : 100.0
+2023-02-02 23:42:22,634 - mmcls - INFO - [021/110] Training session : 3 ; lr : 0.022636585305389974 ; loss : 0.11036849021911621 ; acc@1 : 100.0
+2023-02-02 23:42:25,015 - mmcls - INFO - [022/110] Training session : 3 ; lr : 0.022414504053872228 ; loss : 0.2570417523384094 ; acc@1 : 87.5
+2023-02-02 23:42:28,461 - mmcls - INFO - [023/110] Training session : 3 ; lr : 0.02218365987040442 ; loss : 0.06568488478660583 ; acc@1 : 100.0
+2023-02-02 23:42:31,820 - mmcls - INFO - [024/110] Training session : 3 ; lr : 0.021944259391794688 ; loss : 0.046455319970846176 ; acc@1 : 100.0
+2023-02-02 23:42:35,468 - mmcls - INFO - [025/110] Training session : 3 ; lr : 0.021696516913894102 ; loss : 0.2539467513561249 ; acc@1 : 87.5
+2023-02-02 23:42:39,302 - mmcls - INFO - [026/110] Training session : 3 ; lr : 0.021440654199772893 ; loss : 0.08620284497737885 ; acc@1 : 100.0
+2023-02-02 23:42:42,269 - mmcls - INFO - [027/110] Training session : 3 ; lr : 0.02117690028121245 ; loss : 0.05172675475478172 ; acc@1 : 100.0
+2023-02-02 23:42:44,931 - mmcls - INFO - [028/110] Training session : 3 ; lr : 0.020905491253690872 ; loss : 0.03175991401076317 ; acc@1 : 100.0
+2023-02-02 23:42:47,774 - mmcls - INFO - [029/110] Training session : 3 ; lr : 0.02062667006504552 ; loss : 0.17654554545879364 ; acc@1 : 87.5
+2023-02-02 23:42:50,896 - mmcls - INFO - [030/110] Training session : 3 ; lr : 0.020340686298001828 ; loss : 0.017459969967603683 ; acc@1 : 100.0
+2023-02-02 23:42:54,587 - mmcls - INFO - [031/110] Training session : 3 ; lr : 0.020047795946762932 ; loss : 0.10567642748355865 ; acc@1 : 100.0
+2023-02-02 23:42:57,589 - mmcls - INFO - [032/110] Training session : 3 ; lr : 0.019748261187860213 ; loss : 0.0296025313436985 ; acc@1 : 100.0
+2023-02-02 23:43:00,844 - mmcls - INFO - [033/110] Training session : 3 ; lr : 0.01944235014546977 ; loss : 0.05112903565168381 ; acc@1 : 100.0
+2023-02-02 23:43:04,190 - mmcls - INFO - [034/110] Training session : 3 ; lr : 0.019130336651404994 ; loss : 0.11207167059183121 ; acc@1 : 87.5
+2023-02-02 23:43:06,845 - mmcls - INFO - [035/110] Training session : 3 ; lr : 0.018812500000000003 ; loss : 0.021800532937049866 ; acc@1 : 100.0
+2023-02-02 23:43:10,693 - mmcls - INFO - [036/110] Training session : 3 ; lr : 0.01848912469810336 ; loss : 0.04179520532488823 ; acc@1 : 100.0
+2023-02-02 23:43:13,156 - mmcls - INFO - [037/110] Training session : 3 ; lr : 0.018160500210405953 ; loss : 0.06518383324146271 ; acc@1 : 100.0
+2023-02-02 23:43:16,514 - mmcls - INFO - [038/110] Training session : 3 ; lr : 0.017826920700330876 ; loss : 0.04769560694694519 ; acc@1 : 100.0
+2023-02-02 23:43:19,558 - mmcls - INFO - [039/110] Training session : 3 ; lr : 0.017488684766717305 ; loss : 0.0227068942040205 ; acc@1 : 100.0
+2023-02-02 23:43:22,722 - mmcls - INFO - [040/110] Training session : 3 ; lr : 0.01714609517653414 ; loss : 0.03596552088856697 ; acc@1 : 100.0
+2023-02-02 23:43:26,093 - mmcls - INFO - [041/110] Training session : 3 ; lr : 0.016799458593862525 ; loss : 0.01649640128016472 ; acc@1 : 100.0
+2023-02-02 23:43:28,855 - mmcls - INFO - [042/110] Training session : 3 ; lr : 0.016449085305389976 ; loss : 0.03690183535218239 ; acc@1 : 100.0
+2023-02-02 23:43:32,068 - mmcls - INFO - [043/110] Training session : 3 ; lr : 0.016095288942661785 ; loss : 0.04328563064336777 ; acc@1 : 100.0
+2023-02-02 23:43:35,907 - mmcls - INFO - [044/110] Training session : 3 ; lr : 0.015738386201338293 ; loss : 0.03903999552130699 ; acc@1 : 100.0
+2023-02-02 23:43:39,199 - mmcls - INFO - [045/110] Training session : 3 ; lr : 0.015378696557709392 ; loss : 0.04664981737732887 ; acc@1 : 100.0
+2023-02-02 23:43:42,384 - mmcls - INFO - [046/110] Training session : 3 ; lr : 0.015016541982719973 ; loss : 0.013306953012943268 ; acc@1 : 100.0
+2023-02-02 23:43:45,586 - mmcls - INFO - [047/110] Training session : 3 ; lr : 0.01465224665376233 ; loss : 0.010674308985471725 ; acc@1 : 100.0
+2023-02-02 23:43:49,297 - mmcls - INFO - [048/110] Training session : 3 ; lr : 0.014286136664493488 ; loss : 0.02124781720340252 ; acc@1 : 100.0
+2023-02-02 23:43:52,237 - mmcls - INFO - [049/110] Training session : 3 ; lr : 0.013918539732937213 ; loss : 0.026661986485123634 ; acc@1 : 100.0
+2023-02-02 23:43:55,518 - mmcls - INFO - [050/110] Training session : 3 ; lr : 0.013549784908132002 ; loss : 0.028008311986923218 ; acc@1 : 100.0
+2023-02-02 23:43:58,474 - mmcls - INFO - [051/110] Training session : 3 ; lr : 0.013180202275587624 ; loss : 0.022400470450520515 ; acc@1 : 100.0
+2023-02-02 23:44:01,549 - mmcls - INFO - [052/110] Training session : 3 ; lr : 0.012810122661813889 ; loss : 0.06067698448896408 ; acc@1 : 100.0
+2023-02-02 23:44:04,728 - mmcls - INFO - [053/110] Training session : 3 ; lr : 0.012439877338186116 ; loss : 0.03303227946162224 ; acc@1 : 100.0
+2023-02-02 23:44:07,820 - mmcls - INFO - [054/110] Training session : 3 ; lr : 0.012069797724412383 ; loss : 0.05440701171755791 ; acc@1 : 100.0
+2023-02-02 23:44:10,504 - mmcls - INFO - [055/110] Training session : 3 ; lr : 0.011700215091868001 ; loss : 0.015230108983814716 ; acc@1 : 100.0
+2023-02-02 23:44:14,314 - mmcls - INFO - [056/110] Training session : 3 ; lr : 0.011331460267062792 ; loss : 0.07317370176315308 ; acc@1 : 100.0
+2023-02-02 23:44:17,526 - mmcls - INFO - [057/110] Training session : 3 ; lr : 0.010963863335506517 ; loss : 0.04367782920598984 ; acc@1 : 100.0
+2023-02-02 23:44:20,639 - mmcls - INFO - [058/110] Training session : 3 ; lr : 0.010597753346237672 ; loss : 0.024290399625897408 ; acc@1 : 100.0
+2023-02-02 23:44:24,012 - mmcls - INFO - [059/110] Training session : 3 ; lr : 0.01023345801728003 ; loss : 0.03203553333878517 ; acc@1 : 100.0
+2023-02-02 23:44:27,014 - mmcls - INFO - [060/110] Training session : 3 ; lr : 0.00987130344229061 ; loss : 0.017191926017403603 ; acc@1 : 100.0
+2023-02-02 23:44:29,233 - mmcls - INFO - [061/110] Training session : 3 ; lr : 0.009511613798661708 ; loss : 0.06143852323293686 ; acc@1 : 100.0
+2023-02-02 23:44:32,879 - mmcls - INFO - [062/110] Training session : 3 ; lr : 0.009154711057338219 ; loss : 0.038408633321523666 ; acc@1 : 100.0
+2023-02-02 23:44:36,113 - mmcls - INFO - [063/110] Training session : 3 ; lr : 0.008800914694610027 ; loss : 0.011019743047654629 ; acc@1 : 100.0
+2023-02-02 23:44:39,595 - mmcls - INFO - [064/110] Training session : 3 ; lr : 0.00845054140613748 ; loss : 0.020751673728227615 ; acc@1 : 100.0
+2023-02-02 23:44:42,534 - mmcls - INFO - [065/110] Training session : 3 ; lr : 0.008103904823465862 ; loss : 0.01404594536870718 ; acc@1 : 100.0
+2023-02-02 23:44:45,631 - mmcls - INFO - [066/110] Training session : 3 ; lr : 0.0077613152332826965 ; loss : 0.007397322915494442 ; acc@1 : 100.0
+2023-02-02 23:44:48,728 - mmcls - INFO - [067/110] Training session : 3 ; lr : 0.00742307929966913 ; loss : 0.03473001718521118 ; acc@1 : 100.0
+2023-02-02 23:44:51,840 - mmcls - INFO - [068/110] Training session : 3 ; lr : 0.0070894997895940455 ; loss : 0.02088794857263565 ; acc@1 : 100.0
+2023-02-02 23:44:54,669 - mmcls - INFO - [069/110] Training session : 3 ; lr : 0.006760875301896643 ; loss : 0.015432676300406456 ; acc@1 : 100.0
+2023-02-02 23:44:57,698 - mmcls - INFO - [070/110] Training session : 3 ; lr : 0.006437500000000003 ; loss : 0.015151235274970531 ; acc@1 : 100.0
+2023-02-02 23:45:01,054 - mmcls - INFO - [071/110] Training session : 3 ; lr : 0.006119663348595004 ; loss : 0.07236599177122116 ; acc@1 : 100.0
+2023-02-02 23:45:04,779 - mmcls - INFO - [072/110] Training session : 3 ; lr : 0.005807649854530233 ; loss : 0.016167528927326202 ; acc@1 : 100.0
+2023-02-02 23:45:07,866 - mmcls - INFO - [073/110] Training session : 3 ; lr : 0.005501738812139792 ; loss : 0.02177787572145462 ; acc@1 : 100.0
+2023-02-02 23:45:10,819 - mmcls - INFO - [074/110] Training session : 3 ; lr : 0.005202204053237069 ; loss : 0.03069170191884041 ; acc@1 : 100.0
+2023-02-02 23:45:14,237 - mmcls - INFO - [075/110] Training session : 3 ; lr : 0.004909313701998173 ; loss : 0.019896455109119415 ; acc@1 : 100.0
+2023-02-02 23:45:17,442 - mmcls - INFO - [076/110] Training session : 3 ; lr : 0.004623329934954482 ; loss : 0.0312606543302536 ; acc@1 : 100.0
+2023-02-02 23:45:20,623 - mmcls - INFO - [077/110] Training session : 3 ; lr : 0.004344508746309134 ; loss : 0.029160751029849052 ; acc@1 : 100.0
+2023-02-02 23:45:23,831 - mmcls - INFO - [078/110] Training session : 3 ; lr : 0.0040730997187875505 ; loss : 0.022310402244329453 ; acc@1 : 100.0
+2023-02-02 23:45:26,906 - mmcls - INFO - [079/110] Training session : 3 ; lr : 0.0038093458002271107 ; loss : 0.013705193996429443 ; acc@1 : 100.0
+2023-02-02 23:45:30,174 - mmcls - INFO - [080/110] Training session : 3 ; lr : 0.0035534830861059016 ; loss : 0.033036064356565475 ; acc@1 : 100.0
+2023-02-02 23:45:33,302 - mmcls - INFO - [081/110] Training session : 3 ; lr : 0.0033057406082053157 ; loss : 0.0336662158370018 ; acc@1 : 100.0
+2023-02-02 23:45:36,339 - mmcls - INFO - [082/110] Training session : 3 ; lr : 0.0030663401295955824 ; loss : 0.030325232073664665 ; acc@1 : 100.0
+2023-02-02 23:45:39,329 - mmcls - INFO - [083/110] Training session : 3 ; lr : 0.0028354959461277807 ; loss : 0.017619531601667404 ; acc@1 : 100.0
+2023-02-02 23:45:42,464 - mmcls - INFO - [084/110] Training session : 3 ; lr : 0.002613414694610027 ; loss : 0.03690650686621666 ; acc@1 : 100.0
+2023-02-02 23:45:45,607 - mmcls - INFO - [085/110] Training session : 3 ; lr : 0.0024002951678395662 ; loss : 0.04164203628897667 ; acc@1 : 100.0
+2023-02-02 23:45:48,533 - mmcls - INFO - [086/110] Training session : 3 ; lr : 0.0021963281366562653 ; loss : 0.06526476889848709 ; acc@1 : 100.0
+2023-02-02 23:45:51,424 - mmcls - INFO - [087/110] Training session : 3 ; lr : 0.002001696179176907 ; loss : 0.02485758624970913 ; acc@1 : 100.0
+2023-02-02 23:45:54,885 - mmcls - INFO - [088/110] Training session : 3 ; lr : 0.0018165735173630206 ; loss : 0.029298199340701103 ; acc@1 : 100.0
+2023-02-02 23:45:57,987 - mmcls - INFO - [089/110] Training session : 3 ; lr : 0.0016411258610686433 ; loss : 0.017364393919706345 ; acc@1 : 100.0
+2023-02-02 23:46:01,018 - mmcls - INFO - [090/110] Training session : 3 ; lr : 0.0014755102597075645 ; loss : 0.04608865827322006 ; acc@1 : 100.0
+2023-02-02 23:46:03,816 - mmcls - INFO - [091/110] Training session : 3 ; lr : 0.001319874961672813 ; loss : 0.015248694457113743 ; acc@1 : 100.0
+2023-02-02 23:46:06,562 - mmcls - INFO - [092/110] Training session : 3 ; lr : 0.0011743592816342908 ; loss : 0.014665395021438599 ; acc@1 : 100.0
+2023-02-02 23:46:09,985 - mmcls - INFO - [093/110] Training session : 3 ; lr : 0.0010390934758332522 ; loss : 0.04227069765329361 ; acc@1 : 100.0
+2023-02-02 23:46:13,796 - mmcls - INFO - [094/110] Training session : 3 ; lr : 0.0009141986254853424 ; loss : 0.011536678299307823 ; acc@1 : 100.0
+2023-02-02 23:46:16,907 - mmcls - INFO - [095/110] Training session : 3 ; lr : 0.0007997865283965078 ; loss : 0.05931415408849716 ; acc@1 : 100.0
+2023-02-02 23:46:19,086 - mmcls - INFO - [096/110] Training session : 3 ; lr : 0.0006959595988888162 ; loss : 0.01615721546113491 ; acc@1 : 100.0
+2023-02-02 23:46:21,479 - mmcls - INFO - [097/110] Training session : 3 ; lr : 0.0006028107761257646 ; loss : 0.032853953540325165 ; acc@1 : 100.0
+2023-02-02 23:46:23,799 - mmcls - INFO - [098/110] Training session : 3 ; lr : 0.0005204234409191546 ; loss : 0.01834002323448658 ; acc@1 : 100.0
+2023-02-02 23:46:26,314 - mmcls - INFO - [099/110] Training session : 3 ; lr : 0.00044887134109195784 ; loss : 0.023910675197839737 ; acc@1 : 100.0
+2023-02-02 23:46:28,221 - mmcls - INFO - [100/110] Training session : 3 ; lr : 0.00038821852546403455 ; loss : 0.026311466470360756 ; acc@1 : 100.0
+2023-02-02 23:46:31,721 - mmcls - INFO - [101/110] Training session : 3 ; lr : 0.00033851928651976274 ; loss : 0.01616796664893627 ; acc@1 : 100.0
+2023-02-02 23:46:34,612 - mmcls - INFO - [102/110] Training session : 3 ; lr : 0.00029981811180891654 ; loss : 0.039347726851701736 ; acc@1 : 100.0
+2023-02-02 23:46:39,863 - mmcls - INFO - [103/110] Training session : 3 ; lr : 0.0002721496441242775 ; loss : 0.024564776569604874 ; acc@1 : 100.0
+2023-02-02 23:46:44,543 - mmcls - INFO - [104/110] Training session : 3 ; lr : 0.00025553865049164637 ; loss : 0.058882515877485275 ; acc@1 : 100.0
+2023-02-02 23:46:48,724 - mmcls - INFO - [105/110] Training session : 3 ; lr : 0.00025 ; loss : 0.016608497127890587 ; acc@1 : 100.0
+2023-02-02 23:46:52,313 - mmcls - INFO - [106/110] Training session : 3 ; lr : 2.5e-05 ; loss : 0.05161842703819275 ; acc@1 : 100.0
+2023-02-02 23:46:54,945 - mmcls - INFO - [107/110] Training session : 3 ; lr : 2.5e-05 ; loss : 0.1456306278705597 ; acc@1 : 87.5
+2023-02-02 23:46:57,357 - mmcls - INFO - [108/110] Training session : 3 ; lr : 2.5e-05 ; loss : 0.153743177652359 ; acc@1 : 87.5
+2023-02-02 23:46:59,597 - mmcls - INFO - [109/110] Training session : 3 ; lr : 2.5e-05 ; loss : 0.025246312841773033 ; acc@1 : 100.0
+2023-02-02 23:47:02,095 - mmcls - INFO - [110/110] Training session : 3 ; lr : 2.5e-05 ; loss : 0.04819471389055252 ; acc@1 : 100.0
+2023-02-02 23:47:02,096 - mmcls - INFO - Evaluating session 3, from 0 to 70.
+2023-02-02 23:47:05,914 - mmcls - INFO - [03]Evaluation results : acc : 72.00 ; acc_base : 75.98 ; acc_inc : 48.10
+2023-02-02 23:47:05,914 - mmcls - INFO - [03]Evaluation results : acc_incremental_old : 33.00 ; acc_incremental_new : 63.20
+2023-02-02 23:47:06,052 - mmcls - INFO - Starting session : 4 ------------------------------------------------------------
+2023-02-02 23:47:06,052 - mmcls - INFO - Newly added classes are from 70 to 75.
+2023-02-02 23:47:06,052 - mmcls - INFO - Model now can classify 75 classes
+2023-02-02 23:47:06,053 - mmcls - INFO - 120 steps
+2023-02-02 23:47:06,053 - mmcls - INFO - Extracting mean neck feat from 60 to 70
+2023-02-02 23:47:06,053 - mmcls - INFO - Copy 3 duplications.
+2023-02-02 23:47:06,059 - mmcls - INFO - Session : 4 ; The dataset has 115 samples.
+2023-02-02 23:47:06,059 - mmcls - INFO - Labels : [70, 70, 70, 70, 70, 71, 71, 71, 71, 71, 72, 72, 72, 72, 72, 73, 73, 73, 73, 73, 74, 74, 74, 74, 74, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+2023-02-02 23:47:08,989 - mmcls - INFO - [001/120] Training session : 4 ; lr : 0.006998707143572518 ; loss : 1.2847323417663574 ; acc@1 : 75.0
+2023-02-02 23:47:11,808 - mmcls - INFO - [002/120] Training session : 4 ; lr : 0.011491505671325997 ; loss : 1.2654244899749756 ; acc@1 : 75.0
+2023-02-02 23:47:15,395 - mmcls - INFO - [003/120] Training session : 4 ; lr : 0.015973417325943394 ; loss : 0.029202967882156372 ; acc@1 : 100.0
+2023-02-02 23:47:19,403 - mmcls - INFO - [004/120] Training session : 4 ; lr : 0.020439476933238786 ; loss : 0.5579060912132263 ; acc@1 : 87.5
+2023-02-02 23:47:22,821 - mmcls - INFO - [005/120] Training session : 4 ; lr : 0.024884738582199594 ; loss : 0.46391940116882324 ; acc@1 : 87.5
+2023-02-02 23:47:27,154 - mmcls - INFO - [006/120] Training session : 4 ; lr : 0.024834137106022478 ; loss : 0.2388167381286621 ; acc@1 : 87.5
+2023-02-02 23:47:31,299 - mmcls - INFO - [007/120] Training session : 4 ; lr : 0.024774424714185037 ; loss : 0.8206326365470886 ; acc@1 : 75.0
+2023-02-02 23:47:35,926 - mmcls - INFO - [008/120] Training session : 4 ; lr : 0.024705645966311866 ; loss : 0.5460205078125 ; acc@1 : 75.0
+2023-02-02 23:47:40,611 - mmcls - INFO - [009/120] Training session : 4 ; lr : 0.024627852187682184 ; loss : 0.48615241050720215 ; acc@1 : 87.5
+2023-02-02 23:47:43,803 - mmcls - INFO - [010/120] Training session : 4 ; lr : 0.024541101430929017 ; loss : 0.3623368740081787 ; acc@1 : 100.0
+2023-02-02 23:47:47,513 - mmcls - INFO - [011/120] Training session : 4 ; lr : 0.024445458432718146 ; loss : 0.5009221434593201 ; acc@1 : 100.0
+2023-02-02 23:47:51,606 - mmcls - INFO - [012/120] Training session : 4 ; lr : 0.024340994565439165 ; loss : 0.19695743918418884 ; acc@1 : 100.0
+2023-02-02 23:47:55,166 - mmcls - INFO - [013/120] Training session : 4 ; lr : 0.024227787783944753 ; loss : 0.23708632588386536 ; acc@1 : 100.0
+2023-02-02 23:47:58,774 - mmcls - INFO - [014/120] Training session : 4 ; lr : 0.02410592256737781 ; loss : 0.13425126671791077 ; acc@1 : 100.0
+2023-02-02 23:48:02,299 - mmcls - INFO - [015/120] Training session : 4 ; lr : 0.023975489856129982 ; loss : 0.3123410940170288 ; acc@1 : 87.5
+2023-02-02 23:48:05,083 - mmcls - INFO - [016/120] Training session : 4 ; lr : 0.023836586983978527 ; loss : 0.12575818598270416 ; acc@1 : 100.0
+2023-02-02 23:48:08,427 - mmcls - INFO - [017/120] Training session : 4 ; lr : 0.023689317605452183 ; loss : 0.15248799324035645 ; acc@1 : 100.0
+2023-02-02 23:48:12,220 - mmcls - INFO - [018/120] Training session : 4 ; lr : 0.02353379161848031 ; loss : 0.13231173157691956 ; acc@1 : 100.0
+2023-02-02 23:48:15,903 - mmcls - INFO - [019/120] Training session : 4 ; lr : 0.023370125082382905 ; loss : 0.048548623919487 ; acc@1 : 100.0
+2023-02-02 23:48:18,812 - mmcls - INFO - [020/120] Training session : 4 ; lr : 0.023198440131262796 ; loss : 0.08127139508724213 ; acc@1 : 100.0
+2023-02-02 23:48:22,099 - mmcls - INFO - [021/120] Training session : 4 ; lr : 0.023018864882864608 ; loss : 0.08024509996175766 ; acc@1 : 100.0
+2023-02-02 23:48:25,518 - mmcls - INFO - [022/120] Training session : 4 ; lr : 0.022831533342968485 ; loss : 0.08574311435222626 ; acc@1 : 100.0
+2023-02-02 23:48:28,478 - mmcls - INFO - [023/120] Training session : 4 ; lr : 0.022636585305389974 ; loss : 0.10092905163764954 ; acc@1 : 100.0
+2023-02-02 23:48:31,805 - mmcls - INFO - [024/120] Training session : 4 ; lr : 0.02243416624766062 ; loss : 0.06771103292703629 ; acc@1 : 100.0
+2023-02-02 23:48:34,873 - mmcls - INFO - [025/120] Training session : 4 ; lr : 0.0222244272224672 ; loss : 0.04604195058345795 ; acc@1 : 100.0
+2023-02-02 23:48:37,618 - mmcls - INFO - [026/120] Training session : 4 ; lr : 0.022007524744930514 ; loss : 0.054893773049116135 ; acc@1 : 100.0
+2023-02-02 23:48:40,899 - mmcls - INFO - [027/120] Training session : 4 ; lr : 0.021783620675807993 ; loss : 0.09966905415058136 ; acc@1 : 100.0
+2023-02-02 23:48:44,468 - mmcls - INFO - [028/120] Training session : 4 ; lr : 0.02155288210070708 ; loss : 0.044051818549633026 ; acc@1 : 100.0
+2023-02-02 23:48:47,824 - mmcls - INFO - [029/120] Training session : 4 ; lr : 0.021315481205399712 ; loss : 0.0490599200129509 ; acc@1 : 100.0
+2023-02-02 23:48:50,584 - mmcls - INFO - [030/120] Training session : 4 ; lr : 0.021071595147330847 ; loss : 0.04663604497909546 ; acc@1 : 100.0
+2023-02-02 23:48:53,481 - mmcls - INFO - [031/120] Training session : 4 ; lr : 0.020821405923416934 ; loss : 0.07475308328866959 ; acc@1 : 100.0
+2023-02-02 23:48:56,624 - mmcls - INFO - [032/120] Training session : 4 ; lr : 0.020565100234232993 ; loss : 0.07782577723264694 ; acc@1 : 100.0
+2023-02-02 23:49:00,115 - mmcls - INFO - [033/120] Training session : 4 ; lr : 0.020302869344689656 ; loss : 0.086930051445961 ; acc@1 : 100.0
+2023-02-02 23:49:03,391 - mmcls - INFO - [034/120] Training session : 4 ; lr : 0.020034908941304105 ; loss : 0.25439420342445374 ; acc@1 : 87.5
+2023-02-02 23:49:06,431 - mmcls - INFO - [035/120] Training session : 4 ; lr : 0.019761418986171484 ; loss : 0.18715977668762207 ; acc@1 : 87.5
+2023-02-02 23:49:09,832 - mmcls - INFO - [036/120] Training session : 4 ; lr : 0.019482603567745664 ; loss : 0.03202974051237106 ; acc@1 : 100.0
+2023-02-02 23:49:13,347 - mmcls - INFO - [037/120] Training session : 4 ; lr : 0.019198670748540817 ; loss : 0.02953021600842476 ; acc@1 : 100.0
+2023-02-02 23:49:16,670 - mmcls - INFO - [038/120] Training session : 4 ; lr : 0.018909832409867353 ; loss : 0.04495907574892044 ; acc@1 : 100.0
+2023-02-02 23:49:20,039 - mmcls - INFO - [039/120] Training session : 4 ; lr : 0.018616304093718138 ; loss : 0.23124179244041443 ; acc@1 : 75.0
+2023-02-02 23:49:23,499 - mmcls - INFO - [040/120] Training session : 4 ; lr : 0.018318304841923008 ; loss : 0.04712725058197975 ; acc@1 : 100.0
+2023-02-02 23:49:27,137 - mmcls - INFO - [041/120] Training session : 4 ; lr : 0.018016057032691525 ; loss : 0.030014172196388245 ; acc@1 : 100.0
+2023-02-02 23:49:30,802 - mmcls - INFO - [042/120] Training session : 4 ; lr : 0.017709786214666037 ; loss : 0.06420525908470154 ; acc@1 : 100.0
+2023-02-02 23:49:34,098 - mmcls - INFO - [043/120] Training session : 4 ; lr : 0.017399720938608802 ; loss : 0.1683405041694641 ; acc@1 : 87.5
+2023-02-02 23:49:37,795 - mmcls - INFO - [044/120] Training session : 4 ; lr : 0.017086092586848883 ; loss : 0.027479328215122223 ; acc@1 : 100.0
+2023-02-02 23:49:41,508 - mmcls - INFO - [045/120] Training session : 4 ; lr : 0.016769135200615952 ; loss : 0.07364018261432648 ; acc@1 : 100.0
+2023-02-02 23:49:44,447 - mmcls - INFO - [046/120] Training session : 4 ; lr : 0.016449085305389976 ; loss : 0.02900248020887375 ; acc@1 : 100.0
+2023-02-02 23:49:47,953 - mmcls - INFO - [047/120] Training session : 4 ; lr : 0.01612618173439701 ; loss : 0.04702489823102951 ; acc@1 : 100.0
+2023-02-02 23:49:51,347 - mmcls - INFO - [048/120] Training session : 4 ; lr : 0.015800665450382924 ; loss : 0.018531249836087227 ; acc@1 : 100.0
+2023-02-02 23:49:54,695 - mmcls - INFO - [049/120] Training session : 4 ; lr : 0.015472779365797959 ; loss : 0.022592468187212944 ; acc@1 : 100.0
+2023-02-02 23:49:58,096 - mmcls - INFO - [050/120] Training session : 4 ; lr : 0.015142768161526345 ; loss : 0.0648355484008789 ; acc@1 : 100.0
+2023-02-02 23:49:59,993 - mmcls - INFO - [051/120] Training session : 4 ; lr : 0.014810878104296273 ; loss : 0.03344571590423584 ; acc@1 : 100.0
+2023-02-02 23:50:01,941 - mmcls - INFO - [052/120] Training session : 4 ; lr : 0.014477356862906412 ; loss : 0.03066187910735607 ; acc@1 : 100.0
+2023-02-02 23:50:03,848 - mmcls - INFO - [053/120] Training session : 4 ; lr : 0.014142453323406193 ; loss : 0.048518769443035126 ; acc@1 : 100.0
+2023-02-02 23:50:06,590 - mmcls - INFO - [054/120] Training session : 4 ; lr : 0.013806417403367702 ; loss : 0.018761606886982918 ; acc@1 : 100.0
+2023-02-02 23:50:08,781 - mmcls - INFO - [055/120] Training session : 4 ; lr : 0.013469499865387806 ; loss : 0.17143020033836365 ; acc@1 : 87.5
+2023-02-02 23:50:11,431 - mmcls - INFO - [056/120] Training session : 4 ; lr : 0.013131952129959728 ; loss : 0.09013789892196655 ; acc@1 : 100.0
+2023-02-02 23:50:14,074 - mmcls - INFO - [057/120] Training session : 4 ; lr : 0.012794026087853645 ; loss : 0.023529717698693275 ; acc@1 : 100.0
+2023-02-02 23:50:16,717 - mmcls - INFO - [058/120] Training session : 4 ; lr : 0.012455973912146359 ; loss : 0.10626871883869171 ; acc@1 : 87.5
+2023-02-02 23:50:18,701 - mmcls - INFO - [059/120] Training session : 4 ; lr : 0.012118047870040274 ; loss : 0.026819702237844467 ; acc@1 : 100.0
+2023-02-02 23:50:21,259 - mmcls - INFO - [060/120] Training session : 4 ; lr : 0.0117805001346122 ; loss : 0.09706468135118484 ; acc@1 : 87.5
+2023-02-02 23:50:23,631 - mmcls - INFO - [061/120] Training session : 4 ; lr : 0.011443582596632302 ; loss : 0.049438830465078354 ; acc@1 : 100.0
+2023-02-02 23:50:25,474 - mmcls - INFO - [062/120] Training session : 4 ; lr : 0.01110754667659381 ; loss : 0.04122917354106903 ; acc@1 : 100.0
+2023-02-02 23:50:27,965 - mmcls - INFO - [063/120] Training session : 4 ; lr : 0.010772643137093595 ; loss : 0.08460577577352524 ; acc@1 : 100.0
+2023-02-02 23:50:30,162 - mmcls - INFO - [064/120] Training session : 4 ; lr : 0.010439121895703733 ; loss : 0.018242059275507927 ; acc@1 : 100.0
+2023-02-02 23:50:32,470 - mmcls - INFO - [065/120] Training session : 4 ; lr : 0.01010723183847366 ; loss : 0.11422298103570938 ; acc@1 : 87.5
+2023-02-02 23:50:34,647 - mmcls - INFO - [066/120] Training session : 4 ; lr : 0.009777220634202045 ; loss : 0.039593346416950226 ; acc@1 : 100.0
+2023-02-02 23:50:37,687 - mmcls - INFO - [067/120] Training session : 4 ; lr : 0.00944933454961708 ; loss : 0.0455855131149292 ; acc@1 : 100.0
+2023-02-02 23:50:40,189 - mmcls - INFO - [068/120] Training session : 4 ; lr : 0.00912381826560299 ; loss : 0.02234477922320366 ; acc@1 : 100.0
+2023-02-02 23:50:42,797 - mmcls - INFO - [069/120] Training session : 4 ; lr : 0.008800914694610027 ; loss : 0.04426013305783272 ; acc@1 : 100.0
+2023-02-02 23:50:44,940 - mmcls - INFO - [070/120] Training session : 4 ; lr : 0.008480864799384046 ; loss : 0.02266235649585724 ; acc@1 : 100.0
+2023-02-02 23:50:47,241 - mmcls - INFO - [071/120] Training session : 4 ; lr : 0.00816390741315112 ; loss : 0.06750471144914627 ; acc@1 : 100.0
+2023-02-02 23:50:49,458 - mmcls - INFO - [072/120] Training session : 4 ; lr : 0.007850279061391198 ; loss : 0.09530554711818695 ; acc@1 : 87.5
+2023-02-02 23:50:51,483 - mmcls - INFO - [073/120] Training session : 4 ; lr : 0.007540213785333967 ; loss : 0.012073136866092682 ; acc@1 : 100.0
+2023-02-02 23:50:53,788 - mmcls - INFO - [074/120] Training session : 4 ; lr : 0.007233942967308475 ; loss : 0.08283203840255737 ; acc@1 : 100.0
+2023-02-02 23:50:56,162 - mmcls - INFO - [075/120] Training session : 4 ; lr : 0.006931695158076992 ; loss : 0.03411956876516342 ; acc@1 : 100.0
+2023-02-02 23:50:58,231 - mmcls - INFO - [076/120] Training session : 4 ; lr : 0.006633695906281869 ; loss : 0.02336221933364868 ; acc@1 : 100.0
+2023-02-02 23:51:00,920 - mmcls - INFO - [077/120] Training session : 4 ; lr : 0.00634016759013265 ; loss : 0.04746447503566742 ; acc@1 : 100.0
+2023-02-02 23:51:03,380 - mmcls - INFO - [078/120] Training session : 4 ; lr : 0.006051329251459186 ; loss : 0.03431315720081329 ; acc@1 : 100.0
+2023-02-02 23:51:05,644 - mmcls - INFO - [079/120] Training session : 4 ; lr : 0.005767396432254339 ; loss : 0.12781308591365814 ; acc@1 : 87.5
+2023-02-02 23:51:07,748 - mmcls - INFO - [080/120] Training session : 4 ; lr : 0.00548858101382852 ; loss : 0.01753973960876465 ; acc@1 : 100.0
+2023-02-02 23:51:10,454 - mmcls - INFO - [081/120] Training session : 4 ; lr : 0.005215091058695897 ; loss : 0.0185867752879858 ; acc@1 : 100.0
+2023-02-02 23:51:12,621 - mmcls - INFO - [082/120] Training session : 4 ; lr : 0.004947130655310345 ; loss : 0.03373764082789421 ; acc@1 : 100.0
+2023-02-02 23:51:14,772 - mmcls - INFO - [083/120] Training session : 4 ; lr : 0.004684899765767006 ; loss : 0.05106606334447861 ; acc@1 : 100.0
+2023-02-02 23:51:16,524 - mmcls - INFO - [084/120] Training session : 4 ; lr : 0.004428594076583071 ; loss : 0.025044957175850868 ; acc@1 : 100.0
+2023-02-02 23:51:18,996 - mmcls - INFO - [085/120] Training session : 4 ; lr : 0.0041784048526691585 ; loss : 0.023513194173574448 ; acc@1 : 100.0
+2023-02-02 23:51:21,073 - mmcls - INFO - [086/120] Training session : 4 ; lr : 0.003934518794600292 ; loss : 0.016237612813711166 ; acc@1 : 100.0
+2023-02-02 23:51:23,217 - mmcls - INFO - [087/120] Training session : 4 ; lr : 0.0036971178992929237 ; loss : 0.03339327499270439 ; acc@1 : 100.0
+2023-02-02 23:51:25,160 - mmcls - INFO - [088/120] Training session : 4 ; lr : 0.0034663793241920078 ; loss : 0.03862409293651581 ; acc@1 : 100.0
+2023-02-02 23:51:27,281 - mmcls - INFO - [089/120] Training session : 4 ; lr : 0.003242475255069488 ; loss : 0.11866077780723572 ; acc@1 : 87.5
+2023-02-02 23:51:29,468 - mmcls - INFO - [090/120] Training session : 4 ; lr : 0.0030255727775328036 ; loss : 0.039691828191280365 ; acc@1 : 100.0
+2023-02-02 23:51:31,422 - mmcls - INFO - [091/120] Training session : 4 ; lr : 0.002815833752339381 ; loss : 0.024494975805282593 ; acc@1 : 100.0
+2023-02-02 23:51:34,396 - mmcls - INFO - [092/120] Training session : 4 ; lr : 0.002613414694610027 ; loss : 0.025085195899009705 ; acc@1 : 100.0
+2023-02-02 23:51:37,033 - mmcls - INFO - [093/120] Training session : 4 ; lr : 0.0024184666570315145 ; loss : 0.0475161150097847 ; acc@1 : 100.0
+2023-02-02 23:51:39,896 - mmcls - INFO - [094/120] Training session : 4 ; lr : 0.002231135117135394 ; loss : 0.01365891844034195 ; acc@1 : 100.0
+2023-02-02 23:51:42,460 - mmcls - INFO - [095/120] Training session : 4 ; lr : 0.0020515598687372042 ; loss : 0.036392662674188614 ; acc@1 : 100.0
+2023-02-02 23:51:44,509 - mmcls - INFO - [096/120] Training session : 4 ; lr : 0.0018798749176170972 ; loss : 0.09971003234386444 ; acc@1 : 87.5
+2023-02-02 23:51:46,934 - mmcls - INFO - [097/120] Training session : 4 ; lr : 0.0017162083815196894 ; loss : 0.038901809602975845 ; acc@1 : 100.0
+2023-02-02 23:51:50,520 - mmcls - INFO - [098/120] Training session : 4 ; lr : 0.001560682394547817 ; loss : 0.01935039833188057 ; acc@1 : 100.0
+2023-02-02 23:51:54,203 - mmcls - INFO - [099/120] Training session : 4 ; lr : 0.0014134130160214772 ; loss : 0.0304033812135458 ; acc@1 : 100.0
+2023-02-02 23:51:56,872 - mmcls - INFO - [100/120] Training session : 4 ; lr : 0.0012745101438700213 ; loss : 0.14847593009471893 ; acc@1 : 87.5
+2023-02-02 23:51:59,040 - mmcls - INFO - [101/120] Training session : 4 ; lr : 0.001144077432622191 ; loss : 0.0299951434135437 ; acc@1 : 100.0
+2023-02-02 23:52:02,202 - mmcls - INFO - [102/120] Training session : 4 ; lr : 0.0010222122160552494 ; loss : 0.14727537333965302 ; acc@1 : 87.5
+2023-02-02 23:52:05,108 - mmcls - INFO - [103/120] Training session : 4 ; lr : 0.0009090054345608332 ; loss : 0.1563221514225006 ; acc@1 : 87.5
+2023-02-02 23:52:07,846 - mmcls - INFO - [104/120] Training session : 4 ; lr : 0.0008045415672818555 ; loss : 0.015829268842935562 ; acc@1 : 100.0
+2023-02-02 23:52:10,009 - mmcls - INFO - [105/120] Training session : 4 ; lr : 0.0007088985690709858 ; loss : 0.02918071672320366 ; acc@1 : 100.0
+2023-02-02 23:52:12,317 - mmcls - INFO - [106/120] Training session : 4 ; lr : 0.0006221478123178183 ; loss : 0.03503183275461197 ; acc@1 : 100.0
+2023-02-02 23:52:15,028 - mmcls - INFO - [107/120] Training session : 4 ; lr : 0.0005443540336881362 ; loss : 0.07352592796087265 ; acc@1 : 100.0
+2023-02-02 23:52:17,213 - mmcls - INFO - [108/120] Training session : 4 ; lr : 0.00047557528581496317 ; loss : 0.027647120878100395 ; acc@1 : 100.0
+2023-02-02 23:52:19,519 - mmcls - INFO - [109/120] Training session : 4 ; lr : 0.0004158628939775262 ; loss : 0.026483777910470963 ; acc@1 : 100.0
+2023-02-02 23:52:21,858 - mmcls - INFO - [110/120] Training session : 4 ; lr : 0.0003652614178004069 ; loss : 0.04607390612363815 ; acc@1 : 100.0
+2023-02-02 23:52:24,667 - mmcls - INFO - [111/120] Training session : 4 ; lr : 0.0003238086180014805 ; loss : 0.1001739427447319 ; acc@1 : 87.5
+2023-02-02 23:52:26,645 - mmcls - INFO - [112/120] Training session : 4 ; lr : 0.0002915354282134465 ; loss : 0.03443562984466553 ; acc@1 : 100.0
+2023-02-02 23:52:29,292 - mmcls - INFO - [113/120] Training session : 4 ; lr : 0.00026846593190000385 ; loss : 0.04717826470732689 ; acc@1 : 100.0
+2023-02-02 23:52:31,547 - mmcls - INFO - [114/120] Training session : 4 ; lr : 0.0002546173443838553 ; loss : 0.029205504804849625 ; acc@1 : 100.0
+2023-02-02 23:52:33,627 - mmcls - INFO - [115/120] Training session : 4 ; lr : 0.00025 ; loss : 0.03412463143467903 ; acc@1 : 100.0
+2023-02-02 23:52:35,761 - mmcls - INFO - [116/120] Training session : 4 ; lr : 2.5e-05 ; loss : 0.024131596088409424 ; acc@1 : 100.0
+2023-02-02 23:52:38,003 - mmcls - INFO - [117/120] Training session : 4 ; lr : 2.5e-05 ; loss : 0.16720426082611084 ; acc@1 : 87.5
+2023-02-02 23:52:40,031 - mmcls - INFO - [118/120] Training session : 4 ; lr : 2.5e-05 ; loss : 0.03720967844128609 ; acc@1 : 100.0
+2023-02-02 23:52:41,886 - mmcls - INFO - [119/120] Training session : 4 ; lr : 2.5e-05 ; loss : 0.07433837652206421 ; acc@1 : 100.0
+2023-02-02 23:52:44,135 - mmcls - INFO - [120/120] Training session : 4 ; lr : 2.5e-05 ; loss : 0.03962252661585808 ; acc@1 : 100.0
+2023-02-02 23:52:44,136 - mmcls - INFO - Evaluating session 4, from 0 to 75.
+2023-02-02 23:52:46,683 - mmcls - INFO - [04]Evaluation results : acc : 67.83 ; acc_base : 74.10 ; acc_inc : 42.73
+2023-02-02 23:52:46,684 - mmcls - INFO - [04]Evaluation results : acc_incremental_old : 38.00 ; acc_incremental_new : 52.20
+2023-02-02 23:52:46,781 - mmcls - INFO - Starting session : 5 ------------------------------------------------------------
+2023-02-02 23:52:46,781 - mmcls - INFO - Newly added classes are from 75 to 80.
+2023-02-02 23:52:46,781 - mmcls - INFO - Model now can classify 80 classes
+2023-02-02 23:52:46,781 - mmcls - INFO - 130 steps
+2023-02-02 23:52:46,781 - mmcls - INFO - Extracting mean neck feat from 60 to 75
+2023-02-02 23:52:46,781 - mmcls - INFO - Copy 4 duplications.
+2023-02-02 23:52:46,791 - mmcls - INFO - Session : 5 ; The dataset has 145 samples.
+2023-02-02 23:52:46,792 - mmcls - INFO - Labels : [75, 75, 75, 75, 75, 76, 76, 76, 76, 76, 77, 77, 77, 77, 77, 78, 78, 78, 78, 78, 79, 79, 79, 79, 79, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+2023-02-02 23:52:49,383 - mmcls - INFO - [001/130] Training session : 5 ; lr : 0.006998905715866632 ; loss : 0.6682088375091553 ; acc@1 : 87.5
+2023-02-02 23:52:49,390 - mmcls - INFO - [002/130] Training session : 5 ; lr : 0.011492810125479754 ; loss : 1.3453826904296875 ; acc@1 : 75.0
+2023-02-02 23:52:51,724 - mmcls - INFO - [003/130] Training session : 5 ; lr : 0.01597749849006406 ; loss : 0.6491989493370056 ; acc@1 : 87.5
+2023-02-02 23:52:51,732 - mmcls - INFO - [004/130] Training session : 5 ; lr : 0.020448765444817746 ; loss : 1.2456333637237549 ; acc@1 : 75.0
+2023-02-02 23:52:54,376 - mmcls - INFO - [005/130] Training session : 5 ; lr : 0.024902419428766667 ; loss : 0.6510144472122192 ; acc@1 : 75.0
+2023-02-02 23:52:54,385 - mmcls - INFO - [006/130] Training session : 5 ; lr : 0.024859565341131686 ; loss : 0.0958549901843071 ; acc@1 : 87.5
+2023-02-02 23:52:57,399 - mmcls - INFO - [007/130] Training session : 5 ; lr : 0.02480898363979892 ; loss : 0.6760894060134888 ; acc@1 : 75.0
+2023-02-02 23:52:57,407 - mmcls - INFO - [008/130] Training session : 5 ; lr : 0.024750706273255055 ; loss : 0.5589610934257507 ; acc@1 : 75.0
+2023-02-02 23:52:59,927 - mmcls - INFO - [009/130] Training session : 5 ; lr : 0.024684770050733894 ; loss : 0.6728333830833435 ; acc@1 : 75.0
+2023-02-02 23:52:59,933 - mmcls - INFO - [010/130] Training session : 5 ; lr : 0.02461121661896681 ; loss : 0.9447162747383118 ; acc@1 : 75.0
+2023-02-02 23:53:02,741 - mmcls - INFO - [011/130] Training session : 5 ; lr : 0.024530092435877813 ; loss : 0.14426189661026 ; acc@1 : 100.0
+2023-02-02 23:53:02,746 - mmcls - INFO - [012/130] Training session : 5 ; lr : 0.02444144874123971 ; loss : 0.4352612793445587 ; acc@1 : 87.5
+2023-02-02 23:53:05,689 - mmcls - INFO - [013/130] Training session : 5 ; lr : 0.024345341524309963 ; loss : 0.1755048632621765 ; acc@1 : 100.0
+2023-02-02 23:53:05,697 - mmcls - INFO - [014/130] Training session : 5 ; lr : 0.024241831488466696 ; loss : 0.12187524139881134 ; acc@1 : 100.0
+2023-02-02 23:53:08,317 - mmcls - INFO - [015/130] Training session : 5 ; lr : 0.02413098401286711 ; loss : 0.29418715834617615 ; acc@1 : 87.5
+2023-02-02 23:53:08,324 - mmcls - INFO - [016/130] Training session : 5 ; lr : 0.02401286911115265 ; loss : 0.18698343634605408 ; acc@1 : 100.0
+2023-02-02 23:53:10,932 - mmcls - INFO - [017/130] Training session : 5 ; lr : 0.02388756138722682 ; loss : 0.24236920475959778 ; acc@1 : 100.0
+2023-02-02 23:53:10,938 - mmcls - INFO - [018/130] Training session : 5 ; lr : 0.023755139988133844 ; loss : 0.12039467692375183 ; acc@1 : 100.0
+2023-02-02 23:53:13,401 - mmcls - INFO - [019/130] Training session : 5 ; lr : 0.023615688554067614 ; loss : 0.22760629653930664 ; acc@1 : 100.0
+2023-02-02 23:53:13,409 - mmcls - INFO - [020/130] Training session : 5 ; lr : 0.023469295165542813 ; loss : 0.12393532693386078 ; acc@1 : 100.0
+2023-02-02 23:53:15,916 - mmcls - INFO - [021/130] Training session : 5 ; lr : 0.023316052287761336 ; loss : 0.1381717026233673 ; acc@1 : 87.5
+2023-02-02 23:53:15,922 - mmcls - INFO - [022/130] Training session : 5 ; lr : 0.023156056712209314 ; loss : 0.09794532507658005 ; acc@1 : 100.0
+2023-02-02 23:53:18,332 - mmcls - INFO - [023/130] Training session : 5 ; lr : 0.022989409495521508 ; loss : 0.047182150185108185 ; acc@1 : 100.0
+2023-02-02 23:53:18,339 - mmcls - INFO - [024/130] Training session : 5 ; lr : 0.02281621589565179 ; loss : 0.08723955601453781 ; acc@1 : 100.0
+2023-02-02 23:53:20,117 - mmcls - INFO - [025/130] Training session : 5 ; lr : 0.022636585305389974 ; loss : 0.09381971508264542 ; acc@1 : 100.0
+2023-02-02 23:53:20,124 - mmcls - INFO - [026/130] Training session : 5 ; lr : 0.022450631183266963 ; loss : 0.08730658888816833 ; acc@1 : 100.0
+2023-02-02 23:53:22,288 - mmcls - INFO - [027/130] Training session : 5 ; lr : 0.022258470981891917 ; loss : 0.08058808743953705 ; acc@1 : 100.0
+2023-02-02 23:53:22,306 - mmcls - INFO - [028/130] Training session : 5 ; lr : 0.02206022607376667 ; loss : 0.08748646080493927 ; acc@1 : 100.0
+2023-02-02 23:53:25,089 - mmcls - INFO - [029/130] Training session : 5 ; lr : 0.021856021674624256 ; loss : 0.05407918244600296 ; acc@1 : 100.0
+2023-02-02 23:53:25,096 - mmcls - INFO - [030/130] Training session : 5 ; lr : 0.02164598676433997 ; loss : 0.05765581130981445 ; acc@1 : 100.0
+2023-02-02 23:53:27,382 - mmcls - INFO - [031/130] Training session : 5 ; lr : 0.02143025400546491 ; loss : 0.08619493246078491 ; acc@1 : 100.0
+2023-02-02 23:53:27,393 - mmcls - INFO - [032/130] Training session : 5 ; lr : 0.021208959659433462 ; loss : 0.037868600338697433 ; acc@1 : 100.0
+2023-02-02 23:53:29,708 - mmcls - INFO - [033/130] Training session : 5 ; lr : 0.02098224350049768 ; loss : 0.13380926847457886 ; acc@1 : 87.5
+2023-02-02 23:53:29,715 - mmcls - INFO - [034/130] Training session : 5 ; lr : 0.020750248727442838 ; loss : 0.034902896732091904 ; acc@1 : 100.0
+2023-02-02 23:53:32,272 - mmcls - INFO - [035/130] Training session : 5 ; lr : 0.020513121873140038 ; loss : 0.10446621477603912 ; acc@1 : 87.5
+2023-02-02 23:53:32,279 - mmcls - INFO - [036/130] Training session : 5 ; lr : 0.02027101271199289 ; loss : 0.042047493159770966 ; acc@1 : 100.0
+2023-02-02 23:53:34,585 - mmcls - INFO - [037/130] Training session : 5 ; lr : 0.0200240741653368 ; loss : 0.048932451754808426 ; acc@1 : 100.0
+2023-02-02 23:53:34,590 - mmcls - INFO - [038/130] Training session : 5 ; lr : 0.01977246220485056 ; loss : 0.09303297847509384 ; acc@1 : 87.5
+2023-02-02 23:53:37,243 - mmcls - INFO - [039/130] Training session : 5 ; lr : 0.01951633575404133 ; loss : 0.0842856615781784 ; acc@1 : 100.0
+2023-02-02 23:53:37,254 - mmcls - INFO - [040/130] Training session : 5 ; lr : 0.019255856587865085 ; loss : 0.04039367660880089 ; acc@1 : 100.0
+2023-02-02 23:53:39,652 - mmcls - INFO - [041/130] Training session : 5 ; lr : 0.018991189230546143 ; loss : 0.14808930456638336 ; acc@1 : 87.5
+2023-02-02 23:53:39,659 - mmcls - INFO - [042/130] Training session : 5 ; lr : 0.01872250085166011 ; loss : 0.038048624992370605 ; acc@1 : 100.0
+2023-02-02 23:53:41,428 - mmcls - INFO - [043/130] Training session : 5 ; lr : 0.018449961160545994 ; loss : 0.029294246807694435 ; acc@1 : 100.0
+2023-02-02 23:53:41,442 - mmcls - INFO - [044/130] Training session : 5 ; lr : 0.018173742299114153 ; loss : 0.19929426908493042 ; acc@1 : 87.5
+2023-02-02 23:53:43,748 - mmcls - INFO - [045/130] Training session : 5 ; lr : 0.017894018733117776 ; loss : 0.038187600672245026 ; acc@1 : 100.0
+2023-02-02 23:53:43,756 - mmcls - INFO - [046/130] Training session : 5 ; lr : 0.017610967141956577 ; loss : 0.02334570698440075 ; acc@1 : 100.0
+2023-02-02 23:53:45,820 - mmcls - INFO - [047/130] Training session : 5 ; lr : 0.017324766307082292 ; loss : 0.03932209685444832 ; acc@1 : 100.0
+2023-02-02 23:53:45,827 - mmcls - INFO - [048/130] Training session : 5 ; lr : 0.017035596999076478 ; loss : 0.03121298924088478 ; acc@1 : 100.0
+2023-02-02 23:53:48,549 - mmcls - INFO - [049/130] Training session : 5 ; lr : 0.01674364186347196 ; loss : 0.025848811492323875 ; acc@1 : 100.0
+2023-02-02 23:53:48,557 - mmcls - INFO - [050/130] Training session : 5 ; lr : 0.016449085305389976 ; loss : 0.028093378990888596 ; acc@1 : 100.0
+2023-02-02 23:53:50,947 - mmcls - INFO - [051/130] Training session : 5 ; lr : 0.016152113373065956 ; loss : 0.03260340541601181 ; acc@1 : 100.0
+2023-02-02 23:53:50,953 - mmcls - INFO - [052/130] Training session : 5 ; lr : 0.015852913640337474 ; loss : 0.04646278917789459 ; acc@1 : 100.0
+2023-02-02 23:53:52,633 - mmcls - INFO - [053/130] Training session : 5 ; lr : 0.015551675088168595 ; loss : 0.023119032382965088 ; acc@1 : 100.0
+2023-02-02 23:53:52,646 - mmcls - INFO - [054/130] Training session : 5 ; lr : 0.015248587985285429 ; loss : 0.04718512296676636 ; acc@1 : 100.0
+2023-02-02 23:53:55,057 - mmcls - INFO - [055/130] Training session : 5 ; lr : 0.014943843767998346 ; loss : 0.014120904728770256 ; acc@1 : 100.0
+2023-02-02 23:53:55,064 - mmcls - INFO - [056/130] Training session : 5 ; lr : 0.014637634919286687 ; loss : 0.07356409728527069 ; acc@1 : 100.0
+2023-02-02 23:53:57,746 - mmcls - INFO - [057/130] Training session : 5 ; lr : 0.014330154847222396 ; loss : 0.026811376214027405 ; acc@1 : 100.0
+2023-02-02 23:53:57,752 - mmcls - INFO - [058/130] Training session : 5 ; lr : 0.014021597762809335 ; loss : 0.0668654590845108 ; acc@1 : 100.0
+2023-02-02 23:53:59,995 - mmcls - INFO - [059/130] Training session : 5 ; lr : 0.01371215855731545 ; loss : 0.07717141509056091 ; acc@1 : 100.0
+2023-02-02 23:54:00,001 - mmcls - INFO - [060/130] Training session : 5 ; lr : 0.013402032679175255 ; loss : 0.03625403717160225 ; acc@1 : 100.0
+2023-02-02 23:54:02,131 - mmcls - INFO - [061/130] Training session : 5 ; lr : 0.013091416010540443 ; loss : 0.033143967390060425 ; acc@1 : 100.0
+2023-02-02 23:54:02,142 - mmcls - INFO - [062/130] Training session : 5 ; lr : 0.01278050474355649 ; loss : 0.027242690324783325 ; acc@1 : 100.0
+2023-02-02 23:54:04,582 - mmcls - INFO - [063/130] Training session : 5 ; lr : 0.012469495256443511 ; loss : 0.08956542611122131 ; acc@1 : 100.0
+2023-02-02 23:54:04,588 - mmcls - INFO - [064/130] Training session : 5 ; lr : 0.01215858398945956 ; loss : 0.02198721095919609 ; acc@1 : 100.0
+2023-02-02 23:54:06,582 - mmcls - INFO - [065/130] Training session : 5 ; lr : 0.011847967320824748 ; loss : 0.029598869383335114 ; acc@1 : 100.0
+2023-02-02 23:54:06,593 - mmcls - INFO - [066/130] Training session : 5 ; lr : 0.011537841442684554 ; loss : 0.03622818738222122 ; acc@1 : 100.0
+2023-02-02 23:54:08,848 - mmcls - INFO - [067/130] Training session : 5 ; lr : 0.011228402237190665 ; loss : 0.028128094971179962 ; acc@1 : 100.0
+2023-02-02 23:54:08,853 - mmcls - INFO - [068/130] Training session : 5 ; lr : 0.010919845152777606 ; loss : 0.17017868161201477 ; acc@1 : 87.5
+2023-02-02 23:54:11,182 - mmcls - INFO - [069/130] Training session : 5 ; lr : 0.010612365080713317 ; loss : 0.027355480939149857 ; acc@1 : 100.0
+2023-02-02 23:54:11,187 - mmcls - INFO - [070/130] Training session : 5 ; lr : 0.010306156232001656 ; loss : 0.13145451247692108 ; acc@1 : 87.5
+2023-02-02 23:54:13,459 - mmcls - INFO - [071/130] Training session : 5 ; lr : 0.010001412014714578 ; loss : 0.09107901155948639 ; acc@1 : 100.0
+2023-02-02 23:54:13,465 - mmcls - INFO - [072/130] Training session : 5 ; lr : 0.00969832491183141 ; loss : 0.04205600917339325 ; acc@1 : 100.0
+2023-02-02 23:54:16,021 - mmcls - INFO - [073/130] Training session : 5 ; lr : 0.00939708635966253 ; loss : 0.02460061013698578 ; acc@1 : 100.0
+2023-02-02 23:54:16,030 - mmcls - INFO - [074/130] Training session : 5 ; lr : 0.009097886626934046 ; loss : 0.1836692988872528 ; acc@1 : 75.0
+2023-02-02 23:54:18,538 - mmcls - INFO - [075/130] Training session : 5 ; lr : 0.008800914694610027 ; loss : 0.08332280814647675 ; acc@1 : 87.5
+2023-02-02 23:54:18,548 - mmcls - INFO - [076/130] Training session : 5 ; lr : 0.008506358136528043 ; loss : 0.07062389701604843 ; acc@1 : 87.5
+2023-02-02 23:54:21,744 - mmcls - INFO - [077/130] Training session : 5 ; lr : 0.008214403000923524 ; loss : 0.07289587706327438 ; acc@1 : 87.5
+2023-02-02 23:54:21,759 - mmcls - INFO - [078/130] Training session : 5 ; lr : 0.007925233692917713 ; loss : 0.02628144808113575 ; acc@1 : 100.0
+2023-02-02 23:54:24,891 - mmcls - INFO - [079/130] Training session : 5 ; lr : 0.007639032858043426 ; loss : 0.03661836311221123 ; acc@1 : 100.0
+2023-02-02 23:54:24,898 - mmcls - INFO - [080/130] Training session : 5 ; lr : 0.0073559812668822265 ; loss : 0.07422471046447754 ; acc@1 : 87.5
+2023-02-02 23:54:27,173 - mmcls - INFO - [081/130] Training session : 5 ; lr : 0.0070762577008858536 ; loss : 0.019023476168513298 ; acc@1 : 100.0
+2023-02-02 23:54:27,182 - mmcls - INFO - [082/130] Training session : 5 ; lr : 0.00680003883945401 ; loss : 0.01592080108821392 ; acc@1 : 100.0
+2023-02-02 23:54:29,593 - mmcls - INFO - [083/130] Training session : 5 ; lr : 0.006527499148339894 ; loss : 0.05232593044638634 ; acc@1 : 100.0
+2023-02-02 23:54:29,599 - mmcls - INFO - [084/130] Training session : 5 ; lr : 0.0062588107694538575 ; loss : 0.024688102304935455 ; acc@1 : 100.0
+2023-02-02 23:54:31,671 - mmcls - INFO - [085/130] Training session : 5 ; lr : 0.005994143412134914 ; loss : 0.01951187662780285 ; acc@1 : 100.0
+2023-02-02 23:54:31,676 - mmcls - INFO - [086/130] Training session : 5 ; lr : 0.005733664245958679 ; loss : 0.03485859930515289 ; acc@1 : 100.0
+2023-02-02 23:54:33,846 - mmcls - INFO - [087/130] Training session : 5 ; lr : 0.005477537795149441 ; loss : 0.022618144750595093 ; acc@1 : 100.0
+2023-02-02 23:54:33,851 - mmcls - INFO - [088/130] Training session : 5 ; lr : 0.005225925834663209 ; loss : 0.021170590072870255 ; acc@1 : 100.0
+2023-02-02 23:54:35,967 - mmcls - INFO - [089/130] Training session : 5 ; lr : 0.0049789872880071145 ; loss : 0.013940123841166496 ; acc@1 : 100.0
+2023-02-02 23:54:35,986 - mmcls - INFO - [090/130] Training session : 5 ; lr : 0.004736878126859965 ; loss : 0.02704242616891861 ; acc@1 : 100.0
+2023-02-02 23:54:38,398 - mmcls - INFO - [091/130] Training session : 5 ; lr : 0.004499751272557166 ; loss : 0.02393484115600586 ; acc@1 : 100.0
+2023-02-02 23:54:38,405 - mmcls - INFO - [092/130] Training session : 5 ; lr : 0.0042677564995023225 ; loss : 0.03898508846759796 ; acc@1 : 100.0
+2023-02-02 23:54:40,634 - mmcls - INFO - [093/130] Training session : 5 ; lr : 0.00404104034056654 ; loss : 0.015592790208756924 ; acc@1 : 100.0
+2023-02-02 23:54:40,641 - mmcls - INFO - [094/130] Training session : 5 ; lr : 0.0038197459945350943 ; loss : 0.018958372995257378 ; acc@1 : 100.0
+2023-02-02 23:54:42,899 - mmcls - INFO - [095/130] Training session : 5 ; lr : 0.0036040132356600346 ; loss : 0.020429573953151703 ; acc@1 : 100.0
+2023-02-02 23:54:42,904 - mmcls - INFO - [096/130] Training session : 5 ; lr : 0.003393978325375747 ; loss : 0.044521648436784744 ; acc@1 : 100.0
+2023-02-02 23:54:45,106 - mmcls - INFO - [097/130] Training session : 5 ; lr : 0.0031897739262333313 ; loss : 0.019665401428937912 ; acc@1 : 100.0
+2023-02-02 23:54:45,114 - mmcls - INFO - [098/130] Training session : 5 ; lr : 0.002991529018108086 ; loss : 0.016762688755989075 ; acc@1 : 100.0
+2023-02-02 23:54:47,510 - mmcls - INFO - [099/130] Training session : 5 ; lr : 0.002799368816733037 ; loss : 0.01502115186303854 ; acc@1 : 100.0
+2023-02-02 23:54:47,515 - mmcls - INFO - [100/130] Training session : 5 ; lr : 0.002613414694610027 ; loss : 0.12618301808834076 ; acc@1 : 87.5
+2023-02-02 23:54:49,754 - mmcls - INFO - [101/130] Training session : 5 ; lr : 0.0024337841043482102 ; loss : 0.011274198070168495 ; acc@1 : 100.0
+2023-02-02 23:54:49,760 - mmcls - INFO - [102/130] Training session : 5 ; lr : 0.002260590504478497 ; loss : 0.03394261375069618 ; acc@1 : 100.0
+2023-02-02 23:54:52,079 - mmcls - INFO - [103/130] Training session : 5 ; lr : 0.0020939432877906897 ; loss : 0.01900681108236313 ; acc@1 : 100.0
+2023-02-02 23:54:52,086 - mmcls - INFO - [104/130] Training session : 5 ; lr : 0.0019339477122386635 ; loss : 0.07038722932338715 ; acc@1 : 100.0
+2023-02-02 23:54:54,195 - mmcls - INFO - [105/130] Training session : 5 ; lr : 0.001780704834457191 ; loss : 0.02170262485742569 ; acc@1 : 100.0
+2023-02-02 23:54:54,203 - mmcls - INFO - [106/130] Training session : 5 ; lr : 0.0016343114459323872 ; loss : 0.08515475690364838 ; acc@1 : 100.0
+2023-02-02 23:54:56,725 - mmcls - INFO - [107/130] Training session : 5 ; lr : 0.001494860011866158 ; loss : 0.042235374450683594 ; acc@1 : 100.0
+2023-02-02 23:54:56,732 - mmcls - INFO - [108/130] Training session : 5 ; lr : 0.0013624386127731789 ; loss : 0.037258755415678024 ; acc@1 : 100.0
+2023-02-02 23:54:58,933 - mmcls - INFO - [109/130] Training session : 5 ; lr : 0.0012371308888473541 ; loss : 0.016807550564408302 ; acc@1 : 100.0
+2023-02-02 23:54:58,964 - mmcls - INFO - [110/130] Training session : 5 ; lr : 0.0011190159871328896 ; loss : 0.14756537973880768 ; acc@1 : 87.5
+2023-02-02 23:55:01,594 - mmcls - INFO - [111/130] Training session : 5 ; lr : 0.0010081685115333084 ; loss : 0.023638401180505753 ; acc@1 : 100.0
+2023-02-02 23:55:01,600 - mmcls - INFO - [112/130] Training session : 5 ; lr : 0.0009046584756900401 ; loss : 0.009689153172075748 ; acc@1 : 100.0
+2023-02-02 23:55:03,869 - mmcls - INFO - [113/130] Training session : 5 ; lr : 0.0008085512587602935 ; loss : 0.018750786781311035 ; acc@1 : 100.0
+2023-02-02 23:55:03,881 - mmcls - INFO - [114/130] Training session : 5 ; lr : 0.0007199075641221866 ; loss : 0.02043793722987175 ; acc@1 : 100.0
+2023-02-02 23:55:06,112 - mmcls - INFO - [115/130] Training session : 5 ; lr : 0.0006387833810331904 ; loss : 0.01578095369040966 ; acc@1 : 100.0
+2023-02-02 23:55:06,117 - mmcls - INFO - [116/130] Training session : 5 ; lr : 0.0005652299492661067 ; loss : 0.031107190996408463 ; acc@1 : 100.0
+2023-02-02 23:55:08,197 - mmcls - INFO - [117/130] Training session : 5 ; lr : 0.0004992937267449451 ; loss : 0.11802248656749725 ; acc@1 : 87.5
+2023-02-02 23:55:08,205 - mmcls - INFO - [118/130] Training session : 5 ; lr : 0.00044101636020108404 ; loss : 0.00809464231133461 ; acc@1 : 100.0
+2023-02-02 23:55:10,605 - mmcls - INFO - [119/130] Training session : 5 ; lr : 0.0003904346588683149 ; loss : 0.07277004420757294 ; acc@1 : 100.0
+2023-02-02 23:55:10,610 - mmcls - INFO - [120/130] Training session : 5 ; lr : 0.00034758057123333765 ; loss : 0.0615256242454052 ; acc@1 : 100.0
+2023-02-02 23:55:13,195 - mmcls - INFO - [121/130] Training session : 5 ; lr : 0.00031248116485641035 ; loss : 0.05182602256536484 ; acc@1 : 100.0
+2023-02-02 23:55:13,202 - mmcls - INFO - [122/130] Training session : 5 ; lr : 0.0002851586092749026 ; loss : 0.07274648547172546 ; acc@1 : 100.0
+2023-02-02 23:55:15,765 - mmcls - INFO - [123/130] Training session : 5 ; lr : 0.00026563016200053385 ; loss : 0.048314910382032394 ; acc@1 : 100.0
+2023-02-02 23:55:15,773 - mmcls - INFO - [124/130] Training session : 5 ; lr : 0.00025390815761916323 ; loss : 0.06232742965221405 ; acc@1 : 100.0
+2023-02-02 23:55:17,602 - mmcls - INFO - [125/130] Training session : 5 ; lr : 0.00025 ; loss : 0.07022661715745926 ; acc@1 : 100.0
+2023-02-02 23:55:17,611 - mmcls - INFO - [126/130] Training session : 5 ; lr : 2.5e-05 ; loss : 0.022615935653448105 ; acc@1 : 100.0
+2023-02-02 23:55:19,715 - mmcls - INFO - [127/130] Training session : 5 ; lr : 2.5e-05 ; loss : 0.028610507026314735 ; acc@1 : 100.0
+2023-02-02 23:55:19,721 - mmcls - INFO - [128/130] Training session : 5 ; lr : 2.5e-05 ; loss : 0.01885143853724003 ; acc@1 : 100.0
+2023-02-02 23:55:21,385 - mmcls - INFO - [129/130] Training session : 5 ; lr : 2.5e-05 ; loss : 0.029116548597812653 ; acc@1 : 100.0
+2023-02-02 23:55:21,391 - mmcls - INFO - [130/130] Training session : 5 ; lr : 2.5e-05 ; loss : 0.028009194880723953 ; acc@1 : 100.0
+2023-02-02 23:55:21,392 - mmcls - INFO - Evaluating session 5, from 0 to 80.
+2023-02-02 23:55:24,141 - mmcls - INFO - [05]Evaluation results : acc : 66.35 ; acc_base : 74.95 ; acc_inc : 40.55
+2023-02-02 23:55:24,142 - mmcls - INFO - [05]Evaluation results : acc_incremental_old : 34.87 ; acc_incremental_new : 57.60
+2023-02-02 23:55:24,236 - mmcls - INFO - Starting session : 6 ------------------------------------------------------------
+2023-02-02 23:55:24,237 - mmcls - INFO - Newly added classes are from 80 to 85.
+2023-02-02 23:55:24,237 - mmcls - INFO - Model now can classify 85 classes
+2023-02-02 23:55:24,237 - mmcls - INFO - 140 steps
+2023-02-02 23:55:24,237 - mmcls - INFO - Extracting mean neck feat from 60 to 80
+2023-02-02 23:55:24,237 - mmcls - INFO - Copy 5 duplications.
+2023-02-02 23:55:24,247 - mmcls - INFO - Session : 6 ; The dataset has 185 samples.
+2023-02-02 23:55:24,247 - mmcls - INFO - Labels : [80, 80, 80, 80, 80, 81, 81, 81, 81, 81, 82, 82, 82, 82, 82, 83, 83, 83, 83, 83, 84, 84, 84, 84, 84, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+2023-02-02 23:55:26,344 - mmcls - INFO - [001/140] Training session : 6 ; lr : 0.006999061820686833 ; loss : 2.632408618927002 ; acc@1 : 50.0
+2023-02-02 23:55:26,350 - mmcls - INFO - [002/140] Training session : 6 ; lr : 0.01149383565629455 ; loss : 1.2970750331878662 ; acc@1 : 75.0
+2023-02-02 23:55:28,327 - mmcls - INFO - [003/140] Training session : 6 ; lr : 0.015980707278057806 ; loss : 0.63152015209198 ; acc@1 : 87.5
+2023-02-02 23:55:29,766 - mmcls - INFO - [004/140] Training session : 6 ; lr : 0.02045606934811889 ; loss : 2.3323144912719727 ; acc@1 : 50.0
+2023-02-02 23:55:30,899 - mmcls - INFO - [005/140] Training session : 6 ; lr : 0.024916324677056546 ; loss : 1.096766471862793 ; acc@1 : 75.0
+2023-02-02 23:55:30,928 - mmcls - INFO - [006/140] Training session : 6 ; lr : 0.024879567350676934 ; loss : 0.5267448425292969 ; acc@1 : 87.5
+2023-02-02 23:55:33,406 - mmcls - INFO - [007/140] Training session : 6 ; lr : 0.02483617395989317 ; loss : 0.022718802094459534 ; acc@1 : 100.0
+2023-02-02 23:55:33,414 - mmcls - INFO - [008/140] Training session : 6 ; lr : 0.024786168002991868 ; loss : 0.048004887998104095 ; acc@1 : 100.0
+2023-02-02 23:55:36,228 - mmcls - INFO - [009/140] Training session : 6 ; lr : 0.024729576559080847 ; loss : 0.30907106399536133 ; acc@1 : 87.5
+2023-02-02 23:55:37,558 - mmcls - INFO - [010/140] Training session : 6 ; lr : 0.02466643027342532 ; loss : 0.25016698241233826 ; acc@1 : 87.5
+2023-02-02 23:55:38,637 - mmcls - INFO - [011/140] Training session : 6 ; lr : 0.02459676334085294 ; loss : 0.42849624156951904 ; acc@1 : 75.0
+2023-02-02 23:55:38,642 - mmcls - INFO - [012/140] Training session : 6 ; lr : 0.0245206134872367 ; loss : 0.08385691791772842 ; acc@1 : 100.0
+2023-02-02 23:55:41,380 - mmcls - INFO - [013/140] Training session : 6 ; lr : 0.024438021949065684 ; loss : 0.37601178884506226 ; acc@1 : 87.5
+2023-02-02 23:55:41,388 - mmcls - INFO - [014/140] Training session : 6 ; lr : 0.024349033451114825 ; loss : 0.3033313453197479 ; acc@1 : 87.5
+2023-02-02 23:55:44,277 - mmcls - INFO - [015/140] Training session : 6 ; lr : 0.024253696182225618 ; loss : 0.33562755584716797 ; acc@1 : 87.5
+2023-02-02 23:55:45,534 - mmcls - INFO - [016/140] Training session : 6 ; lr : 0.024152061769211013 ; loss : 0.05129105597734451 ; acc@1 : 100.0
+2023-02-02 23:55:46,522 - mmcls - INFO - [017/140] Training session : 6 ; lr : 0.0240441852488986 ; loss : 0.0772123858332634 ; acc@1 : 100.0
+2023-02-02 23:55:46,529 - mmcls - INFO - [018/140] Training session : 6 ; lr : 0.023930125038327185 ; loss : 0.23869989812374115 ; acc@1 : 100.0
+2023-02-02 23:55:48,697 - mmcls - INFO - [019/140] Training session : 6 ; lr : 0.023809942903112943 ; loss : 0.1201862245798111 ; acc@1 : 100.0
+2023-02-02 23:55:48,707 - mmcls - INFO - [020/140] Training session : 6 ; lr : 0.02368370392400223 ; loss : 0.14851684868335724 ; acc@1 : 100.0
+2023-02-02 23:55:50,696 - mmcls - INFO - [021/140] Training session : 6 ; lr : 0.023551476461629223 ; loss : 0.10677210241556168 ; acc@1 : 100.0
+2023-02-02 23:55:52,033 - mmcls - INFO - [022/140] Training session : 6 ; lr : 0.023413332119497435 ; loss : 0.07468567043542862 ; acc@1 : 100.0
+2023-02-02 23:55:53,346 - mmcls - INFO - [023/140] Training session : 6 ; lr : 0.02326934570520515 ; loss : 0.08142999559640884 ; acc@1 : 100.0
+2023-02-02 23:55:53,357 - mmcls - INFO - [024/140] Training session : 6 ; lr : 0.02311959518993577 ; loss : 0.14240005612373352 ; acc@1 : 100.0
+2023-02-02 23:55:56,165 - mmcls - INFO - [025/140] Training session : 6 ; lr : 0.02296416166623509 ; loss : 0.1300213634967804 ; acc@1 : 100.0
+2023-02-02 23:55:56,171 - mmcls - INFO - [026/140] Training session : 6 ; lr : 0.022803129304098196 ; loss : 0.035968657582998276 ; acc@1 : 100.0
+2023-02-02 23:55:58,547 - mmcls - INFO - [027/140] Training session : 6 ; lr : 0.022636585305389974 ; loss : 0.030784159898757935 ; acc@1 : 100.0
+2023-02-02 23:55:59,852 - mmcls - INFO - [028/140] Training session : 6 ; lr : 0.022464619856623742 ; loss : 0.037596434354782104 ; acc@1 : 100.0
+2023-02-02 23:56:00,662 - mmcls - INFO - [029/140] Training session : 6 ; lr : 0.02228732608012366 ; loss : 0.06579799205064774 ; acc@1 : 100.0
+2023-02-02 23:56:00,668 - mmcls - INFO - [030/140] Training session : 6 ; lr : 0.022104799983597354 ; loss : 0.06501062959432602 ; acc@1 : 100.0
+2023-02-02 23:56:03,248 - mmcls - INFO - [031/140] Training session : 6 ; lr : 0.021917140408146057 ; loss : 0.04873315989971161 ; acc@1 : 100.0
+2023-02-02 23:56:03,253 - mmcls - INFO - [032/140] Training session : 6 ; lr : 0.021724448974740383 ; loss : 0.1017855703830719 ; acc@1 : 100.0
+2023-02-02 23:56:05,353 - mmcls - INFO - [033/140] Training session : 6 ; lr : 0.02152683002919081 ; loss : 0.05068117752671242 ; acc@1 : 100.0
+2023-02-02 23:56:06,624 - mmcls - INFO - [034/140] Training session : 6 ; lr : 0.021324390585642568 ; loss : 0.03776189684867859 ; acc@1 : 100.0
+2023-02-02 23:56:07,393 - mmcls - INFO - [035/140] Training session : 6 ; lr : 0.021117240268625583 ; loss : 0.04041827842593193 ; acc@1 : 100.0
+2023-02-02 23:56:07,411 - mmcls - INFO - [036/140] Training session : 6 ; lr : 0.020905491253690872 ; loss : 0.08811596781015396 ; acc@1 : 100.0
+2023-02-02 23:56:09,632 - mmcls - INFO - [037/140] Training session : 6 ; lr : 0.02068925820666551 ; loss : 0.07772359251976013 ; acc@1 : 100.0
+2023-02-02 23:56:09,638 - mmcls - INFO - [038/140] Training session : 6 ; lr : 0.02046865822155904 ; loss : 0.05307672545313835 ; acc@1 : 100.0
+2023-02-02 23:56:11,672 - mmcls - INFO - [039/140] Training session : 6 ; lr : 0.02024381075715502 ; loss : 0.06759127974510193 ; acc@1 : 100.0
+2023-02-02 23:56:13,213 - mmcls - INFO - [040/140] Training session : 6 ; lr : 0.02001483757232198 ; loss : 0.02851647324860096 ; acc@1 : 100.0
+2023-02-02 23:56:13,580 - mmcls - INFO - [041/140] Training session : 6 ; lr : 0.019781862660078833 ; loss : 0.06812944263219833 ; acc@1 : 100.0
+2023-02-02 23:56:13,586 - mmcls - INFO - [042/140] Training session : 6 ; lr : 0.019545012180450492 ; loss : 0.04807734861969948 ; acc@1 : 100.0
+2023-02-02 23:56:15,685 - mmcls - INFO - [043/140] Training session : 6 ; lr : 0.019304414392149975 ; loss : 0.10852237045764923 ; acc@1 : 100.0
+2023-02-02 23:56:15,692 - mmcls - INFO - [044/140] Training session : 6 ; lr : 0.01906019958312404 ; loss : 0.023148328065872192 ; acc@1 : 100.0
+2023-02-02 23:56:18,463 - mmcls - INFO - [045/140] Training session : 6 ; lr : 0.018812500000000003 ; loss : 0.10499545931816101 ; acc@1 : 87.5
+2023-02-02 23:56:19,734 - mmcls - INFO - [046/140] Training session : 6 ; lr : 0.0185614497764718 ; loss : 0.037253256887197495 ; acc@1 : 100.0
+2023-02-02 23:56:21,448 - mmcls - INFO - [047/140] Training session : 6 ; lr : 0.01830718486066427 ; loss : 0.02944086119532585 ; acc@1 : 100.0
+2023-02-02 23:56:21,454 - mmcls - INFO - [048/140] Training session : 6 ; lr : 0.018049842941514835 ; loss : 0.04943268373608589 ; acc@1 : 100.0
+2023-02-02 23:56:24,214 - mmcls - INFO - [049/140] Training session : 6 ; lr : 0.0177895633742125 ; loss : 0.040936026722192764 ; acc@1 : 100.0
+2023-02-02 23:56:24,227 - mmcls - INFO - [050/140] Training session : 6 ; lr : 0.01752648710473457 ; loss : 0.035440776497125626 ; acc@1 : 100.0
+2023-02-02 23:56:27,420 - mmcls - INFO - [051/140] Training session : 6 ; lr : 0.017260756593521914 ; loss : 0.05291469767689705 ; acc@1 : 100.0
+2023-02-02 23:56:28,985 - mmcls - INFO - [052/140] Training session : 6 ; lr : 0.016992515738334126 ; loss : 0.046213045716285706 ; acc@1 : 100.0
+2023-02-02 23:56:30,287 - mmcls - INFO - [053/140] Training session : 6 ; lr : 0.016721909796326356 ; loss : 0.030496513471007347 ; acc@1 : 100.0
+2023-02-02 23:56:30,309 - mmcls - INFO - [054/140] Training session : 6 ; lr : 0.016449085305389976 ; loss : 0.03039570339024067 ; acc@1 : 100.0
+2023-02-02 23:56:33,372 - mmcls - INFO - [055/140] Training session : 6 ; lr : 0.016174190004799742 ; loss : 0.05887763574719429 ; acc@1 : 100.0
+2023-02-02 23:56:33,389 - mmcls - INFO - [056/140] Training session : 6 ; lr : 0.01589737275521038 ; loss : 0.028437696397304535 ; acc@1 : 100.0
+2023-02-02 23:56:36,278 - mmcls - INFO - [057/140] Training session : 6 ; lr : 0.015618783458045887 ; loss : 0.013417435809969902 ; acc@1 : 100.0
+2023-02-02 23:56:37,489 - mmcls - INFO - [058/140] Training session : 6 ; lr : 0.015338572974325303 ; loss : 0.030373940244317055 ; acc@1 : 100.0
+2023-02-02 23:56:38,430 - mmcls - INFO - [059/140] Training session : 6 ; lr : 0.015056893042968774 ; loss : 0.0371951088309288 ; acc@1 : 100.0
+2023-02-02 23:56:38,437 - mmcls - INFO - [060/140] Training session : 6 ; lr : 0.014773896198628267 ; loss : 0.024252567440271378 ; acc@1 : 100.0
+2023-02-02 23:56:41,022 - mmcls - INFO - [061/140] Training session : 6 ; lr : 0.014489735689087355 ; loss : 0.018355948850512505 ; acc@1 : 100.0
+2023-02-02 23:56:41,029 - mmcls - INFO - [062/140] Training session : 6 ; lr : 0.014204565392274862 ; loss : 0.03965456038713455 ; acc@1 : 100.0
+2023-02-02 23:56:43,430 - mmcls - INFO - [063/140] Training session : 6 ; lr : 0.013918539732937213 ; loss : 0.020338499918580055 ; acc@1 : 100.0
+2023-02-02 23:56:44,751 - mmcls - INFO - [064/140] Training session : 6 ; lr : 0.013631813599014747 ; loss : 0.08541840314865112 ; acc@1 : 100.0
+2023-02-02 23:56:45,565 - mmcls - INFO - [065/140] Training session : 6 ; lr : 0.013344542257767138 ; loss : 0.021780062466859818 ; acc@1 : 100.0
+2023-02-02 23:56:45,572 - mmcls - INFO - [066/140] Training session : 6 ; lr : 0.013056881271693452 ; loss : 0.020404677838087082 ; acc@1 : 100.0
+2023-02-02 23:56:47,911 - mmcls - INFO - [067/140] Training session : 6 ; lr : 0.012768986414292291 ; loss : 0.017216462641954422 ; acc@1 : 100.0
+2023-02-02 23:56:47,924 - mmcls - INFO - [068/140] Training session : 6 ; lr : 0.012481013585707714 ; loss : 0.010197489522397518 ; acc@1 : 100.0
+2023-02-02 23:56:50,765 - mmcls - INFO - [069/140] Training session : 6 ; lr : 0.012193118728306555 ; loss : 0.022740952670574188 ; acc@1 : 100.0
+2023-02-02 23:56:51,806 - mmcls - INFO - [070/140] Training session : 6 ; lr : 0.011905457742232863 ; loss : 0.011286046355962753 ; acc@1 : 100.0
+2023-02-02 23:56:53,012 - mmcls - INFO - [071/140] Training session : 6 ; lr : 0.011618186400985256 ; loss : 0.029535992071032524 ; acc@1 : 100.0
+2023-02-02 23:56:53,017 - mmcls - INFO - [072/140] Training session : 6 ; lr : 0.011331460267062792 ; loss : 0.01792038232088089 ; acc@1 : 100.0
+2023-02-02 23:56:56,055 - mmcls - INFO - [073/140] Training session : 6 ; lr : 0.011045434607725143 ; loss : 0.03592707961797714 ; acc@1 : 100.0
+2023-02-02 23:56:56,062 - mmcls - INFO - [074/140] Training session : 6 ; lr : 0.010760264310912647 ; loss : 0.038377545773983 ; acc@1 : 100.0
+2023-02-02 23:56:58,468 - mmcls - INFO - [075/140] Training session : 6 ; lr : 0.010476103801371739 ; loss : 0.02073444426059723 ; acc@1 : 100.0
+2023-02-02 23:56:59,705 - mmcls - INFO - [076/140] Training session : 6 ; lr : 0.010193106957031227 ; loss : 0.028032254427671432 ; acc@1 : 100.0
+2023-02-02 23:57:00,692 - mmcls - INFO - [077/140] Training session : 6 ; lr : 0.009911427025674695 ; loss : 0.019472476094961166 ; acc@1 : 100.0
+2023-02-02 23:57:00,701 - mmcls - INFO - [078/140] Training session : 6 ; lr : 0.009631216541954115 ; loss : 0.019738614559173584 ; acc@1 : 100.0
+2023-02-02 23:57:03,317 - mmcls - INFO - [079/140] Training session : 6 ; lr : 0.009352627244789627 ; loss : 0.018363313749432564 ; acc@1 : 100.0
+2023-02-02 23:57:03,324 - mmcls - INFO - [080/140] Training session : 6 ; lr : 0.009075809995200261 ; loss : 0.07536756992340088 ; acc@1 : 100.0
+2023-02-02 23:57:06,003 - mmcls - INFO - [081/140] Training session : 6 ; lr : 0.008800914694610027 ; loss : 0.07053430378437042 ; acc@1 : 100.0
+2023-02-02 23:57:07,350 - mmcls - INFO - [082/140] Training session : 6 ; lr : 0.008528090203673646 ; loss : 0.018003003671765327 ; acc@1 : 100.0
+2023-02-02 23:57:08,225 - mmcls - INFO - [083/140] Training session : 6 ; lr : 0.008257484261665875 ; loss : 0.03196502476930618 ; acc@1 : 100.0
+2023-02-02 23:57:08,230 - mmcls - INFO - [084/140] Training session : 6 ; lr : 0.007989243406478089 ; loss : 0.03880680352449417 ; acc@1 : 100.0
+2023-02-02 23:57:10,594 - mmcls - INFO - [085/140] Training session : 6 ; lr : 0.007723512895265435 ; loss : 0.03876228258013725 ; acc@1 : 100.0
+2023-02-02 23:57:10,602 - mmcls - INFO - [086/140] Training session : 6 ; lr : 0.007460436625787505 ; loss : 0.06259547919034958 ; acc@1 : 100.0
+2023-02-02 23:57:13,327 - mmcls - INFO - [087/140] Training session : 6 ; lr : 0.007200157058485166 ; loss : 0.01602667011320591 ; acc@1 : 100.0
+2023-02-02 23:57:14,533 - mmcls - INFO - [088/140] Training session : 6 ; lr : 0.0069428151393357285 ; loss : 0.04420259967446327 ; acc@1 : 100.0
+2023-02-02 23:57:16,254 - mmcls - INFO - [089/140] Training session : 6 ; lr : 0.006688550223528208 ; loss : 0.02258279360830784 ; acc@1 : 100.0
+2023-02-02 23:57:16,262 - mmcls - INFO - [090/140] Training session : 6 ; lr : 0.006437500000000003 ; loss : 0.06879892945289612 ; acc@1 : 100.0
+2023-02-02 23:57:19,168 - mmcls - INFO - [091/140] Training session : 6 ; lr : 0.0061898004168759605 ; loss : 0.016082702204585075 ; acc@1 : 100.0
+2023-02-02 23:57:19,178 - mmcls - INFO - [092/140] Training session : 6 ; lr : 0.005945585607850032 ; loss : 0.009585043415427208 ; acc@1 : 100.0
+2023-02-02 23:57:21,723 - mmcls - INFO - [093/140] Training session : 6 ; lr : 0.005704987819549511 ; loss : 0.05306050181388855 ; acc@1 : 100.0
+2023-02-02 23:57:22,927 - mmcls - INFO - [094/140] Training session : 6 ; lr : 0.005468137339921167 ; loss : 0.009938094764947891 ; acc@1 : 100.0
+2023-02-02 23:57:23,461 - mmcls - INFO - [095/140] Training session : 6 ; lr : 0.005235162427678024 ; loss : 0.017405636608600616 ; acc@1 : 100.0
+2023-02-02 23:57:23,475 - mmcls - INFO - [096/140] Training session : 6 ; lr : 0.005006189242844979 ; loss : 0.017244575545191765 ; acc@1 : 100.0
+2023-02-02 23:57:26,518 - mmcls - INFO - [097/140] Training session : 6 ; lr : 0.00478134177844096 ; loss : 0.03160629794001579 ; acc@1 : 100.0
+2023-02-02 23:57:26,524 - mmcls - INFO - [098/140] Training session : 6 ; lr : 0.004560741793334493 ; loss : 0.046941302716732025 ; acc@1 : 100.0
+2023-02-02 23:57:29,247 - mmcls - INFO - [099/140] Training session : 6 ; lr : 0.004344508746309134 ; loss : 0.010228324681520462 ; acc@1 : 100.0
+2023-02-02 23:57:30,641 - mmcls - INFO - [100/140] Training session : 6 ; lr : 0.0041327597313744234 ; loss : 0.02762819640338421 ; acc@1 : 100.0
+2023-02-02 23:57:31,233 - mmcls - INFO - [101/140] Training session : 6 ; lr : 0.003925609414357436 ; loss : 0.03710523620247841 ; acc@1 : 100.0
+2023-02-02 23:57:31,238 - mmcls - INFO - [102/140] Training session : 6 ; lr : 0.0037231699708091944 ; loss : 0.01866845414042473 ; acc@1 : 100.0
+2023-02-02 23:57:34,275 - mmcls - INFO - [103/140] Training session : 6 ; lr : 0.0035255510252596217 ; loss : 0.015676813200116158 ; acc@1 : 100.0
+2023-02-02 23:57:34,285 - mmcls - INFO - [104/140] Training session : 6 ; lr : 0.0033328595918539474 ; loss : 0.022896040230989456 ; acc@1 : 100.0
+2023-02-02 23:57:37,291 - mmcls - INFO - [105/140] Training session : 6 ; lr : 0.0031452000164026482 ; loss : 0.03220502287149429 ; acc@1 : 100.0
+2023-02-02 23:57:38,533 - mmcls - INFO - [106/140] Training session : 6 ; lr : 0.0029626739198763425 ; loss : 0.013940544798970222 ; acc@1 : 100.0
+2023-02-02 23:57:39,496 - mmcls - INFO - [107/140] Training session : 6 ; lr : 0.0027853801433762575 ; loss : 0.021409358829259872 ; acc@1 : 100.0
+2023-02-02 23:57:39,502 - mmcls - INFO - [108/140] Training session : 6 ; lr : 0.002613414694610027 ; loss : 0.022389128804206848 ; acc@1 : 100.0
+2023-02-02 23:57:42,576 - mmcls - INFO - [109/140] Training session : 6 ; lr : 0.0024468706959018044 ; loss : 0.029908377677202225 ; acc@1 : 100.0
+2023-02-02 23:57:42,583 - mmcls - INFO - [110/140] Training session : 6 ; lr : 0.0022858383337649142 ; loss : 0.029067814350128174 ; acc@1 : 100.0
+2023-02-02 23:57:45,535 - mmcls - INFO - [111/140] Training session : 6 ; lr : 0.002130404810064229 ; loss : 0.021966220811009407 ; acc@1 : 100.0
+2023-02-02 23:57:46,989 - mmcls - INFO - [112/140] Training session : 6 ; lr : 0.0019806542947948553 ; loss : 0.025714043527841568 ; acc@1 : 100.0
+2023-02-02 23:57:47,174 - mmcls - INFO - [113/140] Training session : 6 ; lr : 0.0018366678805025666 ; loss : 0.01576981320977211 ; acc@1 : 100.0
+2023-02-02 23:57:47,180 - mmcls - INFO - [114/140] Training session : 6 ; lr : 0.0016985235383707787 ; loss : 0.03320714831352234 ; acc@1 : 100.0
+2023-02-02 23:57:49,567 - mmcls - INFO - [115/140] Training session : 6 ; lr : 0.0015662960759977745 ; loss : 0.0450727753341198 ; acc@1 : 100.0
+2023-02-02 23:57:49,574 - mmcls - INFO - [116/140] Training session : 6 ; lr : 0.001440057096887059 ; loss : 0.028252089396119118 ; acc@1 : 100.0
+2023-02-02 23:57:52,041 - mmcls - INFO - [117/140] Training session : 6 ; lr : 0.001319874961672813 ; loss : 0.02264414355158806 ; acc@1 : 100.0
+2023-02-02 23:57:53,559 - mmcls - INFO - [118/140] Training session : 6 ; lr : 0.0012058147511014015 ; loss : 0.01505609042942524 ; acc@1 : 100.0
+2023-02-02 23:57:54,745 - mmcls - INFO - [119/140] Training session : 6 ; lr : 0.0010979382307889874 ; loss : 0.021449878811836243 ; acc@1 : 100.0
+2023-02-02 23:57:54,750 - mmcls - INFO - [120/140] Training session : 6 ; lr : 0.0009963038177743847 ; loss : 0.019491365179419518 ; acc@1 : 100.0
+2023-02-02 23:57:57,192 - mmcls - INFO - [121/140] Training session : 6 ; lr : 0.0009009665488851761 ; loss : 0.017444392666220665 ; acc@1 : 100.0
+2023-02-02 23:57:57,202 - mmcls - INFO - [122/140] Training session : 6 ; lr : 0.0008119780509343176 ; loss : 0.023211529478430748 ; acc@1 : 100.0
+2023-02-02 23:57:59,782 - mmcls - INFO - [123/140] Training session : 6 ; lr : 0.0007293865127633037 ; loss : 0.034897591918706894 ; acc@1 : 100.0
+2023-02-02 23:58:01,078 - mmcls - INFO - [124/140] Training session : 6 ; lr : 0.0006532366591470606 ; loss : 0.024681374430656433 ; acc@1 : 100.0
+2023-02-02 23:58:01,809 - mmcls - INFO - [125/140] Training session : 6 ; lr : 0.0005835697265746803 ; loss : 0.037585850805044174 ; acc@1 : 100.0
+2023-02-02 23:58:01,816 - mmcls - INFO - [126/140] Training session : 6 ; lr : 0.0005204234409191546 ; loss : 0.05935119464993477 ; acc@1 : 100.0
+2023-02-02 23:58:04,994 - mmcls - INFO - [127/140] Training session : 6 ; lr : 0.0004638319970081362 ; loss : 0.04790112376213074 ; acc@1 : 100.0
+2023-02-02 23:58:05,014 - mmcls - INFO - [128/140] Training session : 6 ; lr : 0.0004138260401068322 ; loss : 0.021291319280862808 ; acc@1 : 100.0
+2023-02-02 23:58:07,287 - mmcls - INFO - [129/140] Training session : 6 ; lr : 0.0003704326493230668 ; loss : 0.11907479912042618 ; acc@1 : 87.5
+2023-02-02 23:58:08,399 - mmcls - INFO - [130/140] Training session : 6 ; lr : 0.0003336753229434551 ; loss : 0.04016201198101044 ; acc@1 : 100.0
+2023-02-02 23:58:09,110 - mmcls - INFO - [131/140] Training session : 6 ; lr : 0.0003035739657086712 ; loss : 0.011983748525381088 ; acc@1 : 100.0
+2023-02-02 23:58:09,117 - mmcls - INFO - [132/140] Training session : 6 ; lr : 0.0002801448780346756 ; loss : 0.022587381303310394 ; acc@1 : 100.0
+2023-02-02 23:58:11,747 - mmcls - INFO - [133/140] Training session : 6 ; lr : 0.0002634007471857585 ; loss : 0.12074963748455048 ; acc@1 : 87.5
+2023-02-02 23:58:11,760 - mmcls - INFO - [134/140] Training session : 6 ; lr : 0.0002533506404041613 ; loss : 0.015553407371044159 ; acc@1 : 100.0
+2023-02-02 23:58:14,201 - mmcls - INFO - [135/140] Training session : 6 ; lr : 0.00025 ; loss : 0.031634874641895294 ; acc@1 : 100.0
+2023-02-02 23:58:15,418 - mmcls - INFO - [136/140] Training session : 6 ; lr : 2.5e-05 ; loss : 0.006530027836561203 ; acc@1 : 100.0
+2023-02-02 23:58:16,046 - mmcls - INFO - [137/140] Training session : 6 ; lr : 2.5e-05 ; loss : 0.0313631147146225 ; acc@1 : 100.0
+2023-02-02 23:58:16,053 - mmcls - INFO - [138/140] Training session : 6 ; lr : 2.5e-05 ; loss : 0.02651781216263771 ; acc@1 : 100.0
+2023-02-02 23:58:18,066 - mmcls - INFO - [139/140] Training session : 6 ; lr : 2.5e-05 ; loss : 0.01711127534508705 ; acc@1 : 100.0
+2023-02-02 23:58:18,071 - mmcls - INFO - [140/140] Training session : 6 ; lr : 2.5e-05 ; loss : 0.03674330562353134 ; acc@1 : 100.0
+2023-02-02 23:58:18,072 - mmcls - INFO - Evaluating session 6, from 0 to 85.
+2023-02-02 23:58:20,671 - mmcls - INFO - [06]Evaluation results : acc : 64.04 ; acc_base : 76.18 ; acc_inc : 34.88
+2023-02-02 23:58:20,671 - mmcls - INFO - [06]Evaluation results : acc_incremental_old : 30.15 ; acc_incremental_new : 53.80
+2023-02-02 23:58:20,804 - mmcls - INFO - Starting session : 7 ------------------------------------------------------------
+2023-02-02 23:58:20,805 - mmcls - INFO - Newly added classes are from 85 to 90.
+2023-02-02 23:58:20,805 - mmcls - INFO - Model now can classify 90 classes
+2023-02-02 23:58:20,805 - mmcls - INFO - 150 steps
+2023-02-02 23:58:20,805 - mmcls - INFO - Extracting mean neck feat from 60 to 85
+2023-02-02 23:58:20,805 - mmcls - INFO - Copy 6 duplications.
+2023-02-02 23:58:20,815 - mmcls - INFO - Session : 7 ; The dataset has 235 samples.
+2023-02-02 23:58:20,815 - mmcls - INFO - Labels : [85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+2023-02-02 23:58:22,891 - mmcls - INFO - [001/150] Training session : 7 ; lr : 0.006999186757634046 ; loss : 0.6264647841453552 ; acc@1 : 87.5
+2023-02-02 23:58:22,897 - mmcls - INFO - [002/150] Training session : 7 ; lr : 0.011494656463023837 ; loss : 0.01070359256118536 ; acc@1 : 100.0
+2023-02-02 23:58:22,903 - mmcls - INFO - [003/150] Training session : 7 ; lr : 0.015983275677628285 ; loss : 0.6658618450164795 ; acc@1 : 87.5
+2023-02-02 23:58:25,461 - mmcls - INFO - [004/150] Training session : 7 ; lr : 0.02046191614109284 ; loss : 0.5733432173728943 ; acc@1 : 87.5
+2023-02-02 23:58:25,473 - mmcls - INFO - [005/150] Training session : 7 ; lr : 0.0249274572197852 ; loss : 0.010964728891849518 ; acc@1 : 100.0
+2023-02-02 23:58:25,477 - mmcls - INFO - [006/150] Training session : 7 ; lr : 0.024895583347771 ; loss : 0.5913861989974976 ; acc@1 : 87.5
+2023-02-02 23:58:28,378 - mmcls - INFO - [007/150] Training session : 7 ; lr : 0.02485794961530464 ; loss : 0.10541950166225433 ; acc@1 : 87.5
+2023-02-02 23:58:28,386 - mmcls - INFO - [008/150] Training session : 7 ; lr : 0.024814573687809288 ; loss : 0.020826786756515503 ; acc@1 : 100.0
+2023-02-02 23:58:28,391 - mmcls - INFO - [009/150] Training session : 7 ; lr : 0.02476547592611721 ; loss : 0.02856561169028282 ; acc@1 : 100.0
+2023-02-02 23:58:31,203 - mmcls - INFO - [010/150] Training session : 7 ; lr : 0.024710679376912324 ; loss : 0.4200838804244995 ; acc@1 : 87.5
+2023-02-02 23:58:31,209 - mmcls - INFO - [011/150] Training session : 7 ; lr : 0.024650209761911984 ; loss : 0.29402080178260803 ; acc@1 : 87.5
+2023-02-02 23:58:31,215 - mmcls - INFO - [012/150] Training session : 7 ; lr : 0.024584095465793113 ; loss : 0.3609507977962494 ; acc@1 : 87.5
+2023-02-02 23:58:33,757 - mmcls - INFO - [013/150] Training session : 7 ; lr : 0.024512367522868322 ; loss : 0.05960598587989807 ; acc@1 : 100.0
+2023-02-02 23:58:33,765 - mmcls - INFO - [014/150] Training session : 7 ; lr : 0.024435059602518284 ; loss : 0.6836974620819092 ; acc@1 : 87.5
+2023-02-02 23:58:33,769 - mmcls - INFO - [015/150] Training session : 7 ; lr : 0.024352207993387182 ; loss : 0.20462527871131897 ; acc@1 : 100.0
+2023-02-02 23:58:36,382 - mmcls - INFO - [016/150] Training session : 7 ; lr : 0.024263851586348684 ; loss : 0.059693701565265656 ; acc@1 : 100.0
+2023-02-02 23:58:36,392 - mmcls - INFO - [017/150] Training session : 7 ; lr : 0.024170031856250416 ; loss : 0.05587512254714966 ; acc@1 : 100.0
+2023-02-02 23:58:36,396 - mmcls - INFO - [018/150] Training session : 7 ; lr : 0.024070792842445503 ; loss : 0.05830327421426773 ; acc@1 : 100.0
+2023-02-02 23:58:39,029 - mmcls - INFO - [019/150] Training session : 7 ; lr : 0.0239661811281203 ; loss : 0.1941942274570465 ; acc@1 : 100.0
+2023-02-02 23:58:39,039 - mmcls - INFO - [020/150] Training session : 7 ; lr : 0.023856245818428094 ; loss : 0.1411435753107071 ; acc@1 : 100.0
+2023-02-02 23:58:39,043 - mmcls - INFO - [021/150] Training session : 7 ; lr : 0.023741038517438938 ; loss : 0.06758978217840195 ; acc@1 : 100.0
+2023-02-02 23:58:41,388 - mmcls - INFO - [022/150] Training session : 7 ; lr : 0.02362061330391648 ; loss : 0.09395378828048706 ; acc@1 : 100.0
+2023-02-02 23:58:41,397 - mmcls - INFO - [023/150] Training session : 7 ; lr : 0.0234950267059332 ; loss : 0.12986572086811066 ; acc@1 : 100.0
+2023-02-02 23:58:41,403 - mmcls - INFO - [024/150] Training session : 7 ; lr : 0.02336433767433589 ; loss : 0.05594346672296524 ; acc@1 : 100.0
+2023-02-02 23:58:43,816 - mmcls - INFO - [025/150] Training session : 7 ; lr : 0.023228607555073916 ; loss : 0.08183927834033966 ; acc@1 : 100.0
+2023-02-02 23:58:43,822 - mmcls - INFO - [026/150] Training session : 7 ; lr : 0.02308790006040316 ; loss : 0.10473009198904037 ; acc@1 : 100.0
+2023-02-02 23:58:43,825 - mmcls - INFO - [027/150] Training session : 7 ; lr : 0.022942281238979238 ; loss : 0.1168041080236435 ; acc@1 : 100.0
+2023-02-02 23:58:45,887 - mmcls - INFO - [028/150] Training session : 7 ; lr : 0.02279181944485403 ; loss : 0.03416981175541878 ; acc@1 : 100.0
+2023-02-02 23:58:45,894 - mmcls - INFO - [029/150] Training session : 7 ; lr : 0.022636585305389974 ; loss : 0.03493424877524376 ; acc@1 : 100.0
+2023-02-02 23:58:45,899 - mmcls - INFO - [030/150] Training session : 7 ; lr : 0.022476651688107342 ; loss : 0.06098324805498123 ; acc@1 : 100.0
+2023-02-02 23:58:48,436 - mmcls - INFO - [031/150] Training session : 7 ; lr : 0.022312093666479904 ; loss : 0.1458749920129776 ; acc@1 : 87.5
+2023-02-02 23:58:48,443 - mmcls - INFO - [032/150] Training session : 7 ; lr : 0.022142988484695158 ; loss : 0.03770924359560013 ; acc@1 : 100.0
+2023-02-02 23:58:48,446 - mmcls - INFO - [033/150] Training session : 7 ; lr : 0.021969415521395606 ; loss : 0.03167445585131645 ; acc@1 : 100.0
+2023-02-02 23:58:50,825 - mmcls - INFO - [034/150] Training session : 7 ; lr : 0.021791456252418098 ; loss : 0.026959748938679695 ; acc@1 : 100.0
+2023-02-02 23:58:50,831 - mmcls - INFO - [035/150] Training session : 7 ; lr : 0.021609194212548744 ; loss : 0.058358363807201385 ; acc@1 : 100.0
+2023-02-02 23:58:50,835 - mmcls - INFO - [036/150] Training session : 7 ; lr : 0.021422714956311376 ; loss : 0.07313859462738037 ; acc@1 : 100.0
+2023-02-02 23:58:53,311 - mmcls - INFO - [037/150] Training session : 7 ; lr : 0.02123210601780789 ; loss : 0.04142025485634804 ; acc@1 : 100.0
+2023-02-02 23:58:53,316 - mmcls - INFO - [038/150] Training session : 7 ; lr : 0.02103745686962941 ; loss : 0.031959038227796555 ; acc@1 : 100.0
+2023-02-02 23:58:53,320 - mmcls - INFO - [039/150] Training session : 7 ; lr : 0.020838858880857493 ; loss : 0.10437231510877609 ; acc@1 : 100.0
+2023-02-02 23:58:55,597 - mmcls - INFO - [040/150] Training session : 7 ; lr : 0.02063640527417512 ; loss : 0.03266507759690285 ; acc@1 : 100.0
+2023-02-02 23:58:55,602 - mmcls - INFO - [041/150] Training session : 7 ; lr : 0.020430191082107592 ; loss : 0.044176653027534485 ; acc@1 : 100.0
+2023-02-02 23:58:55,607 - mmcls - INFO - [042/150] Training session : 7 ; lr : 0.020220313102413904 ; loss : 0.017084037885069847 ; acc@1 : 100.0
+2023-02-02 23:58:58,207 - mmcls - INFO - [043/150] Training session : 7 ; lr : 0.020006869852649475 ; loss : 0.025154659524559975 ; acc@1 : 100.0
+2023-02-02 23:58:58,213 - mmcls - INFO - [044/150] Training session : 7 ; lr : 0.01978996152392163 ; loss : 0.07480408996343613 ; acc@1 : 100.0
+2023-02-02 23:58:58,224 - mmcls - INFO - [045/150] Training session : 7 ; lr : 0.019569689933859484 ; loss : 0.07744218409061432 ; acc@1 : 100.0
+2023-02-02 23:59:00,614 - mmcls - INFO - [046/150] Training session : 7 ; lr : 0.019346158478820357 ; loss : 0.02729044482111931 ; acc@1 : 100.0
+2023-02-02 23:59:00,619 - mmcls - INFO - [047/150] Training session : 7 ; lr : 0.01911947208535511 ; loss : 0.014222157187759876 ; acc@1 : 100.0
+2023-02-02 23:59:00,625 - mmcls - INFO - [048/150] Training session : 7 ; lr : 0.018889737160955194 ; loss : 0.024947011843323708 ; acc@1 : 100.0
+2023-02-02 23:59:02,305 - mmcls - INFO - [049/150] Training session : 7 ; lr : 0.018657061544104576 ; loss : 0.02790170907974243 ; acc@1 : 100.0
+2023-02-02 23:59:02,314 - mmcls - INFO - [050/150] Training session : 7 ; lr : 0.018421554453659904 ; loss : 0.039901379495859146 ; acc@1 : 100.0
+2023-02-02 23:59:02,317 - mmcls - INFO - [051/150] Training session : 7 ; lr : 0.018183326437582758 ; loss : 0.0691196396946907 ; acc@1 : 100.0
+2023-02-02 23:59:05,071 - mmcls - INFO - [052/150] Training session : 7 ; lr : 0.01794248932104798 ; loss : 0.025491900742053986 ; acc@1 : 100.0
+2023-02-02 23:59:05,078 - mmcls - INFO - [053/150] Training session : 7 ; lr : 0.017699156153952525 ; loss : 0.04894016310572624 ; acc@1 : 100.0
+2023-02-02 23:59:05,084 - mmcls - INFO - [054/150] Training session : 7 ; lr : 0.017453441157849362 ; loss : 0.01356506161391735 ; acc@1 : 100.0
+2023-02-02 23:59:07,123 - mmcls - INFO - [055/150] Training session : 7 ; lr : 0.017205459672331443 ; loss : 0.04355594515800476 ; acc@1 : 100.0
+2023-02-02 23:59:07,141 - mmcls - INFO - [056/150] Training session : 7 ; lr : 0.016955328100890822 ; loss : 0.05148220434784889 ; acc@1 : 100.0
+2023-02-02 23:59:07,146 - mmcls - INFO - [057/150] Training session : 7 ; lr : 0.016703163856278413 ; loss : 0.028248419985175133 ; acc@1 : 100.0
+2023-02-02 23:59:09,449 - mmcls - INFO - [058/150] Training session : 7 ; lr : 0.016449085305389976 ; loss : 0.013016420416533947 ; acc@1 : 100.0
+2023-02-02 23:59:09,455 - mmcls - INFO - [059/150] Training session : 7 ; lr : 0.01619321171370422 ; loss : 0.03232797980308533 ; acc@1 : 100.0
+2023-02-02 23:59:09,464 - mmcls - INFO - [060/150] Training session : 7 ; lr : 0.01593566318929911 ; loss : 0.016933508217334747 ; acc@1 : 100.0
+2023-02-02 23:59:12,368 - mmcls - INFO - [061/150] Training session : 7 ; lr : 0.015676560626472682 ; loss : 0.15348444879055023 ; acc@1 : 87.5
+2023-02-02 23:59:12,378 - mmcls - INFO - [062/150] Training session : 7 ; lr : 0.015416025648994755 ; loss : 0.026330124586820602 ; acc@1 : 100.0
+2023-02-02 23:59:12,382 - mmcls - INFO - [063/150] Training session : 7 ; lr : 0.015154180553016268 ; loss : 0.01243828795850277 ; acc@1 : 100.0
+2023-02-02 23:59:14,213 - mmcls - INFO - [064/150] Training session : 7 ; lr : 0.01489114824966297 ; loss : 0.03990156576037407 ; acc@1 : 100.0
+2023-02-02 23:59:14,235 - mmcls - INFO - [065/150] Training session : 7 ; lr : 0.014627052207340467 ; loss : 0.04528752714395523 ; acc@1 : 100.0
+2023-02-02 23:59:14,238 - mmcls - INFO - [066/150] Training session : 7 ; lr : 0.014362016393777637 ; loss : 0.012081884779036045 ; acc@1 : 100.0
+2023-02-02 23:59:16,836 - mmcls - INFO - [067/150] Training session : 7 ; lr : 0.014096165217835719 ; loss : 0.010119963437318802 ; acc@1 : 100.0
+2023-02-02 23:59:16,845 - mmcls - INFO - [068/150] Training session : 7 ; lr : 0.013829623471110277 ; loss : 0.04604440927505493 ; acc@1 : 100.0
+2023-02-02 23:59:16,853 - mmcls - INFO - [069/150] Training session : 7 ; lr : 0.013562516269353533 ; loss : 0.010071901604533195 ; acc@1 : 100.0
+2023-02-02 23:59:19,048 - mmcls - INFO - [070/150] Training session : 7 ; lr : 0.013294968993744544 ; loss : 0.03505847975611687 ; acc@1 : 100.0
+2023-02-02 23:59:19,058 - mmcls - INFO - [071/150] Training session : 7 ; lr : 0.013027107232034785 ; loss : 0.02388790249824524 ; acc@1 : 100.0
+2023-02-02 23:59:19,065 - mmcls - INFO - [072/150] Training session : 7 ; lr : 0.012759056719596745 ; loss : 0.03620458394289017 ; acc@1 : 100.0
+2023-02-02 23:59:21,338 - mmcls - INFO - [073/150] Training session : 7 ; lr : 0.012490943280403259 ; loss : 0.03786896914243698 ; acc@1 : 100.0
+2023-02-02 23:59:21,344 - mmcls - INFO - [074/150] Training session : 7 ; lr : 0.012222892767965218 ; loss : 0.026260122656822205 ; acc@1 : 100.0
+2023-02-02 23:59:21,348 - mmcls - INFO - [075/150] Training session : 7 ; lr : 0.01195503100625546 ; loss : 0.036681704223155975 ; acc@1 : 100.0
+2023-02-02 23:59:23,846 - mmcls - INFO - [076/150] Training session : 7 ; lr : 0.011687483730646472 ; loss : 0.033431582152843475 ; acc@1 : 100.0
+2023-02-02 23:59:23,853 - mmcls - INFO - [077/150] Training session : 7 ; lr : 0.01142037652888973 ; loss : 0.03354909271001816 ; acc@1 : 100.0
+2023-02-02 23:59:23,857 - mmcls - INFO - [078/150] Training session : 7 ; lr : 0.011153834782164284 ; loss : 0.04853898286819458 ; acc@1 : 100.0
+2023-02-02 23:59:25,974 - mmcls - INFO - [079/150] Training session : 7 ; lr : 0.010887983606222364 ; loss : 0.023845916613936424 ; acc@1 : 100.0
+2023-02-02 23:59:25,980 - mmcls - INFO - [080/150] Training session : 7 ; lr : 0.010622947792659538 ; loss : 0.036395635455846786 ; acc@1 : 100.0
+2023-02-02 23:59:25,986 - mmcls - INFO - [081/150] Training session : 7 ; lr : 0.010358851750337031 ; loss : 0.020619221031665802 ; acc@1 : 100.0
+2023-02-02 23:59:28,357 - mmcls - INFO - [082/150] Training session : 7 ; lr : 0.010095819446983737 ; loss : 0.013014933094382286 ; acc@1 : 100.0
+2023-02-02 23:59:28,362 - mmcls - INFO - [083/150] Training session : 7 ; lr : 0.009833974351005248 ; loss : 0.0444524921476841 ; acc@1 : 100.0
+2023-02-02 23:59:28,367 - mmcls - INFO - [084/150] Training session : 7 ; lr : 0.009573439373527321 ; loss : 0.03405151888728142 ; acc@1 : 100.0
+2023-02-02 23:59:30,751 - mmcls - INFO - [085/150] Training session : 7 ; lr : 0.009314336810700895 ; loss : 0.03974848985671997 ; acc@1 : 100.0
+2023-02-02 23:59:30,757 - mmcls - INFO - [086/150] Training session : 7 ; lr : 0.009056788286295785 ; loss : 0.03134413808584213 ; acc@1 : 100.0
+2023-02-02 23:59:30,761 - mmcls - INFO - [087/150] Training session : 7 ; lr : 0.008800914694610027 ; loss : 0.013399017043411732 ; acc@1 : 100.0
+2023-02-02 23:59:33,174 - mmcls - INFO - [088/150] Training session : 7 ; lr : 0.008546836143721589 ; loss : 0.021130071952939034 ; acc@1 : 100.0
+2023-02-02 23:59:33,183 - mmcls - INFO - [089/150] Training session : 7 ; lr : 0.008294671899109181 ; loss : 0.029032278805971146 ; acc@1 : 100.0
+2023-02-02 23:59:33,187 - mmcls - INFO - [090/150] Training session : 7 ; lr : 0.008044540327668558 ; loss : 0.011817692779004574 ; acc@1 : 100.0
+2023-02-02 23:59:35,317 - mmcls - INFO - [091/150] Training session : 7 ; lr : 0.007796558842150638 ; loss : 0.013408088125288486 ; acc@1 : 100.0
+2023-02-02 23:59:35,327 - mmcls - INFO - [092/150] Training session : 7 ; lr : 0.007550843846047477 ; loss : 0.03203010559082031 ; acc@1 : 100.0
+2023-02-02 23:59:35,330 - mmcls - INFO - [093/150] Training session : 7 ; lr : 0.0073075106789520245 ; loss : 0.011936604045331478 ; acc@1 : 100.0
+2023-02-02 23:59:37,947 - mmcls - INFO - [094/150] Training session : 7 ; lr : 0.0070666735624172515 ; loss : 0.025214236229658127 ; acc@1 : 100.0
+2023-02-02 23:59:37,955 - mmcls - INFO - [095/150] Training session : 7 ; lr : 0.006828445546340099 ; loss : 0.1075185164809227 ; acc@1 : 87.5
+2023-02-02 23:59:37,961 - mmcls - INFO - [096/150] Training session : 7 ; lr : 0.006592938455895428 ; loss : 0.027192845940589905 ; acc@1 : 100.0
+2023-02-02 23:59:39,940 - mmcls - INFO - [097/150] Training session : 7 ; lr : 0.006360262839044807 ; loss : 0.03666824847459793 ; acc@1 : 100.0
+2023-02-02 23:59:39,947 - mmcls - INFO - [098/150] Training session : 7 ; lr : 0.006130527914644895 ; loss : 0.12444622814655304 ; acc@1 : 87.5
+2023-02-02 23:59:39,952 - mmcls - INFO - [099/150] Training session : 7 ; lr : 0.005903841521179644 ; loss : 0.0074355327524244785 ; acc@1 : 100.0
+2023-02-02 23:59:41,998 - mmcls - INFO - [100/150] Training session : 7 ; lr : 0.00568031006614052 ; loss : 0.011273270472884178 ; acc@1 : 100.0
+2023-02-02 23:59:42,003 - mmcls - INFO - [101/150] Training session : 7 ; lr : 0.005460038476078376 ; loss : 0.026228662580251694 ; acc@1 : 100.0
+2023-02-02 23:59:42,009 - mmcls - INFO - [102/150] Training session : 7 ; lr : 0.005243130147350531 ; loss : 0.008249280042946339 ; acc@1 : 100.0
+2023-02-02 23:59:44,624 - mmcls - INFO - [103/150] Training session : 7 ; lr : 0.005029686897586099 ; loss : 0.016476735472679138 ; acc@1 : 100.0
+2023-02-02 23:59:44,630 - mmcls - INFO - [104/150] Training session : 7 ; lr : 0.004819808917892412 ; loss : 0.037150945514440536 ; acc@1 : 100.0
+2023-02-02 23:59:44,638 - mmcls - INFO - [105/150] Training session : 7 ; lr : 0.004613594725824884 ; loss : 0.01661401055753231 ; acc@1 : 100.0
+2023-02-02 23:59:47,265 - mmcls - INFO - [106/150] Training session : 7 ; lr : 0.0044111411191425105 ; loss : 0.031454525887966156 ; acc@1 : 100.0
+2023-02-02 23:59:47,274 - mmcls - INFO - [107/150] Training session : 7 ; lr : 0.00421254313037059 ; loss : 0.012720925733447075 ; acc@1 : 100.0
+2023-02-02 23:59:47,281 - mmcls - INFO - [108/150] Training session : 7 ; lr : 0.004017893982192111 ; loss : 0.02330765314400196 ; acc@1 : 100.0
+2023-02-02 23:59:49,815 - mmcls - INFO - [109/150] Training session : 7 ; lr : 0.003827285043688628 ; loss : 0.008643345907330513 ; acc@1 : 100.0
+2023-02-02 23:59:49,821 - mmcls - INFO - [110/150] Training session : 7 ; lr : 0.003640805787451259 ; loss : 0.02485116571187973 ; acc@1 : 100.0
+2023-02-02 23:59:49,826 - mmcls - INFO - [111/150] Training session : 7 ; lr : 0.003458543747581905 ; loss : 0.02068888582289219 ; acc@1 : 100.0
+2023-02-02 23:59:52,649 - mmcls - INFO - [112/150] Training session : 7 ; lr : 0.0032805844786043953 ; loss : 0.04034561663866043 ; acc@1 : 100.0
+2023-02-02 23:59:52,680 - mmcls - INFO - [113/150] Training session : 7 ; lr : 0.003107011515304842 ; loss : 0.007974478416144848 ; acc@1 : 100.0
+2023-02-02 23:59:52,684 - mmcls - INFO - [114/150] Training session : 7 ; lr : 0.0029379063335201 ; loss : 0.03819294273853302 ; acc@1 : 100.0
+2023-02-02 23:59:55,263 - mmcls - INFO - [115/150] Training session : 7 ; lr : 0.0027733483118926585 ; loss : 0.027274692431092262 ; acc@1 : 100.0
+2023-02-02 23:59:55,282 - mmcls - INFO - [116/150] Training session : 7 ; lr : 0.002613414694610027 ; loss : 0.03321726620197296 ; acc@1 : 100.0
+2023-02-02 23:59:55,286 - mmcls - INFO - [117/150] Training session : 7 ; lr : 0.002458180555145975 ; loss : 0.037382785230875015 ; acc@1 : 100.0
+2023-02-02 23:59:58,046 - mmcls - INFO - [118/150] Training session : 7 ; lr : 0.0023077187610207666 ; loss : 0.03966417908668518 ; acc@1 : 100.0
+2023-02-02 23:59:58,054 - mmcls - INFO - [119/150] Training session : 7 ; lr : 0.002162099939596845 ; loss : 0.01922900415956974 ; acc@1 : 100.0
+2023-02-02 23:59:58,062 - mmcls - INFO - [120/150] Training session : 7 ; lr : 0.002021392444926086 ; loss : 0.03371395543217659 ; acc@1 : 100.0
+2023-02-03 00:00:00,613 - mmcls - INFO - [121/150] Training session : 7 ; lr : 0.0018856623256641076 ; loss : 0.0167169738560915 ; acc@1 : 100.0
+2023-02-03 00:00:00,634 - mmcls - INFO - [122/150] Training session : 7 ; lr : 0.0017549732940668028 ; loss : 0.012676753103733063 ; acc@1 : 100.0
+2023-02-03 00:00:00,641 - mmcls - INFO - [123/150] Training session : 7 ; lr : 0.0016293866960835207 ; loss : 0.014749288558959961 ; acc@1 : 100.0
+2023-02-03 00:00:03,485 - mmcls - INFO - [124/150] Training session : 7 ; lr : 0.001508961482561065 ; loss : 0.11151200532913208 ; acc@1 : 87.5
+2023-02-03 00:00:03,491 - mmcls - INFO - [125/150] Training session : 7 ; lr : 0.0013937541815719084 ; loss : 0.009337425231933594 ; acc@1 : 100.0
+2023-02-03 00:00:03,496 - mmcls - INFO - [126/150] Training session : 7 ; lr : 0.0012838188718797034 ; loss : 0.026578009128570557 ; acc@1 : 100.0
+2023-02-03 00:00:05,917 - mmcls - INFO - [127/150] Training session : 7 ; lr : 0.0011792071575545007 ; loss : 0.02161015197634697 ; acc@1 : 100.0
+2023-02-03 00:00:05,923 - mmcls - INFO - [128/150] Training session : 7 ; lr : 0.0010799681437495838 ; loss : 0.030614681541919708 ; acc@1 : 100.0
+2023-02-03 00:00:05,929 - mmcls - INFO - [129/150] Training session : 7 ; lr : 0.000986148413651316 ; loss : 0.0279998779296875 ; acc@1 : 100.0
+2023-02-03 00:00:08,058 - mmcls - INFO - [130/150] Training session : 7 ; lr : 0.000897792006612821 ; loss : 0.015299693681299686 ; acc@1 : 100.0
+2023-02-03 00:00:08,066 - mmcls - INFO - [131/150] Training session : 7 ; lr : 0.000814940397481717 ; loss : 0.010289095342159271 ; acc@1 : 100.0
+2023-02-03 00:00:08,071 - mmcls - INFO - [132/150] Training session : 7 ; lr : 0.0007376324771316792 ; loss : 0.021164607256650925 ; acc@1 : 100.0
+2023-02-03 00:00:10,565 - mmcls - INFO - [133/150] Training session : 7 ; lr : 0.0006659045342068909 ; loss : 0.03355065733194351 ; acc@1 : 100.0
+2023-02-03 00:00:10,573 - mmcls - INFO - [134/150] Training session : 7 ; lr : 0.0005997902380880187 ; loss : 0.031825579702854156 ; acc@1 : 100.0
+2023-02-03 00:00:10,577 - mmcls - INFO - [135/150] Training session : 7 ; lr : 0.0005393206230876776 ; loss : 0.032408207654953 ; acc@1 : 100.0
+2023-02-03 00:00:13,226 - mmcls - INFO - [136/150] Training session : 7 ; lr : 0.00048452407388279036 ; loss : 0.021326327696442604 ; acc@1 : 100.0
+2023-02-03 00:00:13,232 - mmcls - INFO - [137/150] Training session : 7 ; lr : 0.0004354263121907137 ; loss : 0.024929726496338844 ; acc@1 : 100.0
+2023-02-03 00:00:13,236 - mmcls - INFO - [138/150] Training session : 7 ; lr : 0.0003920503846953637 ; loss : 0.012947598472237587 ; acc@1 : 100.0
+2023-02-03 00:00:15,458 - mmcls - INFO - [139/150] Training session : 7 ; lr : 0.00035441665222900375 ; loss : 0.033356476575136185 ; acc@1 : 100.0
+2023-02-03 00:00:15,470 - mmcls - INFO - [140/150] Training session : 7 ; lr : 0.0003225427802148 ; loss : 0.023333029821515083 ; acc@1 : 100.0
+2023-02-03 00:00:15,477 - mmcls - INFO - [141/150] Training session : 7 ; lr : 0.0002964437303745925 ; loss : 0.024043766781687737 ; acc@1 : 100.0
+2023-02-03 00:00:17,714 - mmcls - INFO - [142/150] Training session : 7 ; lr : 0.00027613175370580566 ; loss : 0.01737559400498867 ; acc@1 : 100.0
+2023-02-03 00:00:17,719 - mmcls - INFO - [143/150] Training session : 7 ; lr : 0.0002616163847307882 ; loss : 0.01933174952864647 ; acc@1 : 100.0
+2023-02-03 00:00:17,724 - mmcls - INFO - [144/150] Training session : 7 ; lr : 0.00025290443702125895 ; loss : 0.017776884138584137 ; acc@1 : 100.0
+2023-02-03 00:00:19,635 - mmcls - INFO - [145/150] Training session : 7 ; lr : 0.00025 ; loss : 0.026820510625839233 ; acc@1 : 100.0
+2023-02-03 00:00:19,641 - mmcls - INFO - [146/150] Training session : 7 ; lr : 2.5e-05 ; loss : 0.009045109152793884 ; acc@1 : 100.0
+2023-02-03 00:00:19,648 - mmcls - INFO - [147/150] Training session : 7 ; lr : 2.5e-05 ; loss : 0.006053503602743149 ; acc@1 : 100.0
+2023-02-03 00:00:21,975 - mmcls - INFO - [148/150] Training session : 7 ; lr : 2.5e-05 ; loss : 0.011298993602395058 ; acc@1 : 100.0
+2023-02-03 00:00:21,984 - mmcls - INFO - [149/150] Training session : 7 ; lr : 2.5e-05 ; loss : 0.02822628989815712 ; acc@1 : 100.0
+2023-02-03 00:00:21,987 - mmcls - INFO - [150/150] Training session : 7 ; lr : 2.5e-05 ; loss : 0.027506615966558456 ; acc@1 : 100.0
+2023-02-03 00:00:21,988 - mmcls - INFO - Evaluating session 7, from 0 to 90.
+2023-02-03 00:00:24,484 - mmcls - INFO - [07]Evaluation results : acc : 61.46 ; acc_base : 76.18 ; acc_inc : 32.00
+2023-02-03 00:00:24,484 - mmcls - INFO - [07]Evaluation results : acc_incremental_old : 28.64 ; acc_incremental_new : 48.80
+2023-02-03 00:00:24,607 - mmcls - INFO - Starting session : 8 ------------------------------------------------------------
+2023-02-03 00:00:24,607 - mmcls - INFO - Newly added classes are from 90 to 95.
+2023-02-03 00:00:24,607 - mmcls - INFO - Model now can classify 95 classes
+2023-02-03 00:00:24,607 - mmcls - INFO - 160 steps
+2023-02-03 00:00:24,607 - mmcls - INFO - Extracting mean neck feat from 60 to 90
+2023-02-03 00:00:24,608 - mmcls - INFO - Copy 7 duplications.
+2023-02-03 00:00:24,634 - mmcls - INFO - Session : 8 ; The dataset has 295 samples.
+2023-02-03 00:00:24,635 - mmcls - INFO - Labels : [90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 92, 92, 92, 92, 92, 93, 93, 93, 93, 93, 94, 94, 94, 94, 94, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+2023-02-03 00:00:26,560 - mmcls - INFO - [001/160] Training session : 8 ; lr : 0.0069992883036725856 ; loss : 0.6637778878211975 ; acc@1 : 87.5
+2023-02-03 00:00:26,566 - mmcls - INFO - [002/160] Training session : 8 ; lr : 0.011495323618723638 ; loss : 0.013157538138329983 ; acc@1 : 100.0
+2023-02-03 00:00:26,571 - mmcls - INFO - [003/160] Training session : 8 ; lr : 0.015985363399054004 ; loss : 1.25740385055542 ; acc@1 : 75.0
+2023-02-03 00:00:26,585 - mmcls - INFO - [004/160] Training session : 8 ; lr : 0.02046666906457589 ; loss : 0.009502108208835125 ; acc@1 : 100.0
+2023-02-03 00:00:28,817 - mmcls - INFO - [005/160] Training session : 8 ; lr : 0.0249365078769747 ; loss : 0.595588207244873 ; acc@1 : 87.5
+2023-02-03 00:00:28,824 - mmcls - INFO - [006/160] Training session : 8 ; lr : 0.02490860577300455 ; loss : 0.010684257373213768 ; acc@1 : 100.0
+2023-02-03 00:00:28,831 - mmcls - INFO - [007/160] Training session : 8 ; lr : 0.02487565766781302 ; loss : 0.8949739933013916 ; acc@1 : 75.0
+2023-02-03 00:00:28,838 - mmcls - INFO - [008/160] Training session : 8 ; lr : 0.024837677096202687 ; loss : 0.011917087249457836 ; acc@1 : 100.0
+2023-02-03 00:00:31,029 - mmcls - INFO - [009/160] Training session : 8 ; lr : 0.02479467966027071 ; loss : 0.5642471313476562 ; acc@1 : 87.5
+2023-02-03 00:00:31,036 - mmcls - INFO - [010/160] Training session : 8 ; lr : 0.02474668302299962 ; loss : 0.8974751830101013 ; acc@1 : 75.0
+2023-02-03 00:00:31,041 - mmcls - INFO - [011/160] Training session : 8 ; lr : 0.02469370690100153 ; loss : 0.5187721252441406 ; acc@1 : 75.0
+2023-02-03 00:00:31,058 - mmcls - INFO - [012/160] Training session : 8 ; lr : 0.024635773056418696 ; loss : 0.02704181894659996 ; acc@1 : 100.0
+2023-02-03 00:00:33,596 - mmcls - INFO - [013/160] Training session : 8 ; lr : 0.024572905287983834 ; loss : 0.20726144313812256 ; acc@1 : 100.0
+2023-02-03 00:00:33,603 - mmcls - INFO - [014/160] Training session : 8 ; lr : 0.024505129421243783 ; loss : 0.030416831374168396 ; acc@1 : 100.0
+2023-02-03 00:00:33,611 - mmcls - INFO - [015/160] Training session : 8 ; lr : 0.024432473297950605 ; loss : 0.02682124450802803 ; acc@1 : 100.0
+2023-02-03 00:00:33,616 - mmcls - INFO - [016/160] Training session : 8 ; lr : 0.024354966764624425 ; loss : 0.1577940732240677 ; acc@1 : 100.0
+2023-02-03 00:00:36,052 - mmcls - INFO - [017/160] Training session : 8 ; lr : 0.02427264166029273 ; loss : 0.029788708314299583 ; acc@1 : 100.0
+2023-02-03 00:00:36,058 - mmcls - INFO - [018/160] Training session : 8 ; lr : 0.02418553180341116 ; loss : 0.042465146631002426 ; acc@1 : 100.0
+2023-02-03 00:00:36,070 - mmcls - INFO - [019/160] Training session : 8 ; lr : 0.02409367297797119 ; loss : 0.23483330011367798 ; acc@1 : 87.5
+2023-02-03 00:00:36,074 - mmcls - INFO - [020/160] Training session : 8 ; lr : 0.023997102918800355 ; loss : 0.06142871081829071 ; acc@1 : 100.0
+2023-02-03 00:00:38,462 - mmcls - INFO - [021/160] Training session : 8 ; lr : 0.023895861296061107 ; loss : 0.26514941453933716 ; acc@1 : 87.5
+2023-02-03 00:00:38,471 - mmcls - INFO - [022/160] Training session : 8 ; lr : 0.023789989698954656 ; loss : 0.057712770998477936 ; acc@1 : 100.0
+2023-02-03 00:00:38,477 - mmcls - INFO - [023/160] Training session : 8 ; lr : 0.023679531618636458 ; loss : 0.030727935954928398 ; acc@1 : 100.0
+2023-02-03 00:00:38,482 - mmcls - INFO - [024/160] Training session : 8 ; lr : 0.02356453243035043 ; loss : 0.058062829077243805 ; acc@1 : 100.0
+2023-02-03 00:00:40,672 - mmcls - INFO - [025/160] Training session : 8 ; lr : 0.023445039374789204 ; loss : 0.0744057148694992 ; acc@1 : 100.0
+2023-02-03 00:00:40,679 - mmcls - INFO - [026/160] Training session : 8 ; lr : 0.023321101538688004 ; loss : 0.02620670758187771 ; acc@1 : 100.0
+2023-02-03 00:00:40,686 - mmcls - INFO - [027/160] Training session : 8 ; lr : 0.02319276983466027 ; loss : 0.08666300028562546 ; acc@1 : 100.0
+2023-02-03 00:00:40,691 - mmcls - INFO - [028/160] Training session : 8 ; lr : 0.02306009698028317 ; loss : 0.13083124160766602 ; acc@1 : 100.0
+2023-02-03 00:00:42,791 - mmcls - INFO - [029/160] Training session : 8 ; lr : 0.02292313747644167 ; loss : 0.04902743175625801 ; acc@1 : 100.0
+2023-02-03 00:00:42,812 - mmcls - INFO - [030/160] Training session : 8 ; lr : 0.022781947584940048 ; loss : 0.019096018746495247 ; acc@1 : 100.0
+2023-02-03 00:00:42,816 - mmcls - INFO - [031/160] Training session : 8 ; lr : 0.022636585305389974 ; loss : 0.2014642059803009 ; acc@1 : 87.5
+2023-02-03 00:00:42,819 - mmcls - INFO - [032/160] Training session : 8 ; lr : 0.022487110351384825 ; loss : 0.060680996626615524 ; acc@1 : 100.0
+2023-02-03 00:00:45,472 - mmcls - INFO - [033/160] Training session : 8 ; lr : 0.022333584125969794 ; loss : 0.09995649755001068 ; acc@1 : 100.0
+2023-02-03 00:00:45,484 - mmcls - INFO - [034/160] Training session : 8 ; lr : 0.022176069696418055 ; loss : 0.016835173591971397 ; acc@1 : 100.0
+2023-02-03 00:00:45,487 - mmcls - INFO - [035/160] Training session : 8 ; lr : 0.022014631768323287 ; loss : 0.03941391035914421 ; acc@1 : 100.0
+2023-02-03 00:00:45,495 - mmcls - INFO - [036/160] Training session : 8 ; lr : 0.021849336659019128 ; loss : 0.03529484570026398 ; acc@1 : 100.0
+2023-02-03 00:00:47,569 - mmcls - INFO - [037/160] Training session : 8 ; lr : 0.021680252270336584 ; loss : 0.035008132457733154 ; acc@1 : 100.0
+2023-02-03 00:00:47,574 - mmcls - INFO - [038/160] Training session : 8 ; lr : 0.021507448060710553 ; loss : 0.1276359111070633 ; acc@1 : 100.0
+2023-02-03 00:00:47,606 - mmcls - INFO - [039/160] Training session : 8 ; lr : 0.02133099501664686 ; loss : 0.12194044142961502 ; acc@1 : 100.0
+2023-02-03 00:00:47,610 - mmcls - INFO - [040/160] Training session : 8 ; lr : 0.021150965623561623 ; loss : 0.08774703741073608 ; acc@1 : 100.0
+2023-02-03 00:00:49,765 - mmcls - INFO - [041/160] Training session : 8 ; lr : 0.02096743383600485 ; loss : 0.011081544682383537 ; acc@1 : 100.0
+2023-02-03 00:00:49,780 - mmcls - INFO - [042/160] Training session : 8 ; lr : 0.020780475047280533 ; loss : 0.1309746354818344 ; acc@1 : 100.0
+2023-02-03 00:00:49,787 - mmcls - INFO - [043/160] Training session : 8 ; lr : 0.02059016605847572 ; loss : 0.10573159903287888 ; acc@1 : 100.0
+2023-02-03 00:00:49,793 - mmcls - INFO - [044/160] Training session : 8 ; lr : 0.020396585046911286 ; loss : 0.09024045616388321 ; acc@1 : 100.0
+2023-02-03 00:00:52,077 - mmcls - INFO - [045/160] Training session : 8 ; lr : 0.02019981153402733 ; loss : 0.036891382187604904 ; acc@1 : 100.0
+2023-02-03 00:00:52,082 - mmcls - INFO - [046/160] Training session : 8 ; lr : 0.01999992635271647 ; loss : 0.01804077997803688 ; acc@1 : 100.0
+2023-02-03 00:00:52,086 - mmcls - INFO - [047/160] Training session : 8 ; lr : 0.019797011614118353 ; loss : 0.04338626191020012 ; acc@1 : 100.0
+2023-02-03 00:00:52,091 - mmcls - INFO - [048/160] Training session : 8 ; lr : 0.01959115067388911 ; loss : 0.009351924061775208 ; acc@1 : 100.0
+2023-02-03 00:00:53,743 - mmcls - INFO - [049/160] Training session : 8 ; lr : 0.019382428097959543 ; loss : 0.13789936900138855 ; acc@1 : 100.0
+2023-02-03 00:00:53,748 - mmcls - INFO - [050/160] Training session : 8 ; lr : 0.019170929627796162 ; loss : 0.05954485386610031 ; acc@1 : 100.0
+2023-02-03 00:00:53,754 - mmcls - INFO - [051/160] Training session : 8 ; lr : 0.018956742145179332 ; loss : 0.1767708659172058 ; acc@1 : 87.5
+2023-02-03 00:00:53,761 - mmcls - INFO - [052/160] Training session : 8 ; lr : 0.018739953636512947 ; loss : 0.021395038813352585 ; acc@1 : 100.0
+2023-02-03 00:00:55,710 - mmcls - INFO - [053/160] Training session : 8 ; lr : 0.018520653156680385 ; loss : 0.03234666585922241 ; acc@1 : 100.0
+2023-02-03 00:00:55,724 - mmcls - INFO - [054/160] Training session : 8 ; lr : 0.018298930792461494 ; loss : 0.019552186131477356 ; acc@1 : 100.0
+2023-02-03 00:00:55,728 - mmcls - INFO - [055/160] Training session : 8 ; lr : 0.018074877625525728 ; loss : 0.02339456044137478 ; acc@1 : 100.0
+2023-02-03 00:00:55,735 - mmcls - INFO - [056/160] Training session : 8 ; lr : 0.017848585695016544 ; loss : 0.018623165786266327 ; acc@1 : 100.0
+2023-02-03 00:00:58,288 - mmcls - INFO - [057/160] Training session : 8 ; lr : 0.017620147959742535 ; loss : 0.10024487972259521 ; acc@1 : 100.0
+2023-02-03 00:00:58,317 - mmcls - INFO - [058/160] Training session : 8 ; lr : 0.017389658259990694 ; loss : 0.054192811250686646 ; acc@1 : 100.0
+2023-02-03 00:00:58,321 - mmcls - INFO - [059/160] Training session : 8 ; lr : 0.01715721127897767 ; loss : 0.04468061402440071 ; acc@1 : 100.0
+2023-02-03 00:00:58,326 - mmcls - INFO - [060/160] Training session : 8 ; lr : 0.01692290250395465 ; loss : 0.014806937426328659 ; acc@1 : 100.0
+2023-02-03 00:01:00,711 - mmcls - INFO - [061/160] Training session : 8 ; lr : 0.016686828186982056 ; loss : 0.008132880553603172 ; acc@1 : 100.0
+2023-02-03 00:01:00,721 - mmcls - INFO - [062/160] Training session : 8 ; lr : 0.016449085305389976 ; loss : 0.009986154735088348 ; acc@1 : 100.0
+2023-02-03 00:01:00,726 - mmcls - INFO - [063/160] Training session : 8 ; lr : 0.016209771521940718 ; loss : 0.013885033316910267 ; acc@1 : 100.0
+2023-02-03 00:01:00,732 - mmcls - INFO - [064/160] Training session : 8 ; lr : 0.01596898514470977 ; loss : 0.009238296188414097 ; acc@1 : 100.0
+2023-02-03 00:01:03,428 - mmcls - INFO - [065/160] Training session : 8 ; lr : 0.015726825086701667 ; loss : 0.01439408864825964 ; acc@1 : 100.0
+2023-02-03 00:01:03,438 - mmcls - INFO - [066/160] Training session : 8 ; lr : 0.015483390825217387 ; loss : 0.02674875408411026 ; acc@1 : 100.0
+2023-02-03 00:01:03,444 - mmcls - INFO - [067/160] Training session : 8 ; lr : 0.015238782360989894 ; loss : 0.05517935752868652 ; acc@1 : 100.0
+2023-02-03 00:01:03,451 - mmcls - INFO - [068/160] Training session : 8 ; lr : 0.01499310017710469 ; loss : 0.10371614992618561 ; acc@1 : 100.0
+2023-02-03 00:01:06,028 - mmcls - INFO - [069/160] Training session : 8 ; lr : 0.01474644519772224 ; loss : 0.043961070477962494 ; acc@1 : 100.0
+2023-02-03 00:01:06,034 - mmcls - INFO - [070/160] Training session : 8 ; lr : 0.014498918746619138 ; loss : 0.010732523165643215 ; acc@1 : 100.0
+2023-02-03 00:01:06,038 - mmcls - INFO - [071/160] Training session : 8 ; lr : 0.014250622505565188 ; loss : 0.020880242809653282 ; acc@1 : 100.0
+2023-02-03 00:01:06,042 - mmcls - INFO - [072/160] Training session : 8 ; lr : 0.014001658472553394 ; loss : 0.007700861897319555 ; acc@1 : 100.0
+2023-02-03 00:01:08,584 - mmcls - INFO - [073/160] Training session : 8 ; lr : 0.01375212891990003 ; loss : 0.04769936949014664 ; acc@1 : 100.0
+2023-02-03 00:01:08,592 - mmcls - INFO - [074/160] Training session : 8 ; lr : 0.013502136352232054 ; loss : 0.06482434272766113 ; acc@1 : 100.0
+2023-02-03 00:01:08,596 - mmcls - INFO - [075/160] Training session : 8 ; lr : 0.013251783464379071 ; loss : 0.04587902873754501 ; acc@1 : 100.0
+2023-02-03 00:01:08,601 - mmcls - INFO - [076/160] Training session : 8 ; lr : 0.013001173099187168 ; loss : 0.008098367601633072 ; acc@1 : 100.0
+2023-02-03 00:01:10,863 - mmcls - INFO - [077/160] Training session : 8 ; lr : 0.012750408205271938 ; loss : 0.02329304628074169 ; acc@1 : 100.0
+2023-02-03 00:01:10,867 - mmcls - INFO - [078/160] Training session : 8 ; lr : 0.012499591794728067 ; loss : 0.056371595710515976 ; acc@1 : 100.0
+2023-02-03 00:01:10,872 - mmcls - INFO - [079/160] Training session : 8 ; lr : 0.012248826900812837 ; loss : 0.009479798376560211 ; acc@1 : 100.0
+2023-02-03 00:01:10,876 - mmcls - INFO - [080/160] Training session : 8 ; lr : 0.011998216535620932 ; loss : 0.010554147884249687 ; acc@1 : 100.0
+2023-02-03 00:01:13,061 - mmcls - INFO - [081/160] Training session : 8 ; lr : 0.011747863647767948 ; loss : 0.014292122796177864 ; acc@1 : 100.0
+2023-02-03 00:01:13,075 - mmcls - INFO - [082/160] Training session : 8 ; lr : 0.011497871080099972 ; loss : 0.05622491613030434 ; acc@1 : 100.0
+2023-02-03 00:01:13,080 - mmcls - INFO - [083/160] Training session : 8 ; lr : 0.01124834152744661 ; loss : 0.01714947447180748 ; acc@1 : 100.0
+2023-02-03 00:01:13,086 - mmcls - INFO - [084/160] Training session : 8 ; lr : 0.010999377494434814 ; loss : 0.05925372242927551 ; acc@1 : 100.0
+2023-02-03 00:01:15,503 - mmcls - INFO - [085/160] Training session : 8 ; lr : 0.010751081253380868 ; loss : 0.017096199095249176 ; acc@1 : 100.0
+2023-02-03 00:01:15,510 - mmcls - INFO - [086/160] Training session : 8 ; lr : 0.010503554802277765 ; loss : 0.005421189591288567 ; acc@1 : 100.0
+2023-02-03 00:01:15,515 - mmcls - INFO - [087/160] Training session : 8 ; lr : 0.01025689982289531 ; loss : 0.039385776966810226 ; acc@1 : 100.0
+2023-02-03 00:01:15,522 - mmcls - INFO - [088/160] Training session : 8 ; lr : 0.01001121763901011 ; loss : 0.011709327809512615 ; acc@1 : 100.0
+2023-02-03 00:01:18,046 - mmcls - INFO - [089/160] Training session : 8 ; lr : 0.009766609174782614 ; loss : 0.01260700449347496 ; acc@1 : 100.0
+2023-02-03 00:01:18,053 - mmcls - INFO - [090/160] Training session : 8 ; lr : 0.009523174913298333 ; loss : 0.021167103201150894 ; acc@1 : 100.0
+2023-02-03 00:01:18,059 - mmcls - INFO - [091/160] Training session : 8 ; lr : 0.009281014855290237 ; loss : 0.010691529139876366 ; acc@1 : 100.0
+2023-02-03 00:01:18,066 - mmcls - INFO - [092/160] Training session : 8 ; lr : 0.009040228478059286 ; loss : 0.050019942224025726 ; acc@1 : 100.0
+2023-02-03 00:01:20,369 - mmcls - INFO - [093/160] Training session : 8 ; lr : 0.008800914694610027 ; loss : 0.03432846441864967 ; acc@1 : 100.0
+2023-02-03 00:01:20,375 - mmcls - INFO - [094/160] Training session : 8 ; lr : 0.008563171813017946 ; loss : 0.016986167058348656 ; acc@1 : 100.0
+2023-02-03 00:01:20,383 - mmcls - INFO - [095/160] Training session : 8 ; lr : 0.008327097496045351 ; loss : 0.006278275977820158 ; acc@1 : 100.0
+2023-02-03 00:01:20,390 - mmcls - INFO - [096/160] Training session : 8 ; lr : 0.008092788721022332 ; loss : 0.024036955088377 ; acc@1 : 100.0
+2023-02-03 00:01:22,728 - mmcls - INFO - [097/160] Training session : 8 ; lr : 0.007860341740009302 ; loss : 0.027167676016688347 ; acc@1 : 100.0
+2023-02-03 00:01:22,734 - mmcls - INFO - [098/160] Training session : 8 ; lr : 0.0076298520402574704 ; loss : 0.0046284012496471405 ; acc@1 : 100.0
+2023-02-03 00:01:22,741 - mmcls - INFO - [099/160] Training session : 8 ; lr : 0.007401414304983456 ; loss : 0.01713552698493004 ; acc@1 : 100.0
+2023-02-03 00:01:22,751 - mmcls - INFO - [100/160] Training session : 8 ; lr : 0.007175122374474275 ; loss : 0.04956923797726631 ; acc@1 : 100.0
+2023-02-03 00:01:25,149 - mmcls - INFO - [101/160] Training session : 8 ; lr : 0.006951069207538512 ; loss : 0.014380413107573986 ; acc@1 : 100.0
+2023-02-03 00:01:25,156 - mmcls - INFO - [102/160] Training session : 8 ; lr : 0.0067293468433196205 ; loss : 0.018398026004433632 ; acc@1 : 100.0
+2023-02-03 00:01:25,164 - mmcls - INFO - [103/160] Training session : 8 ; lr : 0.006510046363487056 ; loss : 0.09521554410457611 ; acc@1 : 87.5
+2023-02-03 00:01:25,167 - mmcls - INFO - [104/160] Training session : 8 ; lr : 0.006293257854820671 ; loss : 0.01530097983777523 ; acc@1 : 100.0
+2023-02-03 00:01:27,477 - mmcls - INFO - [105/160] Training session : 8 ; lr : 0.006079070372203844 ; loss : 0.02013169415295124 ; acc@1 : 100.0
+2023-02-03 00:01:27,488 - mmcls - INFO - [106/160] Training session : 8 ; lr : 0.005867571902040465 ; loss : 0.006169363856315613 ; acc@1 : 100.0
+2023-02-03 00:01:27,495 - mmcls - INFO - [107/160] Training session : 8 ; lr : 0.005658849326110895 ; loss : 0.031039752066135406 ; acc@1 : 100.0
+2023-02-03 00:01:27,499 - mmcls - INFO - [108/160] Training session : 8 ; lr : 0.00545298838588165 ; loss : 0.047296978533267975 ; acc@1 : 100.0
+2023-02-03 00:01:30,165 - mmcls - INFO - [109/160] Training session : 8 ; lr : 0.005250073647283533 ; loss : 0.008728091605007648 ; acc@1 : 100.0
+2023-02-03 00:01:30,172 - mmcls - INFO - [110/160] Training session : 8 ; lr : 0.005050188465972672 ; loss : 0.006885398179292679 ; acc@1 : 100.0
+2023-02-03 00:01:30,177 - mmcls - INFO - [111/160] Training session : 8 ; lr : 0.004853414953088717 ; loss : 0.016122441738843918 ; acc@1 : 100.0
+2023-02-03 00:01:30,183 - mmcls - INFO - [112/160] Training session : 8 ; lr : 0.004659833941524282 ; loss : 0.08787931501865387 ; acc@1 : 87.5
+2023-02-03 00:01:32,570 - mmcls - INFO - [113/160] Training session : 8 ; lr : 0.00446952495271947 ; loss : 0.015892338007688522 ; acc@1 : 100.0
+2023-02-03 00:01:32,584 - mmcls - INFO - [114/160] Training session : 8 ; lr : 0.004282566163995152 ; loss : 0.009974833577871323 ; acc@1 : 100.0
+2023-02-03 00:01:32,594 - mmcls - INFO - [115/160] Training session : 8 ; lr : 0.004099034376438378 ; loss : 0.018913015723228455 ; acc@1 : 100.0
+2023-02-03 00:01:32,598 - mmcls - INFO - [116/160] Training session : 8 ; lr : 0.003919004983353142 ; loss : 0.007270462810993195 ; acc@1 : 100.0
+2023-02-03 00:01:34,947 - mmcls - INFO - [117/160] Training session : 8 ; lr : 0.0037425519392894494 ; loss : 0.018932780250906944 ; acc@1 : 100.0
+2023-02-03 00:01:34,954 - mmcls - INFO - [118/160] Training session : 8 ; lr : 0.003569747729663419 ; loss : 0.02322445623576641 ; acc@1 : 100.0
+2023-02-03 00:01:34,966 - mmcls - INFO - [119/160] Training session : 8 ; lr : 0.0034006633409808754 ; loss : 0.01230629626661539 ; acc@1 : 100.0
+2023-02-03 00:01:34,970 - mmcls - INFO - [120/160] Training session : 8 ; lr : 0.003235368231676713 ; loss : 0.04767083004117012 ; acc@1 : 100.0
+2023-02-03 00:01:37,432 - mmcls - INFO - [121/160] Training session : 8 ; lr : 0.003073930303581945 ; loss : 0.038074079900979996 ; acc@1 : 100.0
+2023-02-03 00:01:37,438 - mmcls - INFO - [122/160] Training session : 8 ; lr : 0.002916415874030213 ; loss : 0.023775123059749603 ; acc@1 : 100.0
+2023-02-03 00:01:37,443 - mmcls - INFO - [123/160] Training session : 8 ; lr : 0.002762889648615178 ; loss : 0.017715338617563248 ; acc@1 : 100.0
+2023-02-03 00:01:37,448 - mmcls - INFO - [124/160] Training session : 8 ; lr : 0.002613414694610027 ; loss : 0.04301479458808899 ; acc@1 : 100.0
+2023-02-03 00:01:39,967 - mmcls - INFO - [125/160] Training session : 8 ; lr : 0.0024680524150599587 ; loss : 0.009250087663531303 ; acc@1 : 100.0
+2023-02-03 00:01:39,973 - mmcls - INFO - [126/160] Training session : 8 ; lr : 0.002326862523558331 ; loss : 0.029533786699175835 ; acc@1 : 100.0
+2023-02-03 00:01:39,976 - mmcls - INFO - [127/160] Training session : 8 ; lr : 0.002189903019716835 ; loss : 0.09587413817644119 ; acc@1 : 87.5
+2023-02-03 00:01:39,984 - mmcls - INFO - [128/160] Training session : 8 ; lr : 0.0020572301653397343 ; loss : 0.0187128484249115 ; acc@1 : 100.0
+2023-02-03 00:01:42,330 - mmcls - INFO - [129/160] Training session : 8 ; lr : 0.0019288984613119984 ; loss : 0.020979300141334534 ; acc@1 : 100.0
+2023-02-03 00:01:42,334 - mmcls - INFO - [130/160] Training session : 8 ; lr : 0.0018049606252107967 ; loss : 0.011228209361433983 ; acc@1 : 100.0
+2023-02-03 00:01:42,340 - mmcls - INFO - [131/160] Training session : 8 ; lr : 0.001685467569649566 ; loss : 0.020993776619434357 ; acc@1 : 100.0
+2023-02-03 00:01:42,343 - mmcls - INFO - [132/160] Training session : 8 ; lr : 0.0015704683813635451 ; loss : 0.015826549381017685 ; acc@1 : 100.0
+2023-02-03 00:01:45,016 - mmcls - INFO - [133/160] Training session : 8 ; lr : 0.001460010301045346 ; loss : 0.027552612125873566 ; acc@1 : 100.0
+2023-02-03 00:01:45,020 - mmcls - INFO - [134/160] Training session : 8 ; lr : 0.001354138703938892 ; loss : 0.007313254754990339 ; acc@1 : 100.0
+2023-02-03 00:01:45,027 - mmcls - INFO - [135/160] Training session : 8 ; lr : 0.0012528970811996464 ; loss : 0.015134813264012337 ; acc@1 : 100.0
+2023-02-03 00:01:45,032 - mmcls - INFO - [136/160] Training session : 8 ; lr : 0.001156327022028811 ; loss : 0.005553298629820347 ; acc@1 : 100.0
+2023-02-03 00:01:47,633 - mmcls - INFO - [137/160] Training session : 8 ; lr : 0.0010644681965888414 ; loss : 0.04981619864702225 ; acc@1 : 100.0
+2023-02-03 00:01:47,640 - mmcls - INFO - [138/160] Training session : 8 ; lr : 0.0009773583397072716 ; loss : 0.025150757282972336 ; acc@1 : 100.0
+2023-02-03 00:01:47,645 - mmcls - INFO - [139/160] Training session : 8 ; lr : 0.0008950332353755756 ; loss : 0.040317434817552567 ; acc@1 : 100.0
+2023-02-03 00:01:47,650 - mmcls - INFO - [140/160] Training session : 8 ; lr : 0.0008175267020493959 ; loss : 0.014462748542428017 ; acc@1 : 100.0
+2023-02-03 00:01:49,948 - mmcls - INFO - [141/160] Training session : 8 ; lr : 0.0007448705787562184 ; loss : 0.13002397119998932 ; acc@1 : 87.5
+2023-02-03 00:01:49,953 - mmcls - INFO - [142/160] Training session : 8 ; lr : 0.0006770947120161674 ; loss : 0.01562366634607315 ; acc@1 : 100.0
+2023-02-03 00:01:49,956 - mmcls - INFO - [143/160] Training session : 8 ; lr : 0.0006142269435813049 ; loss : 0.0238247811794281 ; acc@1 : 100.0
+2023-02-03 00:01:49,962 - mmcls - INFO - [144/160] Training session : 8 ; lr : 0.0005562930989984722 ; loss : 0.01818733476102352 ; acc@1 : 100.0
+2023-02-03 00:01:52,445 - mmcls - INFO - [145/160] Training session : 8 ; lr : 0.0005033169770003807 ; loss : 0.014942134730517864 ; acc@1 : 100.0
+2023-02-03 00:01:52,459 - mmcls - INFO - [146/160] Training session : 8 ; lr : 0.00045532033972929466 ; loss : 0.004879492335021496 ; acc@1 : 100.0
+2023-02-03 00:01:52,467 - mmcls - INFO - [147/160] Training session : 8 ; lr : 0.0004123229037973171 ; loss : 0.03688134625554085 ; acc@1 : 100.0
+2023-02-03 00:01:52,474 - mmcls - INFO - [148/160] Training session : 8 ; lr : 0.0003743423321869823 ; loss : 0.028636425733566284 ; acc@1 : 100.0
+2023-02-03 00:01:54,582 - mmcls - INFO - [149/160] Training session : 8 ; lr : 0.0003413942269954516 ; loss : 0.009874839335680008 ; acc@1 : 100.0
+2023-02-03 00:01:54,587 - mmcls - INFO - [150/160] Training session : 8 ; lr : 0.0003134921230252975 ; loss : 0.013046963140368462 ; acc@1 : 100.0
+2023-02-03 00:01:54,595 - mmcls - INFO - [151/160] Training session : 8 ; lr : 0.000290647482224529 ; loss : 0.03811673820018768 ; acc@1 : 100.0
+2023-02-03 00:01:54,602 - mmcls - INFO - [152/160] Training session : 8 ; lr : 0.0002728696889781142 ; loss : 0.007138175889849663 ; acc@1 : 100.0
+2023-02-03 00:01:56,709 - mmcls - INFO - [153/160] Training session : 8 ; lr : 0.00026016604625295756 ; loss : 0.013807637616991997 ; acc@1 : 100.0
+2023-02-03 00:01:56,744 - mmcls - INFO - [154/160] Training session : 8 ; lr : 0.00025254177259790374 ; loss : 0.025284627452492714 ; acc@1 : 100.0
+2023-02-03 00:01:56,750 - mmcls - INFO - [155/160] Training session : 8 ; lr : 0.00025 ; loss : 0.0476069375872612 ; acc@1 : 100.0
+2023-02-03 00:01:56,755 - mmcls - INFO - [156/160] Training session : 8 ; lr : 2.5e-05 ; loss : 0.016237638890743256 ; acc@1 : 100.0
+2023-02-03 00:01:59,154 - mmcls - INFO - [157/160] Training session : 8 ; lr : 2.5e-05 ; loss : 0.04043104499578476 ; acc@1 : 100.0
+2023-02-03 00:01:59,161 - mmcls - INFO - [158/160] Training session : 8 ; lr : 2.5e-05 ; loss : 0.026830006390810013 ; acc@1 : 100.0
+2023-02-03 00:01:59,166 - mmcls - INFO - [159/160] Training session : 8 ; lr : 2.5e-05 ; loss : 0.009556401520967484 ; acc@1 : 100.0
+2023-02-03 00:01:59,171 - mmcls - INFO - [160/160] Training session : 8 ; lr : 2.5e-05 ; loss : 0.016518665477633476 ; acc@1 : 100.0
+2023-02-03 00:01:59,171 - mmcls - INFO - Evaluating session 8, from 0 to 95.
+2023-02-03 00:02:01,824 - mmcls - INFO - [08]Evaluation results : acc : 59.54 ; acc_base : 75.55 ; acc_inc : 32.09
+2023-02-03 00:02:01,825 - mmcls - INFO - [08]Evaluation results : acc_incremental_old : 28.40 ; acc_incremental_new : 54.20
+2023-02-03 00:02:01,974 - mmcls - INFO - Starting session : 9 ------------------------------------------------------------
+2023-02-03 00:02:01,974 - mmcls - INFO - Newly added classes are from 95 to 100.
+2023-02-03 00:02:01,975 - mmcls - INFO - Model now can classify 100 classes
+2023-02-03 00:02:01,975 - mmcls - INFO - 170 steps
+2023-02-03 00:02:01,975 - mmcls - INFO - Extracting mean neck feat from 60 to 95
+2023-02-03 00:02:01,975 - mmcls - INFO - Copy 8 duplications.
+2023-02-03 00:02:02,015 - mmcls - INFO - Session : 9 ; The dataset has 365 samples.
+2023-02-03 00:02:02,015 - mmcls - INFO - Labels : [95, 95, 95, 95, 95, 96, 96, 96, 96, 96, 97, 97, 97, 97, 97, 98, 98, 98, 98, 98, 99, 99, 99, 99, 99, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+2023-02-03 00:02:04,182 - mmcls - INFO - [001/170] Training session : 9 ; lr : 0.006999371953239015 ; loss : 0.6559311747550964 ; acc@1 : 87.5
+2023-02-03 00:02:04,188 - mmcls - INFO - [002/170] Training session : 9 ; lr : 0.011495873209604197 ; loss : 0.024039875715970993 ; acc@1 : 100.0
+2023-02-03 00:02:04,197 - mmcls - INFO - [003/170] Training session : 9 ; lr : 0.01598708330309499 ; loss : 0.0997094139456749 ; acc@1 : 87.5
+2023-02-03 00:02:04,202 - mmcls - INFO - [004/170] Training session : 9 ; lr : 0.020470584856373986 ; loss : 0.008836227469146252 ; acc@1 : 100.0
+2023-02-03 00:02:04,207 - mmcls - INFO - [005/170] Training session : 9 ; lr : 0.024943965041841924 ; loss : 0.02618592418730259 ; acc@1 : 100.0
+2023-02-03 00:02:06,598 - mmcls - INFO - [006/170] Training session : 9 ; lr : 0.024919336474938308 ; loss : 0.4879768490791321 ; acc@1 : 87.5
+2023-02-03 00:02:06,606 - mmcls - INFO - [007/170] Training session : 9 ; lr : 0.02489025110099197 ; loss : 0.025077415630221367 ; acc@1 : 100.0
+2023-02-03 00:02:06,636 - mmcls - INFO - [008/170] Training session : 9 ; lr : 0.02485671946371136 ; loss : 0.10110242664813995 ; acc@1 : 87.5
+2023-02-03 00:02:06,643 - mmcls - INFO - [009/170] Training session : 9 ; lr : 0.0248187537186152 ; loss : 0.01592392846941948 ; acc@1 : 100.0
+2023-02-03 00:02:06,648 - mmcls - INFO - [010/170] Training session : 9 ; lr : 0.024776367628625996 ; loss : 0.030205626040697098 ; acc@1 : 100.0
+2023-02-03 00:02:08,919 - mmcls - INFO - [011/170] Training session : 9 ; lr : 0.024729576559080847 ; loss : 0.5243248343467712 ; acc@1 : 87.5
+2023-02-03 00:02:08,929 - mmcls - INFO - [012/170] Training session : 9 ; lr : 0.02467839747216138 ; loss : 0.02414315938949585 ; acc@1 : 100.0
+2023-02-03 00:02:08,939 - mmcls - INFO - [013/170] Training session : 9 ; lr : 0.024622848920744806 ; loss : 0.03093780018389225 ; acc@1 : 100.0
+2023-02-03 00:02:08,943 - mmcls - INFO - [014/170] Training session : 9 ; lr : 0.02456295104167834 ; loss : 0.3243611454963684 ; acc@1 : 87.5
+2023-02-03 00:02:08,950 - mmcls - INFO - [015/170] Training session : 9 ; lr : 0.024498725548479407 ; loss : 0.1741950958967209 ; acc@1 : 100.0
+2023-02-03 00:02:11,750 - mmcls - INFO - [016/170] Training session : 9 ; lr : 0.024430195723464294 ; loss : 0.051406778395175934 ; acc@1 : 100.0
+2023-02-03 00:02:11,756 - mmcls - INFO - [017/170] Training session : 9 ; lr : 0.02435738640930812 ; loss : 0.05999525636434555 ; acc@1 : 100.0
+2023-02-03 00:02:11,764 - mmcls - INFO - [018/170] Training session : 9 ; lr : 0.02428032400003912 ; loss : 0.03942089527845383 ; acc@1 : 100.0
+2023-02-03 00:02:11,767 - mmcls - INFO - [019/170] Training session : 9 ; lr : 0.024199036431470592 ; loss : 0.03314181789755821 ; acc@1 : 100.0
+2023-02-03 00:02:11,771 - mmcls - INFO - [020/170] Training session : 9 ; lr : 0.0241135531710739 ; loss : 0.02173326164484024 ; acc@1 : 100.0
+2023-02-03 00:02:14,072 - mmcls - INFO - [021/170] Training session : 9 ; lr : 0.024023905207296272 ; loss : 0.10929429531097412 ; acc@1 : 100.0
+2023-02-03 00:02:14,079 - mmcls - INFO - [022/170] Training session : 9 ; lr : 0.023930125038327185 ; loss : 0.030177641659975052 ; acc@1 : 100.0
+2023-02-03 00:02:14,084 - mmcls - INFO - [023/170] Training session : 9 ; lr : 0.023832246660317507 ; loss : 0.048502154648303986 ; acc@1 : 100.0
+2023-02-03 00:02:14,089 - mmcls - INFO - [024/170] Training session : 9 ; lr : 0.02373030555505556 ; loss : 0.0390087254345417 ; acc@1 : 100.0
+2023-02-03 00:02:14,093 - mmcls - INFO - [025/170] Training session : 9 ; lr : 0.02362433867710468 ; loss : 0.07171107828617096 ; acc@1 : 100.0
+2023-02-03 00:02:17,188 - mmcls - INFO - [026/170] Training session : 9 ; lr : 0.023514384440406835 ; loss : 0.06595172733068466 ; acc@1 : 100.0
+2023-02-03 00:02:17,198 - mmcls - INFO - [027/170] Training session : 9 ; lr : 0.023400482704357246 ; loss : 0.04984400421380997 ; acc@1 : 100.0
+2023-02-03 00:02:17,205 - mmcls - INFO - [028/170] Training session : 9 ; lr : 0.023282674759354985 ; loss : 0.10155580937862396 ; acc@1 : 100.0
+2023-02-03 00:02:17,212 - mmcls - INFO - [029/170] Training session : 9 ; lr : 0.023161003311834842 ; loss : 0.1269555389881134 ; acc@1 : 100.0
+2023-02-03 00:02:17,221 - mmcls - INFO - [030/170] Training session : 9 ; lr : 0.02303551246878587 ; loss : 0.02975189872086048 ; acc@1 : 100.0
+2023-02-03 00:02:19,754 - mmcls - INFO - [031/170] Training session : 9 ; lr : 0.022906247721762175 ; loss : 0.03545752912759781 ; acc@1 : 100.0
+2023-02-03 00:02:19,760 - mmcls - INFO - [032/170] Training session : 9 ; lr : 0.022773255930391867 ; loss : 0.01983104646205902 ; acc@1 : 100.0
+2023-02-03 00:02:19,767 - mmcls - INFO - [033/170] Training session : 9 ; lr : 0.022636585305389974 ; loss : 0.08652590960264206 ; acc@1 : 100.0
+2023-02-03 00:02:19,773 - mmcls - INFO - [034/170] Training session : 9 ; lr : 0.022496285391081675 ; loss : 0.0661705732345581 ; acc@1 : 100.0
+2023-02-03 00:02:19,780 - mmcls - INFO - [035/170] Training session : 9 ; lr : 0.022352407047441996 ; loss : 0.019616201519966125 ; acc@1 : 100.0
+2023-02-03 00:02:22,195 - mmcls - INFO - [036/170] Training session : 9 ; lr : 0.022205002431658648 ; loss : 0.08433765918016434 ; acc@1 : 100.0
+2023-02-03 00:02:22,200 - mmcls - INFO - [037/170] Training session : 9 ; lr : 0.022054124979224553 ; loss : 0.020305003970861435 ; acc@1 : 100.0
+2023-02-03 00:02:22,206 - mmcls - INFO - [038/170] Training session : 9 ; lr : 0.02189982938456702 ; loss : 0.06960750371217728 ; acc@1 : 100.0
+2023-02-03 00:02:22,211 - mmcls - INFO - [039/170] Training session : 9 ; lr : 0.02174217158122051 ; loss : 0.015374189242720604 ; acc@1 : 100.0
+2023-02-03 00:02:22,217 - mmcls - INFO - [040/170] Training session : 9 ; lr : 0.021581208721550244 ; loss : 0.023977383971214294 ; acc@1 : 100.0
+2023-02-03 00:02:24,096 - mmcls - INFO - [041/170] Training session : 9 ; lr : 0.021416999156033942 ; loss : 0.041876789182424545 ; acc@1 : 100.0
+2023-02-03 00:02:24,102 - mmcls - INFO - [042/170] Training session : 9 ; lr : 0.02124960241210926 ; loss : 0.0502166673541069 ; acc@1 : 100.0
+2023-02-03 00:02:24,107 - mmcls - INFO - [043/170] Training session : 9 ; lr : 0.021079079172594564 ; loss : 0.016417445614933968 ; acc@1 : 100.0
+2023-02-03 00:02:24,112 - mmcls - INFO - [044/170] Training session : 9 ; lr : 0.020905491253690872 ; loss : 0.013579265214502811 ; acc@1 : 100.0
+2023-02-03 00:02:24,117 - mmcls - INFO - [045/170] Training session : 9 ; lr : 0.020728901582572904 ; loss : 0.05350722000002861 ; acc@1 : 100.0
+2023-02-03 00:02:26,699 - mmcls - INFO - [046/170] Training session : 9 ; lr : 0.02054937417457744 ; loss : 0.10742373019456863 ; acc@1 : 100.0
+2023-02-03 00:02:26,707 - mmcls - INFO - [047/170] Training session : 9 ; lr : 0.02036697410999718 ; loss : 0.03837932273745537 ; acc@1 : 100.0
+2023-02-03 00:02:26,713 - mmcls - INFO - [048/170] Training session : 9 ; lr : 0.02018176751048855 ; loss : 0.016098404303193092 ; acc@1 : 100.0
+2023-02-03 00:02:26,720 - mmcls - INFO - [049/170] Training session : 9 ; lr : 0.019993821515102015 ; loss : 0.013673332519829273 ; acc@1 : 100.0
+2023-02-03 00:02:26,723 - mmcls - INFO - [050/170] Training session : 9 ; lr : 0.01980320425594358 ; loss : 0.04376940429210663 ; acc@1 : 100.0
+2023-02-03 00:02:28,937 - mmcls - INFO - [051/170] Training session : 9 ; lr : 0.01960998483347627 ; loss : 0.022116418927907944 ; acc@1 : 100.0
+2023-02-03 00:02:28,989 - mmcls - INFO - [052/170] Training session : 9 ; lr : 0.019414233291470618 ; loss : 0.023975852876901627 ; acc@1 : 100.0
+2023-02-03 00:02:28,997 - mmcls - INFO - [053/170] Training session : 9 ; lr : 0.019216020591613148 ; loss : 0.1376737803220749 ; acc@1 : 87.5
+2023-02-03 00:02:29,004 - mmcls - INFO - [054/170] Training session : 9 ; lr : 0.019015418587782155 ; loss : 0.01357284002006054 ; acc@1 : 100.0
+2023-02-03 00:02:29,021 - mmcls - INFO - [055/170] Training session : 9 ; lr : 0.018812500000000003 ; loss : 0.019972121343016624 ; acc@1 : 100.0
+2023-02-03 00:02:31,350 - mmcls - INFO - [056/170] Training session : 9 ; lr : 0.01860733838807148 ; loss : 0.011884748004376888 ; acc@1 : 100.0
+2023-02-03 00:02:31,357 - mmcls - INFO - [057/170] Training session : 9 ; lr : 0.018400008124917714 ; loss : 0.1503688097000122 ; acc@1 : 87.5
+2023-02-03 00:02:31,363 - mmcls - INFO - [058/170] Training session : 9 ; lr : 0.018190584369615317 ; loss : 0.06929195672273636 ; acc@1 : 100.0
+2023-02-03 00:02:31,369 - mmcls - INFO - [059/170] Training session : 9 ; lr : 0.017979143040150542 ; loss : 0.030550377443432808 ; acc@1 : 100.0
+2023-02-03 00:02:31,375 - mmcls - INFO - [060/170] Training session : 9 ; lr : 0.01776576078589835 ; loss : 0.020199811086058617 ; acc@1 : 100.0
+2023-02-03 00:02:33,675 - mmcls - INFO - [061/170] Training session : 9 ; lr : 0.017550514959836297 ; loss : 0.01550458837300539 ; acc@1 : 100.0
+2023-02-03 00:02:33,680 - mmcls - INFO - [062/170] Training session : 9 ; lr : 0.017333483590503424 ; loss : 0.01937291771173477 ; acc@1 : 100.0
+2023-02-03 00:02:33,683 - mmcls - INFO - [063/170] Training session : 9 ; lr : 0.017114745353714184 ; loss : 0.03566506877541542 ; acc@1 : 100.0
+2023-02-03 00:02:33,687 - mmcls - INFO - [064/170] Training session : 9 ; lr : 0.016894379544037764 ; loss : 0.012030876241624355 ; acc@1 : 100.0
+2023-02-03 00:02:33,691 - mmcls - INFO - [065/170] Training session : 9 ; lr : 0.016672466046053096 ; loss : 0.0100233294069767 ; acc@1 : 100.0
+2023-02-03 00:02:36,011 - mmcls - INFO - [066/170] Training session : 9 ; lr : 0.016449085305389976 ; loss : 0.0420558899641037 ; acc@1 : 100.0
+2023-02-03 00:02:36,016 - mmcls - INFO - [067/170] Training session : 9 ; lr : 0.016224318299566814 ; loss : 0.04368169233202934 ; acc@1 : 100.0
+2023-02-03 00:02:36,023 - mmcls - INFO - [068/170] Training session : 9 ; lr : 0.01599824650863555 ; loss : 0.045329876244068146 ; acc@1 : 100.0
+2023-02-03 00:02:36,031 - mmcls - INFO - [069/170] Training session : 9 ; lr : 0.015770951885644403 ; loss : 0.007815035060048103 ; acc@1 : 100.0
+2023-02-03 00:02:36,035 - mmcls - INFO - [070/170] Training session : 9 ; lr : 0.015542516826929165 ; loss : 0.010199671611189842 ; acc@1 : 100.0
+2023-02-03 00:02:37,830 - mmcls - INFO - [071/170] Training session : 9 ; lr : 0.015313024142243784 ; loss : 0.018302224576473236 ; acc@1 : 100.0
+2023-02-03 00:02:37,882 - mmcls - INFO - [072/170] Training session : 9 ; lr : 0.0150825570247411 ; loss : 0.06977692991495132 ; acc@1 : 100.0
+2023-02-03 00:02:37,886 - mmcls - INFO - [073/170] Training session : 9 ; lr : 0.014851199020814568 ; loss : 0.052937161177396774 ; acc@1 : 100.0
+2023-02-03 00:02:37,889 - mmcls - INFO - [074/170] Training session : 9 ; lr : 0.014619033999811945 ; loss : 0.011509435251355171 ; acc@1 : 100.0
+2023-02-03 00:02:38,048 - mmcls - INFO - [075/170] Training session : 9 ; lr : 0.014386146123631906 ; loss : 0.019571686163544655 ; acc@1 : 100.0
+2023-02-03 00:02:40,713 - mmcls - INFO - [076/170] Training session : 9 ; lr : 0.014152619816214598 ; loss : 0.018599268049001694 ; acc@1 : 100.0
+2023-02-03 00:02:40,724 - mmcls - INFO - [077/170] Training session : 9 ; lr : 0.013918539732937213 ; loss : 0.034600142389535904 ; acc@1 : 100.0
+2023-02-03 00:02:40,736 - mmcls - INFO - [078/170] Training session : 9 ; lr : 0.013683990729925644 ; loss : 0.012777561321854591 ; acc@1 : 100.0
+2023-02-03 00:02:40,739 - mmcls - INFO - [079/170] Training session : 9 ; lr : 0.013449057833293388 ; loss : 0.027581406757235527 ; acc@1 : 100.0
+2023-02-03 00:02:40,747 - mmcls - INFO - [080/170] Training session : 9 ; lr : 0.013213826208318815 ; loss : 0.03524695336818695 ; acc@1 : 100.0
+2023-02-03 00:02:42,884 - mmcls - INFO - [081/170] Training session : 9 ; lr : 0.01297838112857199 ; loss : 0.005392688792198896 ; acc@1 : 100.0
+2023-02-03 00:02:42,900 - mmcls - INFO - [082/170] Training session : 9 ; lr : 0.012742807945002264 ; loss : 0.01767393760383129 ; acc@1 : 100.0
+2023-02-03 00:02:42,907 - mmcls - INFO - [083/170] Training session : 9 ; lr : 0.01250719205499774 ; loss : 0.05704261362552643 ; acc@1 : 100.0
+2023-02-03 00:02:42,921 - mmcls - INFO - [084/170] Training session : 9 ; lr : 0.012271618871428011 ; loss : 0.005401200614869595 ; acc@1 : 100.0
+2023-02-03 00:02:42,927 - mmcls - INFO - [085/170] Training session : 9 ; lr : 0.01203617379168119 ; loss : 0.02249235287308693 ; acc@1 : 100.0
+2023-02-03 00:02:45,312 - mmcls - INFO - [086/170] Training session : 9 ; lr : 0.011800942166706616 ; loss : 0.008174467831850052 ; acc@1 : 100.0
+2023-02-03 00:02:45,319 - mmcls - INFO - [087/170] Training session : 9 ; lr : 0.011566009270074363 ; loss : 0.021945569664239883 ; acc@1 : 100.0
+2023-02-03 00:02:45,325 - mmcls - INFO - [088/170] Training session : 9 ; lr : 0.011331460267062792 ; loss : 0.060535624623298645 ; acc@1 : 100.0
+2023-02-03 00:02:45,331 - mmcls - INFO - [089/170] Training session : 9 ; lr : 0.011097380183785404 ; loss : 0.02009120024740696 ; acc@1 : 100.0
+2023-02-03 00:02:45,336 - mmcls - INFO - [090/170] Training session : 9 ; lr : 0.010863853876368098 ; loss : 0.013687772676348686 ; acc@1 : 100.0
+2023-02-03 00:02:47,637 - mmcls - INFO - [091/170] Training session : 9 ; lr : 0.010630966000188058 ; loss : 0.046598467975854874 ; acc@1 : 100.0
+2023-02-03 00:02:47,643 - mmcls - INFO - [092/170] Training session : 9 ; lr : 0.010398800979185434 ; loss : 0.015207797288894653 ; acc@1 : 100.0
+2023-02-03 00:02:47,647 - mmcls - INFO - [093/170] Training session : 9 ; lr : 0.010167442975258904 ; loss : 0.03437449783086777 ; acc@1 : 100.0
+2023-02-03 00:02:47,651 - mmcls - INFO - [094/170] Training session : 9 ; lr : 0.00993697585775622 ; loss : 0.020183565095067024 ; acc@1 : 100.0
+2023-02-03 00:02:47,656 - mmcls - INFO - [095/170] Training session : 9 ; lr : 0.009707483173070837 ; loss : 0.008121250197291374 ; acc@1 : 100.0
+2023-02-03 00:02:50,314 - mmcls - INFO - [096/170] Training session : 9 ; lr : 0.009479048114355602 ; loss : 0.03777043893933296 ; acc@1 : 100.0
+2023-02-03 00:02:50,320 - mmcls - INFO - [097/170] Training session : 9 ; lr : 0.009251753491364454 ; loss : 0.01615482196211815 ; acc@1 : 100.0
+2023-02-03 00:02:50,324 - mmcls - INFO - [098/170] Training session : 9 ; lr : 0.009025681700433188 ; loss : 0.007406521588563919 ; acc@1 : 100.0
+2023-02-03 00:02:50,328 - mmcls - INFO - [099/170] Training session : 9 ; lr : 0.008800914694610027 ; loss : 0.00490883132442832 ; acc@1 : 100.0
+2023-02-03 00:02:50,333 - mmcls - INFO - [100/170] Training session : 9 ; lr : 0.008577533953946908 ; loss : 0.01798248663544655 ; acc@1 : 100.0
+2023-02-03 00:02:52,561 - mmcls - INFO - [101/170] Training session : 9 ; lr : 0.008355620455962241 ; loss : 0.009912735782563686 ; acc@1 : 100.0
+2023-02-03 00:02:52,569 - mmcls - INFO - [102/170] Training session : 9 ; lr : 0.00813525464628582 ; loss : 0.016999289393424988 ; acc@1 : 100.0
+2023-02-03 00:02:52,575 - mmcls - INFO - [103/170] Training session : 9 ; lr : 0.007916516409496577 ; loss : 0.016490036621689796 ; acc@1 : 100.0
+2023-02-03 00:02:52,581 - mmcls - INFO - [104/170] Training session : 9 ; lr : 0.007699485040163709 ; loss : 0.01421254314482212 ; acc@1 : 100.0
+2023-02-03 00:02:52,586 - mmcls - INFO - [105/170] Training session : 9 ; lr : 0.007484239214101658 ; loss : 0.1317915916442871 ; acc@1 : 87.5
+2023-02-03 00:02:55,109 - mmcls - INFO - [106/170] Training session : 9 ; lr : 0.007270856959849458 ; loss : 0.015401644632220268 ; acc@1 : 100.0
+2023-02-03 00:02:55,118 - mmcls - INFO - [107/170] Training session : 9 ; lr : 0.007059415630384688 ; loss : 0.018247758969664574 ; acc@1 : 100.0
+2023-02-03 00:02:55,122 - mmcls - INFO - [108/170] Training session : 9 ; lr : 0.0068499918750822885 ; loss : 0.006397855933755636 ; acc@1 : 100.0
+2023-02-03 00:02:55,127 - mmcls - INFO - [109/170] Training session : 9 ; lr : 0.006642661611928522 ; loss : 0.007346993312239647 ; acc@1 : 100.0
+2023-02-03 00:02:55,132 - mmcls - INFO - [110/170] Training session : 9 ; lr : 0.006437500000000003 ; loss : 0.02519228495657444 ; acc@1 : 100.0
+2023-02-03 00:02:57,214 - mmcls - INFO - [111/170] Training session : 9 ; lr : 0.006234581412217848 ; loss : 0.005862354766577482 ; acc@1 : 100.0
+2023-02-03 00:02:57,223 - mmcls - INFO - [112/170] Training session : 9 ; lr : 0.006033979408386852 ; loss : 0.01827678456902504 ; acc@1 : 100.0
+2023-02-03 00:02:57,226 - mmcls - INFO - [113/170] Training session : 9 ; lr : 0.005835766708529388 ; loss : 0.01065523736178875 ; acc@1 : 100.0
+2023-02-03 00:02:57,231 - mmcls - INFO - [114/170] Training session : 9 ; lr : 0.005640015166523735 ; loss : 0.03061811998486519 ; acc@1 : 100.0
+2023-02-03 00:02:57,236 - mmcls - INFO - [115/170] Training session : 9 ; lr : 0.005446795744056425 ; loss : 0.004999886732548475 ; acc@1 : 100.0
+2023-02-03 00:02:59,798 - mmcls - INFO - [116/170] Training session : 9 ; lr : 0.0052561784848979875 ; loss : 0.012272876687347889 ; acc@1 : 100.0
+2023-02-03 00:02:59,804 - mmcls - INFO - [117/170] Training session : 9 ; lr : 0.005068232489511453 ; loss : 0.0047266497276723385 ; acc@1 : 100.0
+2023-02-03 00:02:59,813 - mmcls - INFO - [118/170] Training session : 9 ; lr : 0.0048830258900028215 ; loss : 0.14201217889785767 ; acc@1 : 87.5
+2023-02-03 00:02:59,818 - mmcls - INFO - [119/170] Training session : 9 ; lr : 0.004700625825422563 ; loss : 0.004940848797559738 ; acc@1 : 100.0
+2023-02-03 00:02:59,823 - mmcls - INFO - [120/170] Training session : 9 ; lr : 0.004521098417427098 ; loss : 0.02158207632601261 ; acc@1 : 100.0
+2023-02-03 00:03:02,421 - mmcls - INFO - [121/170] Training session : 9 ; lr : 0.004344508746309134 ; loss : 0.12388064712285995 ; acc@1 : 87.5
+2023-02-03 00:03:02,426 - mmcls - INFO - [122/170] Training session : 9 ; lr : 0.004170920827405438 ; loss : 0.012534193694591522 ; acc@1 : 100.0
+2023-02-03 00:03:02,432 - mmcls - INFO - [123/170] Training session : 9 ; lr : 0.004000397587890745 ; loss : 0.017289362847805023 ; acc@1 : 100.0
+2023-02-03 00:03:02,436 - mmcls - INFO - [124/170] Training session : 9 ; lr : 0.0038330008439660624 ; loss : 0.029643815010786057 ; acc@1 : 100.0
+2023-02-03 00:03:02,441 - mmcls - INFO - [125/170] Training session : 9 ; lr : 0.0036687912784497565 ; loss : 0.020073775202035904 ; acc@1 : 100.0
+2023-02-03 00:03:05,071 - mmcls - INFO - [126/170] Training session : 9 ; lr : 0.003507828418779488 ; loss : 0.010563049465417862 ; acc@1 : 100.0
+2023-02-03 00:03:05,076 - mmcls - INFO - [127/170] Training session : 9 ; lr : 0.0033501706154329836 ; loss : 0.005360470153391361 ; acc@1 : 100.0
+2023-02-03 00:03:05,084 - mmcls - INFO - [128/170] Training session : 9 ; lr : 0.00319587502077545 ; loss : 0.004691325128078461 ; acc@1 : 100.0
+2023-02-03 00:03:05,088 - mmcls - INFO - [129/170] Training session : 9 ; lr : 0.0030449975683413547 ; loss : 0.008599754422903061 ; acc@1 : 100.0
+2023-02-03 00:03:05,096 - mmcls - INFO - [130/170] Training session : 9 ; lr : 0.0028975929525580073 ; loss : 0.011412052437663078 ; acc@1 : 100.0
+2023-02-03 00:03:07,225 - mmcls - INFO - [131/170] Training session : 9 ; lr : 0.002753714608918329 ; loss : 0.012982932850718498 ; acc@1 : 100.0
+2023-02-03 00:03:07,234 - mmcls - INFO - [132/170] Training session : 9 ; lr : 0.002613414694610027 ; loss : 0.01814824528992176 ; acc@1 : 100.0
+2023-02-03 00:03:07,240 - mmcls - INFO - [133/170] Training session : 9 ; lr : 0.0024767440696081356 ; loss : 0.01325688324868679 ; acc@1 : 100.0
+2023-02-03 00:03:07,247 - mmcls - INFO - [134/170] Training session : 9 ; lr : 0.0023437522782378236 ; loss : 0.005858002696186304 ; acc@1 : 100.0
+2023-02-03 00:03:07,251 - mmcls - INFO - [135/170] Training session : 9 ; lr : 0.002214487531214131 ; loss : 0.01710774563252926 ; acc@1 : 100.0
+2023-02-03 00:03:09,634 - mmcls - INFO - [136/170] Training session : 9 ; lr : 0.0020889966881651586 ; loss : 0.01739772967994213 ; acc@1 : 100.0
+2023-02-03 00:03:09,639 - mmcls - INFO - [137/170] Training session : 9 ; lr : 0.0019673252406450176 ; loss : 0.06123613193631172 ; acc@1 : 100.0
+2023-02-03 00:03:09,643 - mmcls - INFO - [138/170] Training session : 9 ; lr : 0.0018495172956427594 ; loss : 0.01528116688132286 ; acc@1 : 100.0
+2023-02-03 00:03:09,647 - mmcls - INFO - [139/170] Training session : 9 ; lr : 0.0017356155595931685 ; loss : 0.012703272514045238 ; acc@1 : 100.0
+2023-02-03 00:03:09,660 - mmcls - INFO - [140/170] Training session : 9 ; lr : 0.0016256613228953234 ; loss : 0.03249106928706169 ; acc@1 : 100.0
+2023-02-03 00:03:12,012 - mmcls - INFO - [141/170] Training session : 9 ; lr : 0.001519694444944442 ; loss : 0.007331641856580973 ; acc@1 : 100.0
+2023-02-03 00:03:12,018 - mmcls - INFO - [142/170] Training session : 9 ; lr : 0.0014177533396824927 ; loss : 0.005398373585194349 ; acc@1 : 100.0
+2023-02-03 00:03:12,025 - mmcls - INFO - [143/170] Training session : 9 ; lr : 0.001319874961672813 ; loss : 0.019105516374111176 ; acc@1 : 100.0
+2023-02-03 00:03:12,030 - mmcls - INFO - [144/170] Training session : 9 ; lr : 0.0012260947927037313 ; loss : 0.010502743534743786 ; acc@1 : 100.0
+2023-02-03 00:03:12,037 - mmcls - INFO - [145/170] Training session : 9 ; lr : 0.001136446828926102 ; loss : 0.021378643810749054 ; acc@1 : 100.0
+2023-02-03 00:03:14,389 - mmcls - INFO - [146/170] Training session : 9 ; lr : 0.0010509635685294109 ; loss : 0.02249297685921192 ; acc@1 : 100.0
+2023-02-03 00:03:14,398 - mmcls - INFO - [147/170] Training session : 9 ; lr : 0.0009696759999608829 ; loss : 0.0048957811668515205 ; acc@1 : 100.0
+2023-02-03 00:03:14,404 - mmcls - INFO - [148/170] Training session : 9 ; lr : 0.0008926135906918822 ; loss : 0.009808957576751709 ; acc@1 : 100.0
+2023-02-03 00:03:14,411 - mmcls - INFO - [149/170] Training session : 9 ; lr : 0.0008198042765357062 ; loss : 0.005886904429644346 ; acc@1 : 100.0
+2023-02-03 00:03:14,419 - mmcls - INFO - [150/170] Training session : 9 ; lr : 0.0007512744515205964 ; loss : 0.017409656196832657 ; acc@1 : 100.0
+2023-02-03 00:03:16,877 - mmcls - INFO - [151/170] Training session : 9 ; lr : 0.0006870489583216616 ; loss : 0.012089782394468784 ; acc@1 : 100.0
+2023-02-03 00:03:16,882 - mmcls - INFO - [152/170] Training session : 9 ; lr : 0.0006271510792551956 ; loss : 0.008585989475250244 ; acc@1 : 100.0
+2023-02-03 00:03:16,897 - mmcls - INFO - [153/170] Training session : 9 ; lr : 0.0005716025278386233 ; loss : 0.01011521928012371 ; acc@1 : 100.0
+2023-02-03 00:03:16,902 - mmcls - INFO - [154/170] Training session : 9 ; lr : 0.0005204234409191546 ; loss : 0.018517328426241875 ; acc@1 : 100.0
+2023-02-03 00:03:16,910 - mmcls - INFO - [155/170] Training session : 9 ; lr : 0.00047363237137400455 ; loss : 0.014646436087787151 ; acc@1 : 100.0
+2023-02-03 00:03:19,563 - mmcls - INFO - [156/170] Training session : 9 ; lr : 0.00043124628138479934 ; loss : 0.015246652066707611 ; acc@1 : 100.0
+2023-02-03 00:03:19,569 - mmcls - INFO - [157/170] Training session : 9 ; lr : 0.00039328053628864004 ; loss : 0.01411905512213707 ; acc@1 : 100.0
+2023-02-03 00:03:19,575 - mmcls - INFO - [158/170] Training session : 9 ; lr : 0.00035974889900803133 ; loss : 0.010272009298205376 ; acc@1 : 100.0
+2023-02-03 00:03:19,580 - mmcls - INFO - [159/170] Training session : 9 ; lr : 0.00033066352506169104 ; loss : 0.004080565646290779 ; acc@1 : 100.0
+2023-02-03 00:03:19,586 - mmcls - INFO - [160/170] Training session : 9 ; lr : 0.0003060349581580782 ; loss : 0.027789998799562454 ; acc@1 : 100.0
+2023-02-03 00:03:21,810 - mmcls - INFO - [161/170] Training session : 9 ; lr : 0.0002858721263731915 ; loss : 0.00366803165525198 ; acc@1 : 100.0
+2023-02-03 00:03:21,817 - mmcls - INFO - [162/170] Training session : 9 ; lr : 0.00027018233891407134 ; loss : 0.009351447224617004 ; acc@1 : 100.0
+2023-02-03 00:03:21,822 - mmcls - INFO - [163/170] Training session : 9 ; lr : 0.00025897128346913915 ; loss : 0.02333531342446804 ; acc@1 : 100.0
+2023-02-03 00:03:21,827 - mmcls - INFO - [164/170] Training session : 9 ; lr : 0.00025224302414636837 ; loss : 0.12514325976371765 ; acc@1 : 87.5
+2023-02-03 00:03:21,831 - mmcls - INFO - [165/170] Training session : 9 ; lr : 0.00025 ; loss : 0.017682597041130066 ; acc@1 : 100.0
+2023-02-03 00:03:23,756 - mmcls - INFO - [166/170] Training session : 9 ; lr : 2.5e-05 ; loss : 0.01700235716998577 ; acc@1 : 100.0
+2023-02-03 00:03:23,771 - mmcls - INFO - [167/170] Training session : 9 ; lr : 2.5e-05 ; loss : 0.004940561484545469 ; acc@1 : 100.0
+2023-02-03 00:03:23,778 - mmcls - INFO - [168/170] Training session : 9 ; lr : 2.5e-05 ; loss : 0.015394492074847221 ; acc@1 : 100.0
+2023-02-03 00:03:23,781 - mmcls - INFO - [169/170] Training session : 9 ; lr : 2.5e-05 ; loss : 0.022865593433380127 ; acc@1 : 100.0
+2023-02-03 00:03:23,785 - mmcls - INFO - [170/170] Training session : 9 ; lr : 2.5e-05 ; loss : 0.009516872465610504 ; acc@1 : 100.0
+2023-02-03 00:03:23,785 - mmcls - INFO - Evaluating session 9, from 0 to 100.
+2023-02-03 00:03:27,012 - mmcls - INFO - [09]Evaluation results : acc : 58.31 ; acc_base : 76.30 ; acc_inc : 31.33
+2023-02-03 00:03:27,012 - mmcls - INFO - [09]Evaluation results : acc_incremental_old : 27.74 ; acc_incremental_new : 56.40
+2023-02-03 00:03:27,152 - mmcls - INFO - 84.02 76.80 72.00 67.83 66.35 64.04 61.46 59.54 58.31 

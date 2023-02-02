@@ -23,14 +23,17 @@ If you want to build it by yourself (otherwise **ignore** it). Please run:
 docker build -t harbory/openmmlab:2206 --network=host .
 ```
 
-## Prepare Data
+## Data Preparation
 You do not need to prepare CIFAR datasets since it is managed by torch.
 
-For other datasets, please refer to [hub](https://huggingface.co/datasets/HarborYuan/Few-Shot-Class-Incremental-Learning)([Link](https://huggingface.co/datasets/HarborYuan/Few-Shot-Class-Incremental-Learning/blob/main/fscil.zip)). It is worth noting that the Mini ImageNet dataset is with various versions. Here we follow [CEC](https://drive.google.com/drive/folders/11LxZCQj2FRCs0JTsf_dafvTHqFn2yGSN), which is widely adopted in FSCIL. 
+For other datasets, please refer to [hub](https://huggingface.co/datasets/HarborYuan/Few-Shot-Class-Incremental-Learning)([Link](https://huggingface.co/datasets/HarborYuan/Few-Shot-Class-Incremental-Learning/blob/main/fscil.zip)). It is worth noting that the Mini ImageNet dataset is with various versions. Here we follow [CEC](https://drive.google.com/drive/folders/11LxZCQj2FRCs0JTsf_dafvTHqFn2yGSN), which is widely adopted in FSCIL. Please keep in mind that the usage of datasets is governed by their corresponding agreements. Data sharing here is for research purposes only.
 
 Please put the datasets into the {YOUR DATA LOCATION} you provided above.
 
 ## Getting Start
+Let's go for 🏃‍♀️running code.
+
+[Update🙋‍♀️] We test the training scripts after the release, please refer to logs.
 ### CIFAR
 Run:
 ```commandline
@@ -40,6 +43,7 @@ bash tools/dist_train.sh configs/cifar/resnet12_etf_bs512_200e_cifar.py 8 --work
 |----------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
 | NC-FSCIL | 82.52 | 76.82 | 73.34 | 69.68 | 66.19 | 62.85 | 60.96 | 59.02 | 56.11 |
 
+[[Base Log]](logs/cifar_base.log) [[Incremental Log]](logs/cifar_inc.log)
 
 ### Mini Imagenet
 Run:
@@ -51,6 +55,7 @@ bash tools/dist_train.sh configs/mini_imagenet/resnet12_etf_bs512_500e_miniimage
 |----------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
 | NC-FSCIL | 84.02 | 76.80 | 72.00 | 67.83 | 66.35 | 64.04 | 61.46 | 59.54 | 58.31 |
 
+[[Base Log]](logs/min_base.log) [[Incremental Log]](logs/min_inc.log)
 
 ### CUB
 Run:
@@ -62,6 +67,7 @@ bash tools/dist_train.sh configs/cub/resnet18_etf_bs512_80e_cub.py 8 --work-dir 
 |----------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
 | NC-FSCIL | 80.45 | 75.98 | 72.30 | 70.28 | 68.17 | 65.16 | 64.43 | 63.25 | 60.66 | 60.01 | 59.44 |
 
+[[Base Log]](logs/cub_base.log) [[Incremental Log]](logs/cub_inc.log)
 
 ## Citation
 If you think the code is useful in your research, please consider to refer:
