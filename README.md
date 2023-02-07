@@ -1,7 +1,12 @@
 # Neural Collapse Inspired Feature-Classifier Alignment for Few-Shot Class-Incremental Learning
+
+Authors: [Yibo Yang](https://iboing.github.io/), [Haobo Yuan](https://yuanhaobo.me/), [Xiangtai Li](https://lxtgh.github.io/), [Zhouchen Lin](https://zhouchenlin.github.io/), [Philip Torr](https://www.robots.ox.ac.uk/~phst/), [Dacheng Tao](https://www.sydney.edu.au/engineering/about/our-people/academic-staff/dacheng-tao.html)
+
 **Accepted by ICLR 2023 (top25%), Kigali, Rwanda.**
 
-[[PDF]](https://openreview.net/pdf?id=y5W8tpojhtJ) [[CODE]](https://github.com/NeuralCollapseApplications/FSCIL)
+
+
+[[PDF]](https://arxiv.org/pdf/2302.03004) [[CODE]](https://github.com/NeuralCollapseApplications/FSCIL)
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/neural-collapse-inspired-feature-classifier/few-shot-class-incremental-learning-on-mini)](https://paperswithcode.com/sota/few-shot-class-incremental-learning-on-mini?p=neural-collapse-inspired-feature-classifier)
 
