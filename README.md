@@ -14,6 +14,10 @@ Authors: [Yibo Yang](https://iboing.github.io/), [Haobo Yuan](https://yuanhaobo.
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/neural-collapse-inspired-feature-classifier/few-shot-class-incremental-learning-on-cub)](https://paperswithcode.com/sota/few-shot-class-incremental-learning-on-cub?p=neural-collapse-inspired-feature-classifier)
 
+---
+News: We have done a substantial extension based this work, see the new [paper](https://arxiv.org/pdf/2308.01746), and the code in this [repo](https://github.com/NeuralCollapseApplications/UniCIL). 
+
+
 
 ## Environment
 
